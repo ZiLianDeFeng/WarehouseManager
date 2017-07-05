@@ -24,6 +24,10 @@ public class WareHouseActivity extends BaseActivity {
     }
 
     public void Okgitlab(){
+        gg();
+    }
+
+    private void gg() {
 
     }
 
