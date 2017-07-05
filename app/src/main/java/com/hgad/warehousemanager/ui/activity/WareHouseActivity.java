@@ -19,16 +19,16 @@ public class WareHouseActivity extends BaseActivity {
     private SeatTable seatView;
     private WareInfo wareInfo;
 
-    public void gitlab(){
+    public void gitlab() {
         Okgitlab();
     }
 
-    public void Okgitlab(){
+    public void Okgitlab() {
         gg();
     }
 
     private void gg() {
-
+        int i = 1;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class WareHouseActivity extends BaseActivity {
             initHeader("仓库选位");
             final int[] rows = new int[]{4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6};
             final int[] columns = new int[]{4, 5, 6, 7, 8, 9, 10, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-            final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2,3 , 3, 3, 3, 4, 4};
+            final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
             final int[] unSeatColumns = new int[]{1, 2, 3, 4, 12, 13, 14, 15, 1, 2, 3, 13, 14, 15, 1, 2, 14, 15, 1, 15};
             final int[] unFullRows = new int[]{7, 7, 7, 8, 8, 8};
             final int[] unFullColumns = new int[]{14, 12, 13, 13, 14, 12};
