@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Warehouse Manager</string>
+    <string name="home">系统首页</string>
+    <string name="personal_center">个人中心</string>
+    <string name="loginout">退出登录</string>
+    <string name="change_pwd">修改密码</string>
+    <string name="clear">清除缓存</string>
+    <string name="version">应用版本</string>
+    <string name="systemSetting">系统设置</string>
+    <string name="zxing">应用二维码</string>
+    <string name="syn">数据同步</string>
+    <string name="photo">工作相册</string>
+    <string name="warehouse">仓库管理</string>
+    <string name="login">登录</string>
+    <string name="markNum">标  签  号：</string>
+    <string name="addressWare">仓库位置：</string>
+
+    <string name="str_scan_title">二维码扫描</string>
+    <string name="str_open_light">开启闪光灯</string>
+    <string name="str_close_light">关闭闪光灯</string>
+    <string name="str_scan_hint">取景框对准二维码, 即可自动扫描</string>
+    <string name="str_editphoto_wrapper_title">相册</string>
+    <string name="inputOrder">请输入作业单号</string>
+</resources>

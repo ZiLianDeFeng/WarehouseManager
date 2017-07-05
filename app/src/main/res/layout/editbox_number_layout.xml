@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:text="参考范围："
+             />
+        <TextView
+            android:id="@+id/tv_range"
+            android:text="2~8匹"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/common_dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
+        >
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:text="备        注："/>
+        <TextView
+            android:id="@+id/tv_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/common_dp"
+        >
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:text="实  际  值："/>
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal|numberSigned"
+            android:padding="@dimen/common_dp" />
+    </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginRight="20dp"-->
+        <!--android:layout_marginTop="@dimen/common_dp"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--&gt;-->
+
+        <!--<TextView-->
+            <!--style="@style/CommonTextview"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="right|center_vertical"-->
+            <!--android:text="异常描述："/>-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/et_abnomal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:inputType="numberDecimal|numberSigned"-->
+            <!--android:padding="@dimen/common_dp" />-->
+    <!--</LinearLayout>-->
+</LinearLayout>

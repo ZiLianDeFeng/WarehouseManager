@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_user"
+        android:layout_width="match_parent"
+        android:layout_height="243dp"
+        android:background="@color/blue"
+        android:fitsSystemWindows="true"
+        android:paddingTop="23dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_loginout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                android:text="@string/personal_center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_head_text_size" />
+
+            <ImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/common_dp"
+                android:padding="@dimen/common_min_padding"
+                android:src="@mipmap/set" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_user_icon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/rl_header"
+            android:layout_centerInParent="true"
+            android:paddingTop="20dp"
+            android:src="@mipmap/admin" />
+
+        <LinearLayout
+            android:id="@+id/ll_login_after"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_user_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_more_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="admin"
+                android:textColor="#FFF"
+                android:textSize="@dimen/button_text_size" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="个人"
+        android:textSize="20sp" />
+</LinearLayout>

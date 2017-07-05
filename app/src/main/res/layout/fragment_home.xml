@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="71dp"
+        android:background="@color/blue"
+        android:fitsSystemWindows="true"
+        android:paddingTop="23dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/home"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_head_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/common_padding">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:background="@color/green"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_in_ware"
+                        style="@style/table_text"
+                        android:text="入库"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_head_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_out_ware"
+                        style="@style/table_text"
+                        android:text="出库"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_head_text_size" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:background="@color/blue"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_code_scanning"
+                        style="@style/table_text"
+                        android:text="条码扫描"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_head_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:background="@color/light_black"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_change_ware"
+                        style="@style/table_text"
+                        android:text="移位"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_head_text_size" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:background="@color/tran_red"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_check"
+                        style="@style/table_text"
+                        android:text="盘点"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_head_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:background="@color/yellow"
+                    android:visibility="invisible"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_user_setting"
+                        style="@style/table_text"
+                        android:text="个人设置"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_head_text_size" />
+                </LinearLayout>
+
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+
+</LinearLayout>

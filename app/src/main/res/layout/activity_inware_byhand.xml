@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/common_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标  签  号：" />
+
+            <EditText
+                android:id="@+id/et_markNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请输入标签号"
+                android:textSize="@dimen/common_text_size"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#1000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addressWare" />
+
+            <TextView
+                android:id="@+id/tv_addressWare"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/common_dp"
+                android:text="点击选择仓库"
+                android:background="@drawable/shape_circle"
+                android:textSize="@dimen/common_text_size" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#1000" />
+
+        <Button
+            android:id="@+id/btn_commit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_button_height"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/btn_selector"
+            android:text="确定"
+            android:textColor="@color/text_color_selector"
+            android:textSize="@dimen/item_size" />
+
+    </LinearLayout>
+</LinearLayout>

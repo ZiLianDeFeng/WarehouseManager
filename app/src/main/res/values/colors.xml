@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorLightAccent">#60FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="blue">#1970DA</color>
+    <color name="light_blue">#0084ff</color>
+    <color name="black">#000</color>
+    <color name="background_light">#EBEBEB</color>
+    <color name="light_white">#A8CEE1</color>
+    <color name="tran_light_white">#66A8CEE1</color>
+    <color name="no_net">#bbb7b6b6</color>
+    <color name="gray">#dddddd</color>
+    <color name="btn_color">#3783E3</color>
+    <color name="green">#5FB59F</color>
+    <color name="yellow">#e1ba5f</color>
+    <color name="text_blue">#82B7E1</color>
+    <color name="text_color">#C4D9F6</color>
+    <color name="unclick_color">#FF888888</color>
+    <color name="orange">#fe6e35</color>
+    <color name="red">#ff4d35</color>
+    <color name="old_red">#ce3520</color>
+    <color name="tran_red">#bbff4d35</color>
+    <color name="light_black">#4d4c4c</color>
+    <color name="tran">#0000</color>
+
+
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#00000000</color>
+</resources>

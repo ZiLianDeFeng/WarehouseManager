@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_margin="@dimen/common_padding">
+
+
+        <EditText
+            android:id="@+id/et_order_num"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="3"
+            android:padding="@dimen/common_dp"
+            android:hint="@string/inputOrder"
+            android:textSize="@dimen/common_text_size"
+            android:background="@drawable/shape_circle" />
+
+        <Button
+            android:id="@+id/btn_find"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/marginleft"
+            android:layout_weight="1"
+            android:background="@drawable/shape_circle_state"
+            android:text="查询"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2000"/>
+
+    <ListView
+        android:id="@+id/lv_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="@dimen/marginleft"
+        android:background="@color/background_light"
+        android:scrollbars="none"/>
+</LinearLayout>
