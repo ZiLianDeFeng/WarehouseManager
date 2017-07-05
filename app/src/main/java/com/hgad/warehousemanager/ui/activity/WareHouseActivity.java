@@ -28,7 +28,12 @@ public class WareHouseActivity extends BaseActivity {
     }
 
     private void gg() {
+        g();
+    }
 
+    private void g() {
+        int i = 1;
+        int j = 2;
     }
 
     @Override
