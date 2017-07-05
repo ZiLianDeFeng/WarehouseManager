@@ -30,7 +30,7 @@ public class WareHouseActivity extends BaseActivity {
     private void gg() {
         int i = 1;
         int j = 3;
-
+        int y = 4;
     }
 
     @Override
