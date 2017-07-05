@@ -28,6 +28,10 @@ public class WareHouseActivity extends BaseActivity {
     }
 
     private void gg() {
+        g();
+    }
+
+    private void g() {
 
     }
 
