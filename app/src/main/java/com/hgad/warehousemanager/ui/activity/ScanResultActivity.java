@@ -107,6 +107,14 @@ public class ScanResultActivity extends BaseActivity {
         backWarm();
     }
 
+    public void gitlab(){
+        Okgitlab();
+    }
+
+    public void Okgitlab(){
+
+    }
+
     @Override
     protected void initView() {
         tv_markNum = (TextView) findViewById(R.id.tv_markNum);

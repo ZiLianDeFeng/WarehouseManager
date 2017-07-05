@@ -19,6 +19,14 @@ public class WareHouseActivity extends BaseActivity {
     private SeatTable seatView;
     private WareInfo wareInfo;
 
+    public void gitlab(){
+        Okgitlab();
+    }
+
+    public void Okgitlab(){
+
+    }
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_ware_house);
