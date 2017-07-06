@@ -325,7 +325,7 @@ public class SeatTable extends View {
     float yScale1 = 1;
 
     private void init() {
-        spacing = (int) dip2Px(5);
+        spacing = (int) dip2Px(10);
         verSpacing = (int) dip2Px(10);
         defaultScreenWidth = (int) dip2Px(80);
 
@@ -471,14 +471,12 @@ public class SeatTable extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 handler.postDelayed(hideOverviewRunnable, 1500);
-
                 autoScale();
                 int downDX = Math.abs(x - downX);
                 int downDY = Math.abs(y - downY);
                 if ((downDX > 10 || downDY > 10) && !pointer) {
                     autoScroll();
                 }
-
                 break;
         }
         isOnClick = false;
@@ -504,7 +502,7 @@ public class SeatTable extends View {
         float spacing1 = dip2Px(5);
 //        float y = (headHeight - seatBitmap.getHeight()) / 2;
 
-        float width = seatBitmap.getWidth() + spacing1 + txtWidth + spacing + seatSoldBitmap.getWidth() + txtWidth + spacing1 + spacing + checkedSeatBitmap.getHeight() + spacing1 + txtWidth;
+        float width = (seatBitmap.getWidth() + spacing1 + txtWidth + spacing)*3-spacing;
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), (int) headHeight, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
@@ -530,6 +528,12 @@ public class SeatTable extends View {
         tempMatrix.postTranslate(checkedSeatBitmapX, (headHeight - seatHeight) / 2);
         canvas.drawBitmap(checkedSeatBitmap, tempMatrix, headPaint);
         canvas.drawText("已选", checkedSeatBitmapX + spacing1 + seatWidth, txtY, headPaint);
+          //绘制unfull顶部信息
+//        float unFullSeatBitmapX = checkedSeatBitmapX + checkedSeatBitmap.getWidth()+spacing1 + txtWidth + spacing;
+//        tempMatrix.setScale(xScale1,yScale1);
+//        tempMatrix.postTranslate(unFullSeatBitmapX, (headHeight - seatHeight) / 2);
+//        canvas.drawBitmap(seatUnfullBitmap, tempMatrix, headPaint);
+//        canvas.drawText("1/3", unFullSeatBitmapX + spacing1 + seatWidth, txtY, headPaint);
 
         //绘制分割线
         headPaint.setStrokeWidth(1);
@@ -563,7 +567,7 @@ public class SeatTable extends View {
         canvas.drawPath(path, pathPaint);
 
         pathPaint.setColor(Color.BLACK);
-        pathPaint.setTextSize(20 * getMatrixScaleX());
+        pathPaint.setTextSize(sp2Px(14));
 
         canvas.drawText(screenName, centerX - pathPaint.measureText(screenName) / 2, getBaseLine(pathPaint, startY, startY + screenHeight * getMatrixScaleY()), pathPaint);
     }

@@ -1,5 +1,7 @@
 package com.hgad.warehousemanager.ui.activity;
 
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
+import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.util.CommonUtils;
@@ -29,6 +32,7 @@ public class InWareByHandActivity extends BaseActivity {
     private Button btn_commit;
     private String address;
     private TextView tv_addressWare;
+    private String type;
 
     @Override
     protected void setContentView() {
@@ -37,7 +41,15 @@ public class InWareByHandActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        initHeader("入库-手动添加");
+        Intent intent = getIntent();
+        type = intent.getStringExtra(Constants.TYPE);
+        if (Constants.CHANGE_WARE.equals(type)) {
+            initHeader("移位-手动移位");
+        } else if (Constants.IN_WARE.equals(type)) {
+            initHeader("入库-手动添加");
+        } else if (Constants.CHECK.equals(type)) {
+            initHeader("盘点-手动盘点");
+        }
     }
 
     @Override
@@ -56,7 +68,7 @@ public class InWareByHandActivity extends BaseActivity {
     String[] floors = {"1", "2", "3"};
 
     private void initBottonPopupWindow() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, row, column, floor);
+        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, row, column, floor, getResources().getString(R.string.choose_address));
         bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
         bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -73,7 +85,6 @@ public class InWareByHandActivity extends BaseActivity {
 
     @Override
     public void onSuccessResult(BaseRequest request, BaseReponse response) {
-
     }
 
     @Override
@@ -83,12 +94,48 @@ public class InWareByHandActivity extends BaseActivity {
                 chooseAddress();
                 break;
             case R.id.btn_commit:
-
+                commit();
                 break;
             case R.id.pop_confirm:
                 confirmAddress();
                 break;
+            case R.id.pop_cancle:
+                bottonPopupWindow.dismiss();
+                break;
         }
+    }
+
+    private void commit() {
+        if (TextUtils.isEmpty(et_markNum.getText().toString().trim())) {
+            CommonUtils.showToast(this, "未输入标签号");
+            return;
+        }
+        if (TextUtils.isEmpty(tv_addressWare.getText().toString().trim())) {
+            CommonUtils.showToast(this, "未选择仓库位置");
+            return;
+        }
+        if (Constants.CHANGE_WARE.equals(type)) {
+            changeCommit();
+        } else if (Constants.IN_WARE.equals(type)) {
+            inCommit();
+        } else if (Constants.CHECK.equals(type)) {
+            checkCommit();
+        }
+    }
+
+    private void checkCommit() {
+        CommonUtils.showToast(this, "信息正确");
+        finish();
+    }
+
+    private void inCommit() {
+        CommonUtils.showToast(this, "入库成功");
+        finish();
+    }
+
+    private void changeCommit() {
+        CommonUtils.showToast(this, "移位成功");
+        finish();
     }
 
     private void confirmAddress() {

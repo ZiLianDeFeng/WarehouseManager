@@ -15,4 +15,6 @@ public class Constants {
     public static final String CHANGE_WARE = "changeWare";
     public static final String CHECK = "check";
     public static final String ADDRESS = "address";
+    public static final String OUT_WARE = "outWare";
+    public static final String COMMIT_RESULT = "commitResult";
 }

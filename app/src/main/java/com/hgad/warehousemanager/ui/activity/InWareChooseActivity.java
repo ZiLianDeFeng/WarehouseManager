@@ -3,7 +3,6 @@ package com.hgad.warehousemanager.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
@@ -32,8 +31,8 @@ public class InWareChooseActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        ((TextView) findViewById(R.id.tv_in_hand)).setOnClickListener(this);
-        ((TextView) findViewById(R.id.tv_in_mark)).setOnClickListener(this);
+        findViewById(R.id.tv_in_hand).setOnClickListener(this);
+        findViewById(R.id.tv_in_mark).setOnClickListener(this);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class InWareChooseActivity extends BaseActivity {
                 String resultStr = bundle.getString("result");
                 Intent intent = new Intent(this, ScanResultActivity.class);
                 intent.putExtra(Constants.SCAN_RESULT, resultStr);
-                intent.putExtra(Constants.TYPE,Constants.IN_WARE);
+                intent.putExtra(Constants.TYPE, Constants.IN_WARE);
                 startActivity(intent);
             }
         }
@@ -74,6 +73,7 @@ public class InWareChooseActivity extends BaseActivity {
 
     private void go2InHand() {
         Intent intent = new Intent(this, InWareByHandActivity.class);
+        intent.putExtra(Constants.TYPE,Constants.IN_WARE);
         startActivity(intent);
     }
 }

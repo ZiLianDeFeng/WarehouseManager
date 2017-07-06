@@ -13,6 +13,8 @@ import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.db.dao.BaseDaoImpl;
 import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.ui.activity.ChangeWareActivity;
+import com.hgad.warehousemanager.ui.activity.CheckActivity;
 import com.hgad.warehousemanager.ui.activity.InWareChooseActivity;
 import com.hgad.warehousemanager.ui.activity.OutWareActivity;
 import com.hgad.warehousemanager.ui.activity.ScanResultActivity;
@@ -97,14 +99,12 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void go2ChangeWare() {
-        Intent intent = new Intent(mContext, ScanResultActivity.class);
-        intent.putExtra(Constants.TYPE,Constants.CHANGE_WARE);
+        Intent intent = new Intent(mContext, ChangeWareActivity.class);
         startActivity(intent);
     }
 
     private void go2Check() {
-        Intent intent = new Intent(mContext, ScanResultActivity.class);
-        intent.putExtra(Constants.TYPE,Constants.CHECK);
+        Intent intent = new Intent(mContext, CheckActivity.class);
         startActivity(intent);
     }
 

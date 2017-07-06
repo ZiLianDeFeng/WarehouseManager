@@ -3,6 +3,7 @@ package com.hgad.warehousemanager.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,14 +108,6 @@ public class ScanResultActivity extends BaseActivity {
         backWarm();
     }
 
-    public void gitlab(){
-        Okgitlab();
-    }
-
-    public void Okgitlab(){
-
-    }
-
     @Override
     protected void initView() {
         tv_markNum = (TextView) findViewById(R.id.tv_markNum);
@@ -179,7 +172,39 @@ public class ScanResultActivity extends BaseActivity {
             case R.id.ll_change_ware:
 
                 break;
+            case R.id.btn_commit:
+                commit();
+                break;
         }
+    }
+
+    private void commit() {
+        if (TextUtils.isEmpty(tv_addressWare.getText().toString().trim())) {
+            CommonUtils.showToast(this, "未选择仓库位置");
+            return;
+        }
+        if (Constants.CHANGE_WARE.equals(type)) {
+            changeCommit();
+        } else if (Constants.IN_WARE.equals(type)) {
+            inCommit();
+        } else if (Constants.CHECK.equals(type)) {
+            checkCommit();
+        }
+    }
+
+    private void checkCommit() {
+        CommonUtils.showToast(this, "信息正确");
+        finish();
+    }
+
+    private void inCommit() {
+        CommonUtils.showToast(this, "入库成功");
+        finish();
+    }
+
+    private void changeCommit() {
+        CommonUtils.showToast(this, "移位成功");
+        finish();
     }
 
     private void showMore() {
@@ -215,52 +240,8 @@ public class ScanResultActivity extends BaseActivity {
     String[] floors = {"1", "2", "3"};
 
     private void initBottonPopupWindow() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, row, column, floor);
+        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, row, column, floor, getResources().getString(R.string.choose_address));
         bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
-//        View popupWindowView = View.inflate(this, R.layout.popupwindow_address, null);
-//        bottonPopupWindow = new PopupWindow(popupWindowView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-//        //设置PopupWindow的弹出和消失效果
-//        bottonPopupWindow.setAnimationStyle(R.style.popupAnimation);
-//        bottonPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-//        bottonPopupWindow.setOutsideTouchable(true);
-//        popupWindowView.findViewById(R.id.pop_confirm).setOnClickListener(this);
-//        popupWindowView.findViewById(R.id.pop_cancle).setOnClickListener(this);
-//        WheelView wv_ware_num = (WheelView) popupWindowView.findViewById(R.id.wv_ware_num);
-//        wv_ware_num.setOffset(1);
-//        wv_ware_num.setItems(Arrays.asList(wareNums));
-//        wv_ware_num.setOnWheelViewListener(new OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                ware = item;
-//            }
-//        });
-//        WheelView wv_row = (WheelView) popupWindowView.findViewById(R.id.wv_row);
-//        wv_row.setOffset(1);
-//        wv_row.setItems(Arrays.asList(rows));
-//        wv_row.setOnWheelViewListener(new OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                row = item;
-//            }
-//        });
-//        WheelView wv_column = (WheelView) popupWindowView.findViewById(R.id.wv_column);
-//        wv_column.setOffset(1);
-//        wv_column.setItems(Arrays.asList(columns));
-//        wv_column.setOnWheelViewListener(new OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                column = item;
-//            }
-//        });
-//        WheelView wv_floor = (WheelView) popupWindowView.findViewById(R.id.wv_floor);
-//        wv_floor.setOffset(1);
-//        wv_floor.setItems(Arrays.asList(floors));
-//        wv_floor.setOnWheelViewListener(new OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                floor = item;
-//            }
-//        });
         bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

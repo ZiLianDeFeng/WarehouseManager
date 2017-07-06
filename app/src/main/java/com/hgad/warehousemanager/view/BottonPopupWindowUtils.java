@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 
@@ -19,6 +20,7 @@ public class BottonPopupWindowUtils {
     private String row;
     private String column;
     private String floor;
+    private String title;
     private PopupWindow bottonPopupWindow;
 
     public String getWare() {
@@ -41,11 +43,16 @@ public class BottonPopupWindowUtils {
         return bottonPopupWindow;
     }
 
-    public BottonPopupWindowUtils(String ware, String row, String column, String floor) {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public BottonPopupWindowUtils(String ware, String row, String column, String floor, String title) {
         this.ware = ware;
         this.row = row;
         this.column = column;
         this.floor = floor;
+        this.title = title;
     }
 
     public PopupWindow creat(Context context, String[] wareNums, String[] rows, String[] columns, String[] floors, View.OnClickListener listener) {
@@ -57,6 +64,8 @@ public class BottonPopupWindowUtils {
         bottonPopupWindow.setOutsideTouchable(true);
         popupWindowView.findViewById(R.id.pop_confirm).setOnClickListener(listener);
         popupWindowView.findViewById(R.id.pop_cancle).setOnClickListener(listener);
+        TextView poptitle = (TextView) popupWindowView.findViewById(R.id.pop_title);
+        poptitle.setText(title);
         WheelView wv_ware_num = (WheelView) popupWindowView.findViewById(R.id.wv_ware_num);
         wv_ware_num.setOffset(1);
         wv_ware_num.setItems(Arrays.asList(wareNums));
@@ -100,5 +109,9 @@ public class BottonPopupWindowUtils {
 //            }
 //        });
         return bottonPopupWindow;
+    }
+
+    public void show(View parent, int grarity, int x, int y) {
+        bottonPopupWindow.showAtLocation(parent, grarity, x, y);
     }
 }

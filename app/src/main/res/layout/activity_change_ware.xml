@@ -5,4 +5,44 @@
     android:orientation="vertical">
 
     <include layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:padding="@dimen/common_padding">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/common_dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_in_hand"
+                style="@style/table_text"
+                android:text="手动移位"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_head_text_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/common_dp"
+            android:layout_weight="1"
+            android:background="@color/orange"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_in_mark"
+                style="@style/table_text"
+                android:text="二维码扫描"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_head_text_size" />
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

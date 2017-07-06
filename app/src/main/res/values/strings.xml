@@ -21,4 +21,5 @@
     <string name="str_scan_hint">取景框对准二维码, 即可自动扫描</string>
     <string name="str_editphoto_wrapper_title">相册</string>
     <string name="inputOrder">请输入作业单号</string>
+    <string name="choose_address">请选择位置</string>
 </resources>
