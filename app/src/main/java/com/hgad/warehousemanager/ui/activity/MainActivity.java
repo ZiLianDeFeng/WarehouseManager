@@ -3,6 +3,7 @@ package com.hgad.warehousemanager.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -41,6 +42,9 @@ public class MainActivity extends BaseActivity {
     private RecyclerView left;
     private boolean isDrawer = false;
     private DrawerLayout drawer;
+    private HomeFragment homeFragment;
+    private UserFragment userFragment;
+    private Handler handler = new Handler();
 
     @Override
     protected void setContentView() {
@@ -50,8 +54,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        final HomeFragment homeFragment = new HomeFragment();
-        final UserFragment userFragment = new UserFragment();
+        homeFragment = new HomeFragment();
+        userFragment = new UserFragment();
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -102,15 +106,18 @@ public class MainActivity extends BaseActivity {
                 Display display = manager.getDefaultDisplay();
                 //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
                 right.layout(left.getRight(), 0, left.getRight() + display.getWidth(), display.getHeight());
+                homeFragment.onPause();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                homeFragment.onPause();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 isDrawer = false;
+                homeFragment.onResume();
             }
 
             @Override
@@ -145,7 +152,12 @@ public class MainActivity extends BaseActivity {
                 case R.string.drawer_menu_air://夜间模式
                     break;
             }
-//            drawer.closeDrawer(GravityCompat.START);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            },500);
         }
     }
 

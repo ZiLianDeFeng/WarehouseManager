@@ -23,7 +23,9 @@ import com.hgad.warehousemanager.ui.activity.InWareChooseActivity;
 import com.hgad.warehousemanager.ui.activity.OutWareActivity;
 import com.hgad.warehousemanager.ui.activity.ScanResultActivity;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,8 +37,8 @@ public class HomeFragment extends BaseFragment {
     private View mView;
     //    private UserDao userDao;
     private BaseDaoImpl<UserInfo, Integer> userDao;
-    private ConvenientBanner convenientBanner;
-    private List mImageList;
+    private ConvenientBanner<String> convenientBanner;
+    private List<String> mImageList = new ArrayList<>();
 
     @Override
     protected void initData() {
@@ -46,6 +48,10 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        mImageList.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1225040570,1155990249&fm=23&gp=0.jpg");
+        mImageList.add("http://d.hiphotos.baidu.com/zhidao/pic/item/241f95cad1c8a7862239b60f6109c93d70cf50a4.jpg");
+        mImageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496227174359&di=24c744dd93e649d57138a099e1a147c6&imgtype=0&src=http%3A%2F%2Fimgb.mumayi.com%2Fandroid%2Fwallpaper%2F2012%2F01%2F03%2Fsl_600_2012010302213667522752.jpg");
+        mImageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496227174359&di=b1d83951268801db17ea1a50e64da0f4&imgtype=0&src=http%3A%2F%2Ffile.mumayi.com%2Fforum%2F201305%2F16%2F171333grx16e26je1q1m1e.jpg");
         mView.findViewById(R.id.tv_in_ware).setOnClickListener(this);
         mView.findViewById(R.id.tv_change_ware).setOnClickListener(this);
         mView.findViewById(R.id.tv_out_ware).setOnClickListener(this);
@@ -53,7 +59,7 @@ public class HomeFragment extends BaseFragment {
         mView.findViewById(R.id.tv_check).setOnClickListener(this);
         mView.findViewById(R.id.tv_user_setting).setOnClickListener(this);
         mView.findViewById(R.id.iv_scan).setOnClickListener(this);
-        convenientBanner = (ConvenientBanner) mView.findViewById(R.id.convenientBanner);
+        convenientBanner = (ConvenientBanner<String>) mView.findViewById(R.id.convenientBanner);
         convenientBanner.setPages(new CBViewHolderCreator<ImageViewHolder>() {
             @Override
             public ImageViewHolder createHolder() {
@@ -62,9 +68,10 @@ public class HomeFragment extends BaseFragment {
         },mImageList)
                 .setPageIndicator(new int[]  {R.drawable.shape_oval_gray,R.drawable.shape_oval_white}) //设置两个点作为指示器
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL); //设置指示器的方向水平  居中
+        convenientBanner.setCanLoop(true);
     }
 
-    public class ImageViewHolder implements Holder<Integer> {
+    public class ImageViewHolder implements Holder<String> {
         private ImageView imageView;
         @Override
         public View createView(Context context) {
@@ -74,9 +81,22 @@ public class HomeFragment extends BaseFragment {
         }
 
         @Override
-        public void UpdateUI(Context context, final int position, Integer data) {
-            imageView.setImageResource(data);
+        public void UpdateUI(Context context, final int position, String data) {
+//            imageView.setImageResource(data);
+            Picasso.with(mContext).load(data).into(imageView);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        convenientBanner.startTurning(2000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        convenientBanner.stopTurning();
     }
 
     @Override

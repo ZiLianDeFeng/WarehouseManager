@@ -33,4 +33,5 @@ dependencies {
     compile 'com.github.lazylibrary:lazylibrary:1.0.2'
     compile 'com.android.support:design:23.1.1'
     compile 'com.bigkoo:convenientbanner:2.0.5'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

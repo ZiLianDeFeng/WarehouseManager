@@ -19,12 +19,12 @@
 
     <style name="table_text">
         <item name="android:gravity">center</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <!--<item name="android:paddingTop">@dimen/common_padding</item>-->
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingTop">@dimen/common_padding</item>
         <item name="android:scaleType">center</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <!--<item name="android:background">@drawable/item_selector</item>-->
+        <item name="android:background">@drawable/item_selector</item>
         <item name="android:textColor">#333333</item>
     </style>
 
