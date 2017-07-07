@@ -1,11 +1,15 @@
 package com.hgad.warehousemanager.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.holder.Holder;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseFragment;
 import com.hgad.warehousemanager.bean.UserInfo;
@@ -20,6 +24,8 @@ import com.hgad.warehousemanager.ui.activity.OutWareActivity;
 import com.hgad.warehousemanager.ui.activity.ScanResultActivity;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/6/26.
  */
@@ -29,6 +35,8 @@ public class HomeFragment extends BaseFragment {
     private View mView;
     //    private UserDao userDao;
     private BaseDaoImpl<UserInfo, Integer> userDao;
+    private ConvenientBanner convenientBanner;
+    private List mImageList;
 
     @Override
     protected void initData() {
@@ -38,12 +46,37 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        ((TextView) mView.findViewById(R.id.tv_in_ware)).setOnClickListener(this);
-        ((TextView) mView.findViewById(R.id.tv_change_ware)).setOnClickListener(this);
-        ((TextView) mView.findViewById(R.id.tv_out_ware)).setOnClickListener(this);
-        ((TextView) mView.findViewById(R.id.tv_code_scanning)).setOnClickListener(this);
-        ((TextView) mView.findViewById(R.id.tv_check)).setOnClickListener(this);
-        ((TextView) mView.findViewById(R.id.tv_user_setting)).setOnClickListener(this);
+        mView.findViewById(R.id.tv_in_ware).setOnClickListener(this);
+        mView.findViewById(R.id.tv_change_ware).setOnClickListener(this);
+        mView.findViewById(R.id.tv_out_ware).setOnClickListener(this);
+        mView.findViewById(R.id.tv_code_scanning).setOnClickListener(this);
+        mView.findViewById(R.id.tv_check).setOnClickListener(this);
+        mView.findViewById(R.id.tv_user_setting).setOnClickListener(this);
+        mView.findViewById(R.id.iv_scan).setOnClickListener(this);
+        convenientBanner = (ConvenientBanner) mView.findViewById(R.id.convenientBanner);
+        convenientBanner.setPages(new CBViewHolderCreator<ImageViewHolder>() {
+            @Override
+            public ImageViewHolder createHolder() {
+                return new ImageViewHolder();
+            }
+        },mImageList)
+                .setPageIndicator(new int[]  {R.drawable.shape_oval_gray,R.drawable.shape_oval_white}) //设置两个点作为指示器
+                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL); //设置指示器的方向水平  居中
+    }
+
+    public class ImageViewHolder implements Holder<Integer> {
+        private ImageView imageView;
+        @Override
+        public View createView(Context context) {
+            imageView = new ImageView(context);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            return imageView;
+        }
+
+        @Override
+        public void UpdateUI(Context context, final int position, Integer data) {
+            imageView.setImageResource(data);
+        }
     }
 
     @Override
@@ -56,6 +89,7 @@ public class HomeFragment extends BaseFragment {
     public <Res extends BaseReponse> void onSuccessResult(BaseRequest request, Res response) {
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == getActivity().RESULT_OK && requestCode == SCAN) {
@@ -64,7 +98,7 @@ public class HomeFragment extends BaseFragment {
                 String result = bundle.getString("result");
                 Intent intent = new Intent(mContext, ScanResultActivity.class);
                 intent.putExtra(Constants.SCAN_RESULT, result);
-                intent.putExtra(Constants.TYPE,Constants.SCAN_RESULT);
+                intent.putExtra(Constants.TYPE, Constants.SCAN_RESULT);
                 startActivity(intent);
             }
         }
@@ -90,12 +124,15 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.tv_user_setting:
                 break;
+            case R.id.iv_scan:
+                go2Scan();
+                break;
         }
     }
 
     private void go2Scan() {
         Intent intent = new Intent(mContext, CaptureActivity.class);
-        startActivityForResult(intent,SCAN);
+        startActivityForResult(intent, SCAN);
     }
 
     private void go2ChangeWare() {

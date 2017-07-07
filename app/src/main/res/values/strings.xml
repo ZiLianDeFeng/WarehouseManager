@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Warehouse Manager</string>
-    <string name="home">系统首页</string>
+    <string name="home">首页</string>
     <string name="personal_center">个人中心</string>
     <string name="loginout">退出登录</string>
     <string name="change_pwd">修改密码</string>
@@ -22,4 +22,10 @@
     <string name="str_editphoto_wrapper_title">相册</string>
     <string name="inputOrder">请输入作业单号</string>
     <string name="choose_address">请选择位置</string>
+    <string name="drawer_menu_camera">我的相机</string>
+    <string name="drawer_menu_gallery">我的相册</string>
+    <string name="drawer_menu_tools">工具</string>
+    <string name="drawer_menu_favorites">我的收藏</string>
+    <string name="drawer_menu_setting">设置</string>
+    <string name="drawer_menu_air">天气</string>
 </resources>

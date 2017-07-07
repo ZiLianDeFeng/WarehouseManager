@@ -1,79 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.activity.MainActivity">
+    >
 
-    <FrameLayout
-        android:id="@+id/fl"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+    <include layout="@layout/drawer_main"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#2000" />
+    <!--<android.support.design.widget.NavigationView-->
+        <!--android:id="@+id/nav_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:fitsSystemWindows="true"-->
+        <!--app:headerLayout="@layout/nav_header_main"-->
+        <!--app:menu="@menu/activity_main_drawer"-->
+        <!--/>-->
 
-    <RadioGroup
-        android:id="@+id/rg"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/rb_home"
-            style="@style/ButtonMenu"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/rb_home_selector"
-            android:text="@string/home" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:background="#DCDCDC" />
-
-        <!--<RadioButton-->
-            <!--android:id="@+id/rb_data_centre"-->
-            <!--style="@style/ButtonMenu"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/data_center" />-->
-
-        <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:background="#DCDCDC" />-->
-
-        <!--<RadioButton-->
-            <!--android:id="@+id/rb_performance"-->
-            <!--style="@style/ButtonMenu"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/performance" />-->
-
-        <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:background="#DCDCDC" />-->
-
-        <RadioButton
-            android:id="@+id/rb_user"
-            style="@style/ButtonMenu"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/rb_user_selector"
-            android:text="@string/personal_center" />
-    </RadioGroup>
-</LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_drawer"
+        android:layout_width="@dimen/drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white" />
+</android.support.v4.widget.DrawerLayout>
