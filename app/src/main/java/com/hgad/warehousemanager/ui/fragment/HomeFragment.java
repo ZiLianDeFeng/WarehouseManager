@@ -69,6 +69,7 @@ public class HomeFragment extends BaseFragment {
                 .setPageIndicator(new int[]  {R.drawable.shape_oval_gray,R.drawable.shape_oval_white}) //设置两个点作为指示器
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL); //设置指示器的方向水平  居中
         convenientBanner.setCanLoop(true);
+
     }
 
     public class ImageViewHolder implements Holder<String> {
@@ -123,6 +124,7 @@ public class HomeFragment extends BaseFragment {
             }
         }
     }
+
 
     @Override
     public void onClick(View view) {

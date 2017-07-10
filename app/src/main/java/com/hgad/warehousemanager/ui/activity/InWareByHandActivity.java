@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -25,14 +26,15 @@ public class InWareByHandActivity extends BaseActivity {
     private EditText et_markNum;
     private BottonPopupWindowUtils bottonPopupWindowUtils;
     private PopupWindow bottonPopupWindow;
-    private String row = "1";
-    private String column = "1";
+    private String row;
+    private String column;
     private String floor = "1";
     private String ware = "1";
     private Button btn_commit;
     private String address;
     private TextView tv_addressWare;
     private String type;
+    private LinearLayout ll_address;
 
     @Override
     protected void setContentView() {
@@ -49,6 +51,7 @@ public class InWareByHandActivity extends BaseActivity {
             initHeader("入库-手动添加");
         } else if (Constants.CHECK.equals(type)) {
             initHeader("盘点-手动盘点");
+            ll_address.setVisibility(View.GONE);
         }
     }
 
@@ -57,9 +60,10 @@ public class InWareByHandActivity extends BaseActivity {
         et_markNum = (EditText) findViewById(R.id.et_markNum);
         tv_addressWare = (TextView) findViewById(R.id.tv_addressWare);
         tv_addressWare.setOnClickListener(this);
+        ll_address = (LinearLayout) findViewById(R.id.ll_address);
         btn_commit = (Button) findViewById(R.id.btn_commit);
         btn_commit.setOnClickListener(this);
-        initBottonPopupWindow();
+//        initBottonPopupWindow();
     }
 
     String[] wareNums = {"1", "2", "3", "4", "5", "6"};
@@ -67,16 +71,9 @@ public class InWareByHandActivity extends BaseActivity {
     String[] columns = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     String[] floors = {"1", "2", "3"};
 
-    private void initBottonPopupWindow() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, row, column, floor, getResources().getString(R.string.choose_address));
-        bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
-        bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                CommonUtils.backgroundAlpha(1f, InWareByHandActivity.this);
-            }
-        });
-    }
+//    private void initBottonPopupWindow() {
+//
+//    }
 
     @Override
     public void onBackPressed() {
@@ -97,12 +94,24 @@ public class InWareByHandActivity extends BaseActivity {
                 commit();
                 break;
             case R.id.pop_confirm:
-                confirmAddress();
+                String text = bottonPopupWindowUtils.getConfirmText();
+                if ("下一步".equals(text)) {
+                    changeChoose();
+                } else if ("确定".equals(text)) {
+                    confirmAddress();
+                }
                 break;
             case R.id.pop_cancle:
                 bottonPopupWindow.dismiss();
                 break;
+//            case R.id.pop_switch:
+//                changeChoose();
+//                break;
         }
+    }
+
+    private void changeChoose() {
+        bottonPopupWindowUtils.change();
     }
 
     private void commit() {
@@ -110,9 +119,11 @@ public class InWareByHandActivity extends BaseActivity {
             CommonUtils.showToast(this, "未输入标签号");
             return;
         }
-        if (TextUtils.isEmpty(tv_addressWare.getText().toString().trim())) {
-            CommonUtils.showToast(this, "未选择仓库位置");
-            return;
+        if (!Constants.CHECK.equals(type)) {
+            if (TextUtils.isEmpty(tv_addressWare.getText().toString().trim())) {
+                CommonUtils.showToast(this, "未选择仓库位置");
+                return;
+            }
         }
         if (Constants.CHANGE_WARE.equals(type)) {
             changeCommit();
@@ -139,6 +150,11 @@ public class InWareByHandActivity extends BaseActivity {
     }
 
     private void confirmAddress() {
+        if (bottonPopupWindowUtils.getRow() == null
+                || bottonPopupWindowUtils.getColumn() == null) {
+            CommonUtils.showToast(this, "还未选择地址");
+            return;
+        }
         ware = bottonPopupWindowUtils.getWare();
         row = bottonPopupWindowUtils.getRow();
         column = bottonPopupWindowUtils.getColumn();
@@ -149,7 +165,16 @@ public class InWareByHandActivity extends BaseActivity {
     }
 
     private void chooseAddress() {
-        bottonPopupWindow.showAtLocation(btn_commit, Gravity.BOTTOM, 0, 0);
+        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, null, null, floor, getResources().getString(R.string.choose_address));
+        bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
+        bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                CommonUtils.backgroundAlpha(1f, InWareByHandActivity.this);
+            }
+        });
+        bottonPopupWindowUtils.show(btn_commit, Gravity.BOTTOM, 0, 0);
         CommonUtils.backgroundAlpha(0.8f, this);
     }
+
 }

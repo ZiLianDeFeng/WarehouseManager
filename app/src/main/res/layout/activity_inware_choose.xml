@@ -21,7 +21,9 @@
 
             <TextView
                 android:id="@+id/tv_in_hand"
-                style="@style/table_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="手动入库"
                 android:textColor="@color/white"
                 android:textSize="@dimen/common_head_text_size" />
@@ -38,7 +40,9 @@
 
             <TextView
                 android:id="@+id/tv_in_mark"
-                style="@style/table_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="二维码扫描"
                 android:textColor="@color/white"
                 android:textSize="@dimen/common_head_text_size" />

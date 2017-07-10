@@ -21,12 +21,14 @@ import android.widget.Toast;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
+import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.ui.adapter.DrawerAdapter;
 import com.hgad.warehousemanager.ui.fragment.HomeFragment;
 import com.hgad.warehousemanager.ui.fragment.UserFragment;
 import com.hgad.warehousemanager.util.CommonUtils;
+import com.hgad.warehousemanager.util.SPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +152,7 @@ public class MainActivity extends BaseActivity {
                     go();
                     break;
                 case R.string.drawer_menu_air://夜间模式
+                    weather();
                     break;
             }
             handler.postDelayed(new Runnable() {
@@ -157,8 +160,14 @@ public class MainActivity extends BaseActivity {
                 public void run() {
                     drawer.closeDrawer(GravityCompat.START);
                 }
-            },500);
+            }, 500);
         }
+    }
+
+    private void weather() {
+        Intent intent = new Intent(this, WeatherActivity.class);
+        intent.putExtra("weatherCode", SPUtils.getString(this, SPConstants.WEATHER_CITY));
+        startActivity(intent);
     }
 
     @Override
@@ -211,7 +220,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showDrawer() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
     }
 

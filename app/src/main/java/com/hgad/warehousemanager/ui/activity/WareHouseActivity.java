@@ -157,7 +157,6 @@ public class WareHouseActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_confirm:
-
                 showConfirmDialog();
                 break;
         }
