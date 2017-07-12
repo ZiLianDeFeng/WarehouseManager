@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
@@ -341,7 +343,7 @@ public class CommonUtils {
 //        ColorStateList redColors = ColorStateList.valueOf(0x66ff0000);
         SpannableStringBuilder style = new SpannableStringBuilder(string);
         for (int i = 0; i < string2.length; i++) {
-                int bstart=string.indexOf(string2[i])-string3[i].length();
+                int bstart=string.indexOf(string2[i])-string3[i].length()-1;
                 int bend=bstart+string3[i].length();
                 style.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, 80, null, null), bstart, bend,
                         Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -365,6 +367,24 @@ public class CommonUtils {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
         }
         activity.getWindow().setAttributes(lp);
+    }
+
+
+    // 检查网络状态 如果移动数据网络和WiFi任意一个可用则判断为有网
+    public static boolean checkNetWork(Context context) {
+        // 获得联网的管理者
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        // 获取网络状态的NetworkInfo
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null) {
+            return false;
+        }
+        int type = info.getType();
+        if (type == ConnectivityManager.TYPE_MOBILE || type == ConnectivityManager.TYPE_WIFI) {
+            return true;
+        }
+        return false;
     }
 
 }

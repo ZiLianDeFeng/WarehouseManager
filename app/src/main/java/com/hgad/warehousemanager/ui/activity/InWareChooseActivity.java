@@ -46,10 +46,16 @@ public class InWareChooseActivity extends BaseActivity {
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String resultStr = bundle.getString("result");
-                Intent intent = new Intent(this, ScanResultActivity.class);
-                intent.putExtra(Constants.SCAN_RESULT, resultStr);
-                intent.putExtra(Constants.TYPE, Constants.IN_WARE);
-                startActivity(intent);
+//                if (resultStr != null && resultStr.contains("标签号")) {
+                    Intent intent = new Intent(this, ScanResultActivity.class);
+                    intent.putExtra(Constants.SCAN_RESULT, resultStr);
+                    intent.putExtra(Constants.TYPE, Constants.IN_WARE);
+                    startActivity(intent);
+//                } else {
+//                    Intent intent = new Intent(this, OtherInfoActivity.class);
+//                    intent.putExtra(Constants.SCAN_RESULT, resultStr);
+//                    startActivity(intent);
+//                }
             }
         }
     }
@@ -73,7 +79,7 @@ public class InWareChooseActivity extends BaseActivity {
 
     private void go2InHand() {
         Intent intent = new Intent(this, InWareByHandActivity.class);
-        intent.putExtra(Constants.TYPE,Constants.IN_WARE);
+        intent.putExtra(Constants.TYPE, Constants.IN_WARE);
         startActivity(intent);
     }
 }

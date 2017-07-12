@@ -3,6 +3,8 @@ package com.hgad.warehousemanager.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
@@ -21,6 +24,7 @@ import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.view.BottonPopupWindowUtils;
+import com.hgad.warehousemanager.view.CustomProgressDialog;
 
 import java.io.UnsupportedEncodingException;
 
@@ -29,6 +33,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class ScanResultActivity extends BaseActivity {
 
+    private static final int FINISH = 100;
     private TextView tv_markNum;
     private TextView tv_type;
     private TextView tv_net_weight;
@@ -46,6 +51,18 @@ public class ScanResultActivity extends BaseActivity {
     private PopupWindow morePopupWindow;
     private PopupWindow bottonPopupWindow;
     private BottonPopupWindowUtils bottonPopupWindowUtils;
+    private ScrollView sv_main;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case FINISH:
+                    finish();
+                    break;
+            }
+        }
+    };
+    private CustomProgressDialog customProgressDialog;
 
     @Override
     protected void setContentView() {
@@ -62,13 +79,14 @@ public class ScanResultActivity extends BaseActivity {
             initHeader("移位");
         } else if (Constants.CHECK.equals(type)) {
             initHeader("盘点");
-            btn_commit.setVisibility(View.GONE);
-            address = "2仓 3排 4垛 2层";
+            btn_commit.setText("盘点");
+//            btn_commit.setVisibility(View.GONE);
+            address = "2 仓  3 排  4 垛  2 层";
             CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
         } else if (Constants.SCAN_RESULT.equals(type)) {
             initHeader("条码扫描");
             btn_commit.setVisibility(View.GONE);
-            address = "2仓 3排 4垛 2层";
+            address = "2 仓  3 排  4 垛  2 层";
             CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
             ll_more.setVisibility(View.VISIBLE);
             ll_more.setOnClickListener(this);
@@ -99,7 +117,19 @@ public class ScanResultActivity extends BaseActivity {
             } else {
                 result = GB_Str;
             }
-            tv_test.setText(result);
+            if (!result.contains("标签号")) {
+                sv_main.setVisibility(View.GONE);
+                tv_test.setText(result);
+            } else {
+                String mark = result.substring(result.indexOf("标签号") + 5, result.indexOf("订单号") - 2).trim();
+                String spec = result.substring(result.indexOf("规格") + 8, result.indexOf("加工性能") - 2).trim();
+                String grossW = result.substring(result.indexOf("毛重") + 4, result.indexOf("净重") - 2).trim();
+                String netW = result.substring(result.indexOf("净重") + 4, result.indexOf("日期") - 2).trim();
+                tv_markNum.setText(mark);
+                tv_type.setText(spec);
+                tv_gross_weight.setText(grossW);
+                tv_net_weight.setText(netW);
+            }
         }
     }
 
@@ -122,8 +152,16 @@ public class ScanResultActivity extends BaseActivity {
         ImageView iv_more = (ImageView) findViewById(R.id.search);
         iv_more.setImageResource(R.mipmap.and);
         ll_more = (LinearLayout) findViewById(R.id.ll_search);
-        initBottonPopupWindow();
+        sv_main = (ScrollView) findViewById(R.id.sv_main);
     }
+
+    final int[] seatRows = new int[]{4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6};
+    final int[] seatColumns = new int[]{4, 5, 6, 7, 8, 9, 10, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
+    final int[] unSeatColums = new int[]{1, 2, 3, 4, 12, 13, 14, 15, 1, 2, 3, 13, 14, 15, 1, 2, 14, 15, 1, 15};
+    final int[] unFullRows = new int[]{7, 7, 7, 8, 8, 8};
+    final int[] unFullColums = new int[]{14, 12, 13, 13, 14, 12};
+
 
     private void initMorePopupWindow() {
         View contentView = View.inflate(this, R.layout.popupwindow_more, null);
@@ -155,7 +193,12 @@ public class ScanResultActivity extends BaseActivity {
                 chooseAddress();
                 break;
             case R.id.pop_confirm:
-                confirmAddress();
+                String text = bottonPopupWindowUtils.getConfirmText();
+                if ("下一步".equals(text)) {
+                    changeChoose();
+                } else if ("确定".equals(text)) {
+                    confirmAddress();
+                }
                 break;
             case R.id.pop_cancle:
                 bottonPopupWindow.dismiss();
@@ -178,6 +221,10 @@ public class ScanResultActivity extends BaseActivity {
         }
     }
 
+    private void changeChoose() {
+        bottonPopupWindowUtils.change();
+    }
+
     private void commit() {
         if (TextUtils.isEmpty(tv_addressWare.getText().toString().trim())) {
             CommonUtils.showToast(this, "未选择仓库位置");
@@ -193,18 +240,57 @@ public class ScanResultActivity extends BaseActivity {
     }
 
     private void checkCommit() {
-        CommonUtils.showToast(this, "信息正确");
-        finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (customProgressDialog != null) {
+                    customProgressDialog.dismiss();
+                }
+                CommonUtils.showToast(ScanResultActivity.this, "信息正确");
+                finish();
+            }
+        }, 2000);
+        customProgressDialog = new CustomProgressDialog(this, "信息校验中");
+//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
     }
 
     private void inCommit() {
-        CommonUtils.showToast(this, "入库成功");
-        finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (customProgressDialog != null) {
+                    customProgressDialog.dismiss();
+                }
+                CommonUtils.showToast(ScanResultActivity.this, "入库成功");
+                finish();
+            }
+        }, 2000);
+        customProgressDialog = new CustomProgressDialog(this, "数据提交中");
+//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
     }
 
     private void changeCommit() {
-        CommonUtils.showToast(this, "移位成功");
-        finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (customProgressDialog != null) {
+                    customProgressDialog.dismiss();
+                }
+                CommonUtils.showToast(ScanResultActivity.this, "移位成功");
+                finish();
+            }
+        }, 2000);
+        customProgressDialog = new CustomProgressDialog(this, "数据提交中");
+//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
     }
 
     private void showMore() {
@@ -213,11 +299,16 @@ public class ScanResultActivity extends BaseActivity {
     }
 
     private void confirmAddress() {
+        if (bottonPopupWindowUtils.getRow() == null
+                || bottonPopupWindowUtils.getColumn() == null) {
+            CommonUtils.showToast(this, "还未选择地址");
+            return;
+        }
         ware = bottonPopupWindowUtils.getWare();
         row = bottonPopupWindowUtils.getRow();
         column = bottonPopupWindowUtils.getColumn();
         floor = bottonPopupWindowUtils.getFloor();
-        address = ware + "仓 " + row + "排 " + column + "垛 " + floor + "层 ";
+        address = ware + " 仓  " + row + " 排  " + column + " 垛  " + floor + " 层  ";
         CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
         bottonPopupWindow.dismiss();
     }
@@ -229,7 +320,16 @@ public class ScanResultActivity extends BaseActivity {
             intent.putExtra(Constants.ADDRESS, address);
             startActivity(intent);
         } else {
-            bottonPopupWindow.showAtLocation(btn_commit, Gravity.BOTTOM, 0, 0);
+            bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getResources().getString(R.string.choose_address));
+            bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
+            bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1f);
+                }
+            });
+            bottonPopupWindowUtils.initSeatTable(seatRows, seatColumns, unSeatRows, unSeatColums, unFullRows, unFullColums);
+            bottonPopupWindowUtils.show(btn_commit, Gravity.BOTTOM, 0, 0);
             backgroundAlpha(0.8f);
         }
     }
@@ -238,18 +338,6 @@ public class ScanResultActivity extends BaseActivity {
     String[] rows = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     String[] columns = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     String[] floors = {"1", "2", "3"};
-
-    private void initBottonPopupWindow() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, row, column, floor, getResources().getString(R.string.choose_address));
-        bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
-        bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                backgroundAlpha(1f);
-            }
-        });
-    }
-
 
     /**
      * 设置添加屏幕的背景透明度

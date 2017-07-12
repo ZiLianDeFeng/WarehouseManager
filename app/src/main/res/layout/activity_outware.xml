@@ -9,9 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_padding"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_margin="@dimen/common_padding">
+        android:focusableInTouchMode="true">
 
 
         <EditText
@@ -19,10 +19,10 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="3"
-            android:padding="@dimen/common_dp"
+            android:background="@drawable/shape_circle"
             android:hint="@string/inputOrder"
-            android:textSize="@dimen/common_text_size"
-            android:background="@drawable/shape_circle" />
+            android:padding="@dimen/common_dp"
+            android:textSize="@dimen/common_text_size" />
 
         <Button
             android:id="@+id/btn_find"
@@ -33,20 +33,60 @@
             android:layout_weight="1"
             android:background="@drawable/shape_circle_state"
             android:text="查询"
-            android:textColor="@color/white"
-            />
+            android:textColor="@color/white" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#2000"/>
+        android:background="#2000" />
 
-    <ListView
-        android:id="@+id/lv_order"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="@dimen/marginleft"
-        android:background="@color/background_light"
-        android:scrollbars="none"/>
+        android:background="@color/background_light">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ListView
+                android:id="@+id/lv_order"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_light"
+                android:divider="@null"
+                android:dividerHeight="@dimen/marginleft"
+                android:scrollbars="none" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无数据!"
+            android:textColor="#6000"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_infoOperating"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_light"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/infoOperating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                android:src="@mipmap/jiazai" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
 </LinearLayout>

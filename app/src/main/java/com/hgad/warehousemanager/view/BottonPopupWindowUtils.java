@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,9 +29,18 @@ public class BottonPopupWindowUtils {
     private LinearLayout pop_address;
     private LinearLayout pop_map;
     private SeatTable seatView;
-    //    private TextView pop_switch;
+    private TextView pop_switch;
     private Context context;
     private TextView pop_confirm;
+    private FrameLayout fl_map;
+    private LinearLayout ll_wheel;
+    private WheelView wl_row;
+    private WheelView wl_column;
+    private WheelView wl_floor;
+    private WheelView wl_ware;
+    private WheelView wv_ware_num;
+    private WheelView wv_floor;
+
 
     public String getWare() {
         return ware;
@@ -64,15 +74,12 @@ public class BottonPopupWindowUtils {
         isMap = map;
     }
 
-    public BottonPopupWindowUtils(String ware, String row, String column, String floor, String title) {
+    public BottonPopupWindowUtils(String ware, String floor, String title) {
         this.ware = ware;
-        this.row = row;
-        this.column = column;
         this.floor = floor;
         this.title = title;
         isMap = false;
     }
-
 
     public PopupWindow creat(Context context, String[] wareNums, String[] rows, String[] columns, String[] floors, View.OnClickListener listener) {
         this.context = context;
@@ -85,15 +92,16 @@ public class BottonPopupWindowUtils {
         pop_confirm = (TextView) popupWindowView.findViewById(R.id.pop_confirm);
         pop_confirm.setOnClickListener(listener);
         popupWindowView.findViewById(R.id.pop_cancle).setOnClickListener(listener);
-//        pop_switch = (TextView) popupWindowView.findViewById(R.id.pop_switch);
-//        pop_switch.setOnClickListener(listener);
+        pop_switch = (TextView) popupWindowView.findViewById(R.id.pop_switch);
+        pop_switch.setOnClickListener(switchListener);
         pop_address = (LinearLayout) popupWindowView.findViewById(R.id.pop_address);
         pop_map = (LinearLayout) popupWindowView.findViewById(R.id.pop_map);
+        fl_map = (FrameLayout) popupWindowView.findViewById(R.id.fl_map);
+        ll_wheel = (LinearLayout) popupWindowView.findViewById(R.id.ll_wheel);
         seatView = (SeatTable) popupWindowView.findViewById(R.id.seatView);
-        initSeatTable();
         TextView poptitle = (TextView) popupWindowView.findViewById(R.id.pop_title);
         poptitle.setText(title);
-        WheelView wv_ware_num = (WheelView) popupWindowView.findViewById(R.id.wv_ware_num);
+        wv_ware_num = (WheelView) popupWindowView.findViewById(R.id.wv_ware_num);
         wv_ware_num.setOffset(1);
         wv_ware_num.setItems(Arrays.asList(wareNums));
         wv_ware_num.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
@@ -102,25 +110,7 @@ public class BottonPopupWindowUtils {
                 ware = item;
             }
         });
-//        WheelView wv_row = (WheelView) popupWindowView.findViewById(R.id.wv_row);
-//        wv_row.setOffset(1);
-//        wv_row.setItems(Arrays.asList(rows));
-//        wv_row.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                row = item;
-//            }
-//        });
-//        WheelView wv_column = (WheelView) popupWindowView.findViewById(R.id.wv_column);
-//        wv_column.setOffset(1);
-//        wv_column.setItems(Arrays.asList(columns));
-//        wv_column.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                column = item;
-//            }
-//        });
-        WheelView wv_floor = (WheelView) popupWindowView.findViewById(R.id.wv_floor);
+        wv_floor = (WheelView) popupWindowView.findViewById(R.id.wv_floor);
         wv_floor.setOffset(1);
         wv_floor.setItems(Arrays.asList(floors));
         wv_floor.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
@@ -129,6 +119,47 @@ public class BottonPopupWindowUtils {
                 floor = item;
             }
         });
+        wl_ware = (WheelView) popupWindowView.findViewById(R.id.wl_ware);
+        wl_ware.setOffset(1);
+        wl_ware.setItems(Arrays.asList(wareNums));
+        wl_ware.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                ware = item;
+            }
+        });
+        wl_floor = (WheelView) popupWindowView.findViewById(R.id.wl_floor);
+        wl_floor.setOffset(1);
+        wl_floor.setItems(Arrays.asList(floors));
+        wl_floor.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                floor = item;
+            }
+        });
+
+        wl_row = (WheelView) popupWindowView.findViewById(R.id.wl_row);
+        wl_row.setOffset(1);
+        wl_row.setItems(Arrays.asList(rows));
+        wl_row.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                row = item;
+            }
+        });
+        wl_column = (WheelView) popupWindowView.findViewById(R.id.wl_column);
+        wl_column.setOffset(1);
+        wl_column.setItems(Arrays.asList(columns));
+        wl_column.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                column = item;
+            }
+        });
+        row = wl_row.getSeletedItem();
+        column = wl_column.getSeletedItem();
+        ware = wl_ware.getSeletedItem();
+        floor = wl_floor.getSeletedItem();
         return bottonPopupWindow;
     }
 
@@ -136,14 +167,8 @@ public class BottonPopupWindowUtils {
         return pop_confirm.getText().toString();
     }
 
-    private void initSeatTable() {
+    public void initSeatTable(final int[] rows, final int[] columns, final int[] unSeatRows, final int[] unSeatColums, int[] unFullRows, int[] unFullColums) {
         seatView.setData(15, 15);
-        final int[] rows = new int[]{4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6};
-        final int[] columns = new int[]{4, 5, 6, 7, 8, 9, 10, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-        final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
-        final int[] unSeatColumns = new int[]{1, 2, 3, 4, 12, 13, 14, 15, 1, 2, 3, 13, 14, 15, 1, 2, 14, 15, 1, 15};
-        final int[] unFullRows = new int[]{7, 7, 7, 8, 8, 8};
-        final int[] unFullColumns = new int[]{14, 12, 13, 13, 14, 12};
 
         seatView.setMaxSelected(1);
         seatView.setSeatChecker(new SeatTable.SeatChecker() {
@@ -151,7 +176,7 @@ public class BottonPopupWindowUtils {
             @Override
             public boolean isValidSeat(int row, int column) {
                 for (int i = 0; i < unSeatRows.length; i++) {
-                    if (row == (unSeatRows[i] - 1) && column == (unSeatColumns[i] - 1)) {
+                    if (row == (unSeatRows[i] - 1) && column == (unSeatColums[i] - 1)) {
                         return false;
                     }
                 }
@@ -182,7 +207,7 @@ public class BottonPopupWindowUtils {
             @Override
             public boolean isUnFull(int row, int column) {
 //                    for (int i = 0; i < unFullRows.length; i++) {
-//                        if (row == (unFullRows[i] - 1) && column == (unFullColumns[i] - 1)) {
+//                        if (row == (unFullRows[i] - 1) && column == (unFullColums[i] - 1)) {
 //                            return true;
 //                        }
 //                    }
@@ -197,6 +222,31 @@ public class BottonPopupWindowUtils {
         });
     }
 
+    private View.OnClickListener switchListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            isMap = !isMap;
+            if (isMap) {
+                ll_wheel.setVisibility(View.INVISIBLE);
+                fl_map.setVisibility(View.VISIBLE);
+                pop_confirm.setText("下一步");
+                ware = wv_ware_num.getSeletedItem();
+                floor = wv_floor.getSeletedItem();
+                row = null;
+                column = null;
+            } else {
+                index = 1;
+                pop_confirm.setText("确定");
+                ll_wheel.setVisibility(View.VISIBLE);
+                fl_map.setVisibility(View.INVISIBLE);
+                row = wl_row.getSeletedItem();
+                column = wl_column.getSeletedItem();
+                ware = wl_ware.getSeletedItem();
+                floor = wl_floor.getSeletedItem();
+            }
+        }
+    };
+
     public void show(View parent, int grarity, int x, int y) {
         bottonPopupWindow.showAtLocation(parent, grarity, x, y);
         index = 1;
@@ -204,7 +254,7 @@ public class BottonPopupWindowUtils {
         pop_map.setVisibility(View.VISIBLE);
 //        pop_switch.setVisibility(View.VISIBLE);
 //        pop_confirm.setVisibility(View.INVISIBLE);
-        pop_confirm.setText("下一步");
+        pop_confirm.setText("确定");
     }
 
     private int index = 1;
@@ -214,6 +264,7 @@ public class BottonPopupWindowUtils {
             seatView.setScreenName(ware + "号仓库");
             seatView.invalidate();
             pop_address.setVisibility(View.INVISIBLE);
+            pop_switch.setVisibility(View.INVISIBLE);
             index++;
         } else if (index == 2) {
             if (row == null || column == null) {
@@ -228,13 +279,6 @@ public class BottonPopupWindowUtils {
         } else if (index == 3) {
 
         }
-//        isMap = !isMap;
-//        if (isMap) {
-//            pop_address.setVisibility(View.INVISIBLE);
-//            pop_map.setVisibility(View.VISIBLE);
-//        } else {
-//            pop_address.setVisibility(View.VISIBLE);
-//            pop_map.setVisibility(View.INVISIBLE);
-//        }
+
     }
 }

@@ -41,7 +41,7 @@ public class CheckActivity extends BaseActivity{
                 String resultStr = bundle.getString("result");
                 Intent intent = new Intent(this, ScanResultActivity.class);
                 intent.putExtra(Constants.SCAN_RESULT, resultStr);
-                intent.putExtra(Constants.TYPE, Constants.CHANGE_WARE);
+                intent.putExtra(Constants.TYPE, Constants.CHECK);
                 startActivity(intent);
             }
         }

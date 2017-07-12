@@ -16,12 +16,14 @@ import com.hgad.warehousemanager.net.Callback;
 import com.hgad.warehousemanager.net.NetUtil;
 
 
-public abstract class BaseActivity extends AppCompatActivity implements Callback<BaseReponse>,View.OnClickListener{
+public abstract class BaseActivity extends AppCompatActivity implements Callback<BaseReponse>, View.OnClickListener {
 
 
     protected void initHeader(String text) {
         TextView tvTitle = (TextView) findViewById(R.id.tv_title);
-        tvTitle.setText(text);
+        if (tvTitle != null) {
+            tvTitle.setText(text);
+        }
     }
 
     public void back(View view) {
@@ -49,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
         alertDialog.setCancelable(false);
         alertDialog.show();
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

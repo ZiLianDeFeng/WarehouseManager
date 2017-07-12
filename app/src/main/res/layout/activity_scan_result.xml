@@ -8,6 +8,7 @@
     <include layout="@layout/header" />
 
     <ScrollView
+        android:id="@+id/sv_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -181,15 +182,16 @@
                     android:background="#1000" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         </LinearLayout>
-
     </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding"
+        android:textColor="@color/black"
+        android:textSize="@dimen/common_text_size" />
 
     <Button
         android:id="@+id/btn_commit"

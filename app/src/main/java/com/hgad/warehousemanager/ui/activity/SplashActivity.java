@@ -7,8 +7,10 @@ import android.view.View;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
+import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.util.SPUtils;
 
 /**
  * Created by Administrator on 2017/1/4.
@@ -28,13 +30,22 @@ public class SplashActivity extends BaseActivity {
                 return;//finish()之后该活动会继续执行后面的代码，你可以logCat验证，加return避免可能的exception
             }
         }
+        final boolean loginSuccess = SPUtils.getBoolean(this, SPConstants.LOGIN_SUCCESS);
+        if (loginSuccess) {
+            String userName = SPUtils.getString(this, SPConstants.USER_NAME);
+            String password = SPUtils.getString(this, SPConstants.PWD);
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
+                if (loginSuccess) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
                 finish();
-//                }
             }
         }, 2000);
     }

@@ -9,56 +9,59 @@
 
     </data>
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:id="@+id/ll_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/bg_login"
-        android:gravity="center">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="150dp">
 
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_marginTop="@dimen/common_margin_top"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="@string/warehouse"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="@dimen/item_size" />-->
         <LinearLayout
-            android:id="@+id/ll_login"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:paddingTop="100dp">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@mipmap/ic_launcher" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="@dimen/common_margin_top"
-                android:gravity="center_horizontal"
-                android:text="@string/warehouse"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_size" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_white"
+            android:padding="@dimen/common_dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/common_min_padding">
+                android:padding="3dp">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/marginleft"
-                    android:layout_marginRight="@dimen/common_dp"
-                    android:src="@mipmap/user_name" />
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/marginleft"-->
+                <!--android:layout_marginRight="@dimen/common_dp"-->
+                <!--android:src="@mipmap/user_name" />-->
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/marginleft"
-                    android:background="@color/text_color" />
+                <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_margin="@dimen/marginleft"-->
+                <!--android:background="@color/text_color" />-->
 
                 <EditText
                     android:id="@+id/et_username"
@@ -66,40 +69,40 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="账号"
+                    android:hint="账号/会员名/邮箱"
                     android:padding="@dimen/common_dp"
                     android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/text_color" />
+                    android:textColor="@color/light_black"
+                    android:textColorHint="@color/no_net"
+                    android:textSize="@dimen/common_text_size" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/common_dp"
                 android:layout_marginRight="@dimen/common_dp"
-                android:background="@color/text_color" />
+                android:background="@color/light_black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginleft"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/common_min_padding">
+                android:padding="3dp">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/marginleft"
-                    android:layout_marginRight="@dimen/common_dp"
-                    android:src="@mipmap/password" />
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/marginleft"-->
+                <!--android:layout_marginRight="@dimen/common_dp"-->
+                <!--android:src="@mipmap/password" />-->
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/marginleft"
-                    android:background="@color/text_color" />
+                <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_margin="@dimen/marginleft"-->
+                <!--android:background="@color/text_color" />-->
 
                 <EditText
                     android:id="@+id/et_password"
@@ -111,62 +114,63 @@
                     android:inputType="textPassword"
                     android:padding="@dimen/common_dp"
                     android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/text_color" />
+                    android:textColor="@color/light_black"
+                    android:textColorHint="@color/no_net"
+                    android:textSize="@dimen/common_text_size" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/common_dp"
-                android:layout_marginRight="@dimen/common_dp"
-                android:background="@color/text_color" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginleft"
-                android:orientation="horizontal"
-                android:padding="@dimen/common_dp">
-
-                <CheckBox
-                    android:id="@+id/cb_remenber"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/marginleft"
-                    android:layout_marginRight="@dimen/common_dp"
-                    android:background="@drawable/checkbox_selector"
-                    android:button="@null" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/common_dp"
-                    android:gravity="center_vertical"
-                    android:text="记住账号"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/common_button_height"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/shape_circle_button"
-                android:text="@string/login"
-                android:textColor="#1770DE" />
-
-            <!--<TextView-->
-                <!--android:id="@+id/tv_outLine"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/marginleft"-->
-                <!--android:text="@{userModel.userInfo.userName+'\n'+userModel.userInfo.password}"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:textSize="12sp" />-->
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.5dp"-->
+                <!--android:layout_marginLeft="@dimen/common_dp"-->
+                <!--android:layout_marginRight="@dimen/common_dp"-->
+                <!--android:background="@color/light_black" />-->
         </LinearLayout>
-    </RelativeLayout>
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/marginleft"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:padding="@dimen/common_dp">-->
+
+        <!--<CheckBox-->
+        <!--android:id="@+id/cb_remenber"-->
+        <!--android:layout_width="18dp"-->
+        <!--android:layout_height="18dp"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginLeft="@dimen/marginleft"-->
+        <!--android:layout_marginRight="@dimen/common_dp"-->
+        <!--android:background="@drawable/checkbox_selector"-->
+        <!--android:button="@null" />-->
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginLeft="@dimen/common_dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="记住账号"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="12sp" />-->
+        <!--</LinearLayout>-->
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_button_height"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/shape_circle_button"
+            android:text="@string/login"
+            android:textSize="@dimen/item_size"
+            android:textColor="@color/white" />
+
+        <!--<TextView-->
+        <!--android:id="@+id/tv_outLine"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/marginleft"-->
+        <!--android:text="@{userModel.userInfo.userName+'\n'+userModel.userInfo.password}"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="12sp" />-->
+    </LinearLayout>
 
 </layout>

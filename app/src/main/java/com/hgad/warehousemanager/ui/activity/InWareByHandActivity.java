@@ -1,6 +1,8 @@
 package com.hgad.warehousemanager.ui.activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.view.BottonPopupWindowUtils;
+import com.hgad.warehousemanager.view.CustomProgressDialog;
 
 /**
  * Created by Administrator on 2017/6/29.
@@ -35,6 +38,14 @@ public class InWareByHandActivity extends BaseActivity {
     private TextView tv_addressWare;
     private String type;
     private LinearLayout ll_address;
+    private CustomProgressDialog customProgressDialog;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            }
+        }
+    };
 
     @Override
     protected void setContentView() {
@@ -74,6 +85,14 @@ public class InWareByHandActivity extends BaseActivity {
 //    private void initBottonPopupWindow() {
 //
 //    }
+
+    final int[] seatRows = new int[]{4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6};
+    final int[] seatColumns = new int[]{4, 5, 6, 7, 8, 9, 10, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
+    final int[] unSeatColums = new int[]{1, 2, 3, 4, 12, 13, 14, 15, 1, 2, 3, 13, 14, 15, 1, 2, 14, 15, 1, 15};
+    final int[] unFullRows = new int[]{7, 7, 7, 8, 8, 8};
+    final int[] unFullColums = new int[]{14, 12, 13, 13, 14, 12};
+
 
     @Override
     public void onBackPressed() {
@@ -135,18 +154,57 @@ public class InWareByHandActivity extends BaseActivity {
     }
 
     private void checkCommit() {
-        CommonUtils.showToast(this, "信息正确");
-        finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (customProgressDialog != null) {
+                    customProgressDialog.dismiss();
+                }
+                CommonUtils.showToast(InWareByHandActivity.this, "信息正确");
+                finish();
+            }
+        }, 2000);
+        customProgressDialog = new CustomProgressDialog(this, "信息校验中");
+//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
     }
 
     private void inCommit() {
-        CommonUtils.showToast(this, "入库成功");
-        finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (customProgressDialog != null) {
+                    customProgressDialog.dismiss();
+                }
+                CommonUtils.showToast(InWareByHandActivity.this, "入库成功");
+                finish();
+            }
+        }, 2000);
+        customProgressDialog = new CustomProgressDialog(this, "数据提交中");
+//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
     }
 
     private void changeCommit() {
-        CommonUtils.showToast(this, "移位成功");
-        finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (customProgressDialog != null) {
+                    customProgressDialog.dismiss();
+                }
+                CommonUtils.showToast(InWareByHandActivity.this, "移位成功");
+                finish();
+            }
+        }, 2000);
+        customProgressDialog = new CustomProgressDialog(this, "数据提交中");
+//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
     }
 
     private void confirmAddress() {
@@ -159,13 +217,13 @@ public class InWareByHandActivity extends BaseActivity {
         row = bottonPopupWindowUtils.getRow();
         column = bottonPopupWindowUtils.getColumn();
         floor = bottonPopupWindowUtils.getFloor();
-        address = ware + "仓 " + row + "排 " + column + "垛 " + floor + "层 ";
+        address = ware + " 仓  " + row + " 排  " + column + " 垛  " + floor + " 层  ";
         CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
         bottonPopupWindow.dismiss();
     }
 
     private void chooseAddress() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, null, null, floor, getResources().getString(R.string.choose_address));
+        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getResources().getString(R.string.choose_address));
         bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
         bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -173,6 +231,7 @@ public class InWareByHandActivity extends BaseActivity {
                 CommonUtils.backgroundAlpha(1f, InWareByHandActivity.this);
             }
         });
+        bottonPopupWindowUtils.initSeatTable(seatRows, seatColumns, unSeatRows, unSeatColums, unFullRows, unFullColums);
         bottonPopupWindowUtils.show(btn_commit, Gravity.BOTTOM, 0, 0);
         CommonUtils.backgroundAlpha(0.8f, this);
     }

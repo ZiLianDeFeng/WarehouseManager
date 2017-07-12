@@ -2,6 +2,8 @@ package com.hgad.warehousemanager.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -13,8 +15,8 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ import com.hgad.warehousemanager.ui.adapter.DrawerAdapter;
 import com.hgad.warehousemanager.ui.fragment.HomeFragment;
 import com.hgad.warehousemanager.ui.fragment.UserFragment;
 import com.hgad.warehousemanager.util.CommonUtils;
+import com.hgad.warehousemanager.util.FastBlurUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 
 import java.util.ArrayList;
@@ -46,7 +49,9 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout drawer;
     private HomeFragment homeFragment;
     private UserFragment userFragment;
+    private Bitmap roundBitmap;
     private Handler handler = new Handler();
+    private ImageView iv_user_icon;
 
     @Override
     protected void setContentView() {
@@ -57,35 +62,38 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
         homeFragment = new HomeFragment();
-        userFragment = new UserFragment();
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_home:
-                        addHideShow(homeFragment);
-                        break;
-//                    case R.id.rb_data_centre:
-//                        addHideShow(dataCenterFragment);
+//        userFragment = new UserFragment();
+//        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                switch (checkedId) {
+//                    case R.id.rb_home:
+//                        addHideShow(homeFragment);
 //                        break;
-//                    case R.id.rb_performance:
-//                        addHideShow(performanceFragment);
+////                    case R.id.rb_data_centre:
+////                        addHideShow(dataCenterFragment);
+////                        break;
+////                    case R.id.rb_performance:
+////                        addHideShow(performanceFragment);
+////                        break;
+//                    case R.id.rb_user:
+//                        addHideShow(userFragment);
 //                        break;
-                    case R.id.rb_user:
-                        addHideShow(userFragment);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        ((RadioButton) rg.getChildAt(0)).setChecked(true);
-
+//                    default:
+//                        break;
+//                }
+//            }
+//        });
+//        ((RadioButton) rg.getChildAt(0)).setChecked(true);
+        addHideShow(homeFragment);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.dog);
+        roundBitmap = FastBlurUtils.toRoundBitmap(bitmap);
+        iv_user_icon.setImageBitmap(roundBitmap);
     }
 
     @Override
     protected void initView() {
-        rg = (RadioGroup) findViewById(R.id.rg);
+//        rg = (RadioGroup) findViewById(R.id.rg);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         right = (LinearLayout) findViewById(R.id.right);
         left = (RecyclerView) findViewById(R.id.rv_drawer);
@@ -108,7 +116,7 @@ public class MainActivity extends BaseActivity {
                 Display display = manager.getDefaultDisplay();
                 //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
                 right.layout(left.getRight(), 0, left.getRight() + display.getWidth(), display.getHeight());
-                homeFragment.onPause();
+                mCurrentFragment.onPause();
             }
 
             @Override
@@ -119,21 +127,38 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 isDrawer = false;
-                homeFragment.onResume();
+                mCurrentFragment.onResume();
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
             }
         });
-        findViewById(R.id.iv_user_icon).setOnClickListener(this);
+        iv_user_icon = (ImageView) findViewById(R.id.iv_user_icon);
+        iv_user_icon.setOnClickListener(this);
+
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
-        DrawerAdapter drawerAdapter = new DrawerAdapter();
+        DrawerAdapter drawerAdapter = new DrawerAdapter(this);
         drawerAdapter.setOnItemClickListener(new OnItemClickListener());
+        drawerAdapter.setHeadClickListener(new DrawerAdapter.OnHeadClickListener() {
+            @Override
+            public void headClick() {
+                Intent intent = new Intent(MainActivity.this,UserSettingActivity.class);
+                startActivity(intent);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                }, 500);
+            }
+        });
         left.setLayoutManager(new LinearLayoutManager(this));
         left.setAdapter(drawerAdapter);
+
     }
+
 
     public class OnItemClickListener implements DrawerAdapter.OnItemClickListener {
 
@@ -151,7 +176,7 @@ public class MainActivity extends BaseActivity {
                 case R.string.drawer_menu_setting://设置
                     go();
                     break;
-                case R.string.drawer_menu_air://夜间模式
+                case R.string.drawer_menu_air:
                     weather();
                     break;
             }
@@ -276,6 +301,5 @@ public class MainActivity extends BaseActivity {
         } else {
             BaseApplication.getApplication().exit();
         }
-
     }
 }

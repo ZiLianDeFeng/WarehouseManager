@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="500dp"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -41,57 +41,92 @@
             android:textSize="@dimen/common_text_size" />
     </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="400dp">
 
-        <LinearLayout
-            android:id="@+id/pop_floor"
+        <FrameLayout
+            android:id="@+id/fl_map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:gravity="center">
+            android:layout_height="400dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:id="@+id/pop_floor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="层"
-                    android:textColor="@color/light_black"
-                    android:textSize="@dimen/common_text_size" />
+                    android:orientation="vertical">
 
-                <com.hgad.warehousemanager.view.WheelView
-                    android:id="@+id/wv_floor"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="层"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/common_text_size" />
+
+                    <com.hgad.warehousemanager.view.WheelView
+                        android:id="@+id/wv_floor"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/pop_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-            <com.hgad.warehousemanager.view.SeatTable
-                android:id="@+id/seatView"
+            <LinearLayout
+                android:id="@+id/pop_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#fff" />
-        </LinearLayout>
+                android:background="@color/white">
+
+                <com.hgad.warehousemanager.view.SeatTable
+                    android:id="@+id/seatView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pop_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="仓"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/common_text_size" />
+
+                    <com.hgad.warehousemanager.view.WheelView
+                        android:id="@+id/wv_ware_num"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/pop_address"
+            android:id="@+id/ll_wheel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -107,82 +142,79 @@
                     android:textSize="@dimen/common_text_size" />
 
                 <com.hgad.warehousemanager.view.WheelView
-                    android:id="@+id/wv_ware_num"
+                    android:id="@+id/wl_ware"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text="排"-->
-            <!--android:textColor="@color/light_black"-->
-            <!--android:textSize="@dimen/common_text_size" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="排"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/common_text_size" />
 
-            <!--<com.hgad.warehousemanager.view.WheelView-->
-            <!--android:id="@+id/wv_row"-->
-            <!--android:layout_width="60dp"-->
-            <!--android:layout_height="wrap_content" />-->
-            <!--</LinearLayout>-->
+                <com.hgad.warehousemanager.view.WheelView
+                    android:id="@+id/wl_row"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text="垛"-->
-            <!--android:textColor="@color/light_black"-->
-            <!--android:textSize="@dimen/common_text_size" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="垛"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/common_text_size" />
 
-            <!--<com.hgad.warehousemanager.view.WheelView-->
-            <!--android:id="@+id/wv_column"-->
-            <!--android:layout_width="60dp"-->
-            <!--android:layout_height="wrap_content" />-->
-            <!--</LinearLayout>-->
+                <com.hgad.warehousemanager.view.WheelView
+                    android:id="@+id/wl_column"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text="层"-->
-            <!--android:textColor="@color/light_black"-->
-            <!--android:textSize="@dimen/common_text_size" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="层"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/common_text_size" />
 
-            <!--<com.hgad.warehousemanager.view.WheelView-->
-            <!--android:id="@+id/wv_floor"-->
-            <!--android:layout_width="60dp"-->
-            <!--android:layout_height="wrap_content" />-->
-            <!--</LinearLayout>-->
+                <com.hgad.warehousemanager.view.WheelView
+                    android:id="@+id/wl_floor"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
+    </RelativeLayout>
 
-
-    </FrameLayout>
-
-
-    <!--<TextView-->
-    <!--android:id="@+id/pop_switch"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_horizontal"-->
-    <!--android:layout_marginBottom="10dp"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:padding="@dimen/common_padding"-->
-    <!--android:text="下一步"-->
-    <!--android:textColor="@color/blue"-->
-    <!--android:textSize="12sp" />-->
+    <TextView
+        android:id="@+id/pop_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="@dimen/common_padding"
+        android:text="切换"
+        android:textColor="@color/blue"
+        android:textSize="12sp" />
 </LinearLayout>

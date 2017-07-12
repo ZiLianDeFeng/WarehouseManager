@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="71dp"
-        android:background="@color/blue"
+        android:background="@color/dark"
         android:fitsSystemWindows="true"
         android:paddingTop="23dp">
 
@@ -47,7 +47,9 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:layout_weight="1">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -101,7 +103,9 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="@dimen/home_item_height"
@@ -118,20 +122,20 @@
                         android:textSize="@dimen/common_head_text_size" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="@dimen/home_item_height"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:background="@color/blue"
-                    android:orientation="vertical"
-                   >
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_code_scanning"
                         style="@style/table_text"
-                        android:text="条码扫描"
                         android:drawableTop="@mipmap/cancel"
+                        android:text="条码扫描"
                         android:textSize="@dimen/common_head_text_size" />
 
                 </LinearLayout>
@@ -142,14 +146,13 @@
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:background="@color/yellow"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_user_setting"
                         style="@style/table_text"
-                        android:text="个人设置"
                         android:drawableTop="@mipmap/take_phone_0"
+                        android:text="个人设置"
                         android:textSize="@dimen/common_head_text_size" />
                 </LinearLayout>
 

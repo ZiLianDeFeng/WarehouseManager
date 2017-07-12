@@ -7,8 +7,10 @@ import android.widget.TextView;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
+import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.util.SPUtils;
 
 /**
  * Created by Administrator on 2017/6/26.
@@ -56,6 +58,7 @@ public class SettingActivity extends BaseActivity {
     private void loginout() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        SPUtils.put(this, SPConstants.LOGIN_SUCCESS, false);
         BaseApplication.getApplication().exit();
     }
 }
