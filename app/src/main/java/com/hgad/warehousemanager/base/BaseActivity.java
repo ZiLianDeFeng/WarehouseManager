@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.bean.response.ErrorResponseInfo;
-import com.hgad.warehousemanager.net.BaseReponse;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.Callback;
 import com.hgad.warehousemanager.net.NetUtil;
 
 
-public abstract class BaseActivity extends AppCompatActivity implements Callback<BaseReponse>, View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements Callback<BaseResponse>, View.OnClickListener {
 
 
     protected void initHeader(String text) {
@@ -67,16 +67,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
 
     protected abstract void initView();
 
-    public void sendRequest(BaseRequest request, Class<? extends BaseReponse> responseClass) {
+    public void sendRequest(BaseRequest request, Class<? extends BaseResponse> responseClass) {
 
         NetUtil.sendRequest(request, responseClass, this);
     }
 
-    public abstract void onSuccessResult(BaseRequest request, BaseReponse response);
+    public abstract void onSuccessResult(BaseRequest request, BaseResponse response);
 
 
     @Override
-    public void onSuccess(BaseRequest request, BaseReponse response) {
+    public void onSuccess(BaseRequest request, BaseResponse response) {
 
         onSuccessResult(request, response);
     }

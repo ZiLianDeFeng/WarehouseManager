@@ -1,46 +1,86 @@
 package com.hgad.warehousemanager.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
-import com.hgad.warehousemanager.bean.WareInfo;
+import com.hgad.warehousemanager.bean.OrderInfo;
+import com.hgad.warehousemanager.bean.request.TaskRequest;
+import com.hgad.warehousemanager.bean.response.TaskResponse;
 import com.hgad.warehousemanager.constants.Constants;
-import com.hgad.warehousemanager.net.BaseReponse;
+import com.hgad.warehousemanager.constants.SPConstants;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.ui.adapter.OrderAdapter;
 import com.hgad.warehousemanager.util.CommonUtils;
+import com.hgad.warehousemanager.util.SPUtils;
+import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import me.maxwin.view.XListView;
 
 /**
  * Created by Administrator on 2017/6/29.
  */
 public class OutWareActivity extends BaseActivity {
-
-    private ListView lv;
-    private List<WareInfo> data = new ArrayList<>();
+    private static final int SCAN = 199;
+    private XListView lv;
+    private List<OrderInfo> data = new ArrayList<>();
     private OrderAdapter orderAdapter;
     private EditText et_order_num;
     private SwipeRefreshLayout swipeRefreshView;
     private Animation operatingAnim;
     private RelativeLayout rl_info;
     private ImageView infoOperating;
-    private Handler handler = new Handler();
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Constants.NOTIFY:
+                    if (isRefresh) {
+                        lv.stopRefresh();
+                        lv.setRefreshTime(CommonUtils.getCurrentTime());
+                    } else {
+                        lv.stopLoadMore();
+                    }
+                    rl_info.setVisibility(View.INVISIBLE);
+                    infoOperating.clearAnimation();
+                    if (data.size() < 10) {
+                        lv.setPullLoadEnable(false);
+                    } else {
+                        lv.setPullLoadEnable(true);
+                    }
+                    orderAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+    private LinearLayout ll_more;
+    private PopupWindow morePopupWindow;
+    private String type = Constants.OUT_TYPE;
+    private int currentPage = 1;
+    private int userId;
 
     @Override
     protected void setContentView() {
@@ -50,51 +90,111 @@ public class OutWareActivity extends BaseActivity {
     @Override
     protected void initData() {
         initHeader("出库");
+        userId = SPUtils.getInt(this, SPConstants.USER_ID);
+        Intent intent = getIntent();
+        String orderNum = intent.getStringExtra(Constants.ORDER_NUMBER);
+        if (orderNum != null) {
+            et_order_num.setText(orderNum);
+            search();
+        } else {
+            if (operatingAnim != null) {
+                rl_info.setVisibility(View.VISIBLE);
+                infoOperating.startAnimation(operatingAnim);
+//                rl_info.setVisibility(View.INVISIBLE);
+//                infoOperating.clearAnimation();
+                TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
+                sendRequest(taskRequest, TaskResponse.class);
+                currentPage--;
+            }
+        }
     }
 
     @Override
     protected void initView() {
-        lv = (ListView) findViewById(R.id.lv_order);
+        lv = (XListView) findViewById(R.id.lv_order);
         orderAdapter = new OrderAdapter(data, this);
+        orderAdapter.setCallFreshListener(callRefreshListener);
         lv.setAdapter(orderAdapter);
         lv.setOnItemClickListener(itemListener);
+        lv.setPullLoadEnable(true);
+        lv.setPullRefreshEnable(true);
+        lv.setXListViewListener(xlistviewListener);
         TextView tv_empty = (TextView) findViewById(R.id.tv_empty);
         lv.setEmptyView(tv_empty);
         et_order_num = (EditText) findViewById(R.id.et_order_num);
         findViewById(R.id.btn_find).setOnClickListener(this);
-        swipeRefreshView = (SwipeRefreshLayout) findViewById(R.id.srl);
-        swipeRefreshView.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        // 设置下拉进度的主题颜色
-        swipeRefreshView.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
-        swipeRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//        ImageView iv_more = (ImageView) findViewById(R.id.search);
+//        iv_more.setImageResource(R.mipmap.and);
+//        ll_more = (LinearLayout) findViewById(R.id.ll_search);
+//        ll_more.setVisibility(View.VISIBLE);
+//        ll_more.setOnClickListener(this);
+//        initMorePopupWindow();
+        initAnimation();
+    }
+
+    private OrderAdapter.CallFreshListener callRefreshListener = new OrderAdapter.CallFreshListener() {
+        @Override
+        public void callFresh() {
+            callRefresh();
+        }
+    };
+
+    private boolean isRefresh;
+    private XListView.IXListViewListener xlistviewListener = new XListView.IXListViewListener() {
+        @Override
+        public void onRefresh() {
+            callRefresh();
+        }
+
+        @Override
+        public void onLoadMore() {
+            callLoadMore();
+        }
+    };
+
+    private void callLoadMore() {
+        boolean isNetWork = CommonUtils.checkNetWork(this);
+        if (isNetWork) {
+            isRefresh = false;
+            currentPage++;
+            TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
+            sendRequest(taskRequest, TaskResponse.class);
+            currentPage--;
+        } else {
+            lv.stopLoadMore();
+        }
+    }
+
+    private void callRefresh() {
+        boolean isNetWork = CommonUtils.checkNetWork(this);
+        if (isNetWork) {
+            isRefresh = true;
+            currentPage = 1;
+            TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
+            sendRequest(taskRequest, TaskResponse.class);
+            currentPage--;
+        } else {
+            lv.stopRefresh();
+        }
+    }
+
+    private void initMorePopupWindow() {
+        View contentView = View.inflate(this, R.layout.popupwindow_inware, null);
+        morePopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        morePopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000"))); //设置背景
+        morePopupWindow.setFocusable(true); //设置获取焦点
+//        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+        morePopupWindow.setOutsideTouchable(true);
+        morePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
-            public void onRefresh() {
-
-                // 开始刷新，设置当前为刷新状态
-                //swipeRefreshLayout.setRefreshing(true);
-
-                // 这里是主线程
-                // 一些比较耗时的操作，比如联网获取数据，需要放到子线程去执行
-                final Random random = new Random();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        data.add(0, new WareInfo(9, "HIC7039098" + 9, "1仓" + (9 + 1) + "排3垛2层", 500, 510, "待出库"));
-                        orderAdapter.notifyDataSetChanged();
-                        CommonUtils.showToast(OutWareActivity.this, "刷新成功");
-                        // 加载完数据设置为不刷新状态，将下拉进度收起来
-                        swipeRefreshView.setRefreshing(false);
-                    }
-                }, 2000);
-
-                // System.out.println(Thread.currentThread().getName());
-
-                // 这个不能写在外边，不然会直接收起来
-                //swipeRefreshLayout.setRefreshing(false);
+            public void onDismiss() {
+                CommonUtils.backgroundAlpha(1f, OutWareActivity.this);
             }
         });
-        initAnimation();
+        TextView tv_hand = (TextView) contentView.findViewById(R.id.tv_hand);
+        tv_hand.setText("手动出库");
+        contentView.findViewById(R.id.ll_in_hand).setOnClickListener(this);
+        contentView.findViewById(R.id.ll_in_scan).setOnClickListener(this);
     }
 
     private void initAnimation() {
@@ -108,44 +208,95 @@ public class OutWareActivity extends BaseActivity {
     private AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            WareInfo wareInfo = data.get(position);
-            Intent intent = new Intent(OutWareActivity.this, WareHouseActivity.class);
-            intent.putExtra(Constants.ADDRESS, wareInfo.getAddress());
+            OrderInfo orderInfo = data.get(position - 1);
+            Intent intent = new Intent(OutWareActivity.this, ProductListActivity.class);
+//            intent.putExtra(Constants.ORDER_NUMBER, orderInfo.getOrderNum());
             intent.putExtra(Constants.TYPE, Constants.OUT_WARE);
+//            intent.putExtra(Constants.ORDER_ID, orderInfo.getTaskId());
+            intent.putExtra(Constants.ORDER_INFO, orderInfo);
             startActivity(intent);
         }
     };
 
     @Override
-    public void onSuccessResult(BaseRequest request, BaseReponse response) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == SCAN) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                String resultStr = bundle.getString("result");
+                Intent intent = new Intent(this, ScanResultActivity.class);
+                intent.putExtra(Constants.SCAN_RESULT, resultStr);
+                intent.putExtra(Constants.TYPE, Constants.OUT_WARE);
+                startActivity(intent);
+            }
+        }
+    }
 
+    @Override
+    public void onSuccessResult(BaseRequest request, BaseResponse response) {
+        if (request instanceof TaskRequest) {
+            TaskResponse taskResponse = (TaskResponse) response;
+            if (taskResponse.getData() != null) {
+                currentPage++;
+                if (currentPage == 1) {
+                    if (data != null) {
+                        data.clear();
+                    }
+                }
+                if (currentPage == taskResponse.getData().getPage().getPage()) {
+                    List<TaskResponse.DataEntity.ListEntity> list = taskResponse.getData().getList();
+                    for (TaskResponse.DataEntity.ListEntity listEntity : list) {
+                        OrderInfo orderInfo = new OrderInfo();
+                        orderInfo.setData(listEntity);
+                        data.add(orderInfo);
+                    }
+                }
+                handler.sendEmptyMessageDelayed(Constants.NOTIFY, 200);
+            }
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_find:
-                data.clear();
-                if (operatingAnim != null) {
-                    rl_info.setVisibility(View.VISIBLE);
-                    infoOperating.startAnimation(operatingAnim);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            rl_info.setVisibility(View.INVISIBLE);
-                            infoOperating.clearAnimation();
-                            String orderNum = et_order_num.getText().toString().trim();
-                            for (int i = 0; i < 10; i++) {
-                                float weight = (float) (Math.random() * 1000);
-                                int w = (int) weight;
-                                data.add(new WareInfo(i, "HIC7039098" + i, "1仓" + (i + 1) + "排3垛2层", w, w + i, "待出库"));
-                            }
-                            orderAdapter.notifyDataSetChanged();
-                        }
-                    }, 2000);
-                }
-
+                search();
                 break;
+            case R.id.ll_search:
+                showMore();
+                break;
+            case R.id.ll_in_hand:
+                go2InHand();
+                break;
+            case R.id.ll_in_scan:
+                go2Scan();
+                break;
+        }
+    }
+
+    private void showMore() {
+        morePopupWindow.showAsDropDown(ll_more);
+        CommonUtils.backgroundAlpha(0.8f, this);
+    }
+
+    private void go2Scan() {
+        morePopupWindow.dismiss();
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivityForResult(intent, SCAN);
+    }
+
+    private void go2InHand() {
+        morePopupWindow.dismiss();
+        Intent intent = new Intent(this, InWareByHandActivity.class);
+        intent.putExtra(Constants.TYPE, Constants.OUT_WARE);
+        startActivity(intent);
+    }
+
+    private void search() {
+        String orderNum = et_order_num.getText().toString().trim();
+        if (TextUtils.isEmpty(orderNum)) {
+            CommonUtils.showToast(this, "未输入订单号哦！");
+            return;
         }
     }
 }

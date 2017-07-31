@@ -123,6 +123,32 @@ public abstract class BaseDao<T, Integer> {
     }
 
     /**
+     * 增或更新，带事务操作
+     * @param t 泛型实体类集合
+     * @return 影响的行数
+     * @throws SQLException SQLException异常
+     */
+    public int saveOrUpdate(List<T> t) throws SQLException {
+        Dao<T, Integer> dao = getDao();
+        DatabaseConnection databaseConnection = null;
+        try {
+            databaseConnection = dao.startThreadConnection();
+            dao.setAutoCommit(databaseConnection, false);
+            for (T item : t) {
+                dao.createOrUpdate(item);
+            }
+            dao.commit(databaseConnection);
+            return t.size();
+        } catch (SQLException e) {
+            dao.rollBack(databaseConnection);
+            e.printStackTrace();
+        } finally {
+            dao.endThreadConnection(databaseConnection);
+        }
+        return 0;
+    }
+
+    /**
      * 删，带事务操作
      *
      * @param t 泛型实体类
@@ -336,7 +362,7 @@ public abstract class BaseDao<T, Integer> {
         try {
             databaseConnection = dao.startThreadConnection();
             dao.setAutoCommit(databaseConnection, false);
-            List<T> query = dao.queryForAll();
+                List<T> query = dao.queryForAll();
             dao.commit(databaseConnection);
             return query;
         } catch (SQLException e) {

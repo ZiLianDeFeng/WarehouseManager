@@ -8,4 +8,8 @@ public class SPConstants {
     public static final String LOGIN_SUCCESS = "loginSuccess";
     public static final String PWD = "password";
     public static final String USER_NAME = "userName";
+    public static final String IP = "ip";
+    public static final String USER_ID = "userId";
+    public static final String SET_ALIAS_SUCCESS = "setAliasSuccess";
+    public static final String IP_ALL = "ipAll";
 }

@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseFragment;
-import com.hgad.warehousemanager.net.BaseReponse;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.ui.activity.SettingActivity;
 
@@ -35,7 +35,7 @@ public class UserFragment extends BaseFragment {
     }
 
     @Override
-    public <Res extends BaseReponse> void onSuccessResult(BaseRequest request, Res response) {
+    public <Res extends BaseResponse> void onSuccessResult(BaseRequest request, Res response) {
 
     }
 

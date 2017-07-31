@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
+import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.util.FastBlurUtils;
+import com.hgad.warehousemanager.util.SPUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -100,14 +102,16 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             headerViewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (headClickListener!=null){
+                    if (headClickListener != null) {
                         headClickListener.headClick();
                     }
                 }
             });
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.dog);
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.touxiang);
             Bitmap roundBitmap = FastBlurUtils.toRoundBitmap(bitmap);
             headerViewHolder.imageView.setImageBitmap(roundBitmap);
+            String userName = SPUtils.getString(context, SPConstants.USER_NAME);
+            headerViewHolder.tv_name.setText(userName);
         }
 
     }
@@ -128,7 +132,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
         this.headClickListener = headClickListener;
     }
 
-    public interface OnHeadClickListener{
+    public interface OnHeadClickListener {
         void headClick();
     }
 

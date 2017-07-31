@@ -28,6 +28,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import com.hgad.warehousemanager.R;
+import com.hgad.warehousemanager.constants.Constants;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,14 +37,14 @@ import java.util.Collections;
  * Created by baoyunlong on 16/6/16.
  */
 public class SeatTable extends View {
+
+
     private final boolean DBG = false;
 
     Paint paint = new Paint();
     Paint overviewPaint = new Paint();
     Paint lineNumberPaint;
     float lineNumberTxtHeight;
-    private Bitmap seatUnfullBitmap;
-    private int overview_unfull;
 
 
     /**
@@ -106,6 +107,10 @@ public class SeatTable extends View {
     Bitmap seatSoldBitmap;
 
     Bitmap overviewBitmap;
+
+    Bitmap seatUnfullBitmap;
+    Bitmap seatCheckBitmap;
+    Bitmap seatCurrentBitmap;
 
     int lastX;
     int lastY;
@@ -218,11 +223,16 @@ public class SeatTable extends View {
 
     int overview_checked;
     int overview_sold;
+    int overview_unfull;
+    int overview_check;
+    int overview_current;
     int txt_color;
     int seatCheckedResID;
     int seatSoldResID;
     int seatAvailableResID;
     int seatUnfullResID;
+    int seatCheckResID;
+    int seatCurrentResID;
 
     boolean isOnClick;
 
@@ -249,6 +259,14 @@ public class SeatTable extends View {
      * 库存未满
      */
     private static final int SEAT_TYPE_UNFULL = 5;
+    /**
+     * 当前位置
+     */
+    private static final int SEAT_TYPE_CURRENT = 6;
+    /**
+     * 盘点记录的位置
+     */
+    private static final int SEAT_TYPE_CHECK = 7;
 
     private int downX, downY;
     private boolean pointer;
@@ -271,12 +289,12 @@ public class SeatTable extends View {
     /**
      * 默认的座位图宽度,如果使用的自己的座位图片比这个尺寸大或者小,会缩放到这个大小
      */
-    private float defaultImgW = 40;
+    private float defaultImgW = 60;
 
     /**
      * 默认的座位图高度
      */
-    private float defaultImgH = 34;
+    private float defaultImgH = 51;
 
     /**
      * 座位图片的宽度
@@ -300,13 +318,17 @@ public class SeatTable extends View {
     private void init(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SeatTableView);
         overview_checked = typedArray.getColor(R.styleable.SeatTableView_overview_checked, Color.parseColor("#5A9E64"));
-        overview_sold = typedArray.getColor(R.styleable.SeatTableView_overview_sold, Color.RED);
-        overview_unfull = typedArray.getColor(R.styleable.SeatTableView_overview_sold, Color.YELLOW);
+        overview_sold = typedArray.getColor(R.styleable.SeatTableView_overview_sold, Color.parseColor("#F4483C"));
+        overview_unfull = typedArray.getColor(R.styleable.SeatTableView_overview_sold, Color.parseColor("#FF9B07"));
+        overview_check = typedArray.getColor(R.styleable.SeatTableView_seat_check, Color.parseColor("#2698F3"));
+        overview_current = typedArray.getColor(R.styleable.SeatTableView_seat_current, Color.parseColor("#6B3FB9"));
         txt_color = typedArray.getColor(R.styleable.SeatTableView_txt_color, Color.WHITE);
         seatCheckedResID = typedArray.getResourceId(R.styleable.SeatTableView_seat_checked, R.mipmap.seat_green);
         seatSoldResID = typedArray.getResourceId(R.styleable.SeatTableView_overview_sold, R.mipmap.seat_sold);
         seatAvailableResID = typedArray.getResourceId(R.styleable.SeatTableView_seat_available, R.mipmap.seat_gray);
         seatUnfullResID = typedArray.getResourceId(R.styleable.SeatTableView_seat_unfull, R.mipmap.seat_yellow);
+        seatCheckResID = typedArray.getResourceId(R.styleable.SeatTableView_seat_check, R.mipmap.seat_check);
+        seatCurrentResID = typedArray.getResourceId(R.styleable.SeatTableView_seat_current, R.mipmap.seat_current);
         typedArray.recycle();
     }
 
@@ -342,6 +364,8 @@ public class SeatTable extends View {
         checkedSeatBitmap = BitmapFactory.decodeResource(getResources(), seatCheckedResID);
         seatSoldBitmap = BitmapFactory.decodeResource(getResources(), seatSoldResID);
         seatUnfullBitmap = BitmapFactory.decodeResource(getResources(), seatUnfullResID);
+        seatCheckBitmap = BitmapFactory.decodeResource(getResources(), seatCheckResID);
+        seatCurrentBitmap = BitmapFactory.decodeResource(getResources(), seatCurrentResID);
 
         seatBitmapWidth = (int) (column * seatBitmap.getWidth() * xScale1 + (column - 1) * spacing);
         seatBitmapHeight = (int) (row * seatBitmap.getHeight() * yScale1 + (row - 1) * verSpacing);
@@ -349,7 +373,7 @@ public class SeatTable extends View {
         numberWidth = (int) dip2Px(20);
 
         screenHeight = dip2Px(20);
-        headHeight = dip2Px(30);
+        headHeight = dip2Px(60);
 
         headPaint = new Paint();
         headPaint.setStyle(Paint.Style.FILL);
@@ -396,7 +420,6 @@ public class SeatTable extends View {
                 columnNumbers.add(i + 1 + "");
             }
         }
-
 
         matrix.postTranslate(numberWidth + spacing, headHeight + screenHeight + borderHeight + verSpacing + lineNumberTxtHeight * 2);
 
@@ -494,6 +517,12 @@ public class SeatTable extends View {
         }
     };
 
+    private String type;
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     Bitmap drawHeadInfo() {
         String txt = "已售";
         float txtY = getBaseLine(headPaint, 0, headHeight);
@@ -502,7 +531,7 @@ public class SeatTable extends View {
         float spacing1 = dip2Px(5);
 //        float y = (headHeight - seatBitmap.getHeight()) / 2;
 
-        float width = (seatBitmap.getWidth() + spacing1 + txtWidth + spacing)*3-spacing;
+        float width = (seatBitmap.getWidth() + spacing1 + txtWidth + spacing) * 2 - spacing;
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), (int) headHeight, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
@@ -510,37 +539,59 @@ public class SeatTable extends View {
         //绘制背景
         canvas.drawRect(0, 0, getWidth(), headHeight, headPaint);
         headPaint.setColor(Color.BLACK);
-
+        float space = seatBitmap.getWidth() + spacing1 + txtWidth + spacing;
         float startX = (getWidth() - width) / 2;
-        tempMatrix.setScale(xScale1, yScale1);
-        tempMatrix.postTranslate(startX, (headHeight - seatHeight) / 2);
-        canvas.drawBitmap(seatBitmap, tempMatrix, headPaint);
-        canvas.drawText("可选", startX + seatWidth + spacing1, txtY, headPaint);
+        if (Constants.CHECK_RECORD.equals(type)) {
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(startX, (headHeight - seatHeight) / 2);
+            canvas.drawBitmap(seatBitmap, tempMatrix, headPaint);
+            canvas.drawText("未盘点", startX + seatWidth + spacing1, txtY, headPaint);
 
-        float soldSeatBitmapY = startX + seatBitmap.getWidth() + spacing1 + txtWidth + spacing;
-        tempMatrix.setScale(xScale1, yScale1);
-        tempMatrix.postTranslate(soldSeatBitmapY, (headHeight - seatHeight) / 2);
-        canvas.drawBitmap(seatSoldBitmap, tempMatrix, headPaint);
-        canvas.drawText("已满", soldSeatBitmapY + seatWidth + spacing1, txtY, headPaint);
+            float checkSeatBitmapX = startX + space;
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(checkSeatBitmapX, (headHeight - seatHeight) / 2);
+            canvas.drawBitmap(seatCheckBitmap, tempMatrix, headPaint);
+            canvas.drawText("已盘点", checkSeatBitmapX + spacing1 + seatWidth, txtY, headPaint);
+        } else if (Constants.CHOOSE.equals(type)) {
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(startX, (headHeight - seatHeight * 3) / 2);
+            canvas.drawBitmap(seatBitmap, tempMatrix, headPaint);
+            canvas.drawText("可选", startX + seatWidth + spacing1, txtY / 2, headPaint);
 
-        float checkedSeatBitmapX = soldSeatBitmapY + seatSoldBitmap.getWidth() + spacing1 + txtWidth + spacing;
-        tempMatrix.setScale(xScale1, yScale1);
-        tempMatrix.postTranslate(checkedSeatBitmapX, (headHeight - seatHeight) / 2);
-        canvas.drawBitmap(checkedSeatBitmap, tempMatrix, headPaint);
-        canvas.drawText("已选", checkedSeatBitmapX + spacing1 + seatWidth, txtY, headPaint);
-          //绘制unfull顶部信息
-//        float unFullSeatBitmapX = checkedSeatBitmapX + checkedSeatBitmap.getWidth()+spacing1 + txtWidth + spacing;
-//        tempMatrix.setScale(xScale1,yScale1);
-//        tempMatrix.postTranslate(unFullSeatBitmapX, (headHeight - seatHeight) / 2);
-//        canvas.drawBitmap(seatUnfullBitmap, tempMatrix, headPaint);
-//        canvas.drawText("1/3", unFullSeatBitmapX + spacing1 + seatWidth, txtY, headPaint);
+            float soldSeatBitmapX = startX + space;
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(soldSeatBitmapX, (headHeight - seatHeight * 3) / 2);
+            canvas.drawBitmap(seatSoldBitmap, tempMatrix, headPaint);
+            canvas.drawText("已满", soldSeatBitmapX + seatWidth + spacing1, txtY / 2, headPaint);
+
+            //绘制unfull顶部信息
+            float unFullSeatBitmapX = startX;
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(unFullSeatBitmapX, (headHeight - seatHeight) / 2);
+            canvas.drawBitmap(seatUnfullBitmap, tempMatrix, headPaint);
+            canvas.drawText("未满", startX + spacing1 + seatWidth, txtY, headPaint);
+
+            float checkedSeatBitmapX = startX + space;
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(checkedSeatBitmapX, (headHeight - seatHeight) / 2);
+            canvas.drawBitmap(checkedSeatBitmap, tempMatrix, headPaint);
+            canvas.drawText("已选", checkedSeatBitmapX + spacing1 + seatWidth, txtY, headPaint);
+
+
+        } else if (Constants.CURRENT.equals(type)) {
+
+            float currentSeatBitmapX = startX;
+            tempMatrix.setScale(xScale1, yScale1);
+            tempMatrix.postTranslate(currentSeatBitmapX, (headHeight - seatHeight*3) / 2);
+            canvas.drawBitmap(seatCurrentBitmap, tempMatrix, headPaint);
+            canvas.drawText("当前位置", currentSeatBitmapX + spacing1 + seatWidth, txtY/2, headPaint);
+        }
 
         //绘制分割线
         headPaint.setStrokeWidth(1);
         headPaint.setColor(Color.GRAY);
         canvas.drawLine(0, headHeight, getWidth(), headHeight, headPaint);
         return bitmap;
-
     }
 
     /**
@@ -619,6 +670,13 @@ public class SeatTable extends View {
                     case SEAT_TYPE_UNFULL:
                         canvas.drawBitmap(seatUnfullBitmap, tempMatrix, paint);
                         break;
+                    case SEAT_TYPE_CHECK:
+                        canvas.drawBitmap(seatCheckBitmap, tempMatrix, paint);
+                        break;
+                    case SEAT_TYPE_CURRENT:
+                        canvas.drawBitmap(seatCurrentBitmap, tempMatrix, paint);
+                        drawText(canvas, i, j, top, left);
+                        break;
                 }
 
             }
@@ -643,6 +701,10 @@ public class SeatTable extends View {
                 return SEAT_TYPE_SOLD;
             } else if (seatChecker.isUnFull(row, column)) {
                 return SEAT_TYPE_UNFULL;
+            } else if (seatChecker.isCurrentSeat(row, column)) {
+                return SEAT_TYPE_CURRENT;
+            } else if (seatChecker.isCheckSeat(row, column)) {
+                return SEAT_TYPE_CHECK;
             }
         }
 
@@ -683,7 +745,7 @@ public class SeatTable extends View {
         txtPaint.setTypeface(Typeface.DEFAULT_BOLD);
         float seatHeight = this.seatHeight * getMatrixScaleX();
         float seatWidth = this.seatWidth * getMatrixScaleX();
-        txtPaint.setTextSize(seatHeight / 2);
+        txtPaint.setTextSize(seatHeight * 2 / 5);
 
         //获取中间线
         float center = seatHeight / 2;
@@ -853,10 +915,14 @@ public class SeatTable extends View {
                     case SEAT_TYPE_UNFULL:
                         overviewPaint.setColor(overview_unfull);
                         break;
+                    case SEAT_TYPE_CHECK:
+                        overviewPaint.setColor(overview_check);
+                        break;
+                    case SEAT_TYPE_CURRENT:
+                        overviewPaint.setColor(overview_current);
+                        break;
                 }
-
                 float left;
-
                 left = j * rectWidth + j * overviewSpacing + overviewSpacing;
                 canvas.drawRect(left, top, left + rectWidth, top + rectHeight, overviewPaint);
             }
@@ -1237,6 +1303,16 @@ public class SeatTable extends View {
         void unCheck(int row, int column);
 
         boolean isUnFull(int row, int column);
+
+        /*
+          盘点出库时显示当前的位置
+         */
+        boolean isCurrentSeat(int row, int column);
+
+        /*
+          盘点记录显示已盘点的位置
+         */
+        boolean isCheckSeat(int row, int column);
 
         /**
          * 获取选中后座位上显示的文字

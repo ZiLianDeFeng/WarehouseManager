@@ -172,7 +172,7 @@
                         android:background="@drawable/shape_circle"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/common_dp"
-                        android:text="点击选择仓库"
+                        android:hint="点击选择仓库"
                         android:textSize="@dimen/common_text_size" />
                 </LinearLayout>
 

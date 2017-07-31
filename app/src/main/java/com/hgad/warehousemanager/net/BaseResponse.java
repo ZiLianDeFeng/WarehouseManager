@@ -5,7 +5,7 @@ package com.hgad.warehousemanager.net;
  * <p/>
  * 封装响应的数据
  */
-public abstract class BaseReponse {
+public abstract class BaseResponse {
 
 
 }

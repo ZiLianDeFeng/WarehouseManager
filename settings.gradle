@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':pinnedSectionRefreshListView', ':lib-xlv'

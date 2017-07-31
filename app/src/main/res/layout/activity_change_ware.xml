@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/common_dp"
             android:layout_weight="1"
-            android:background="@color/green"
+            android:background="@drawable/shape_bg_green"
             android:orientation="vertical">
 
             <TextView
@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/common_dp"
             android:layout_weight="1"
-            android:background="@color/orange"
+            android:background="@drawable/shape_bg_yellow"
             android:orientation="vertical">
 
             <TextView

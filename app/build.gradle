@@ -9,7 +9,20 @@ android {
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a',
+            // 还可以添加
+             'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "632629737e261c1cd1ce562f", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     buildTypes {
         release {
@@ -34,4 +47,8 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.bigkoo:convenientbanner:2.0.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile project(path: ':pinnedSectionRefreshListView')
+    compile project(':lib-xlv')
+    compile 'cn.jiguang.sdk:jpush:3.0.7'  // 此处以JPush 3.0.3 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.5'  // 此处以JCore 1.1.1 版本为例。
 }

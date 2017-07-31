@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.constants.Constants;
-import com.hgad.warehousemanager.net.BaseReponse;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 
 /**
@@ -36,7 +36,7 @@ public class OtherInfoActivity extends BaseActivity {
     }
 
     @Override
-    public void onSuccessResult(BaseRequest request, BaseReponse response) {
+    public void onSuccessResult(BaseRequest request, BaseResponse response) {
 
     }
 

@@ -12,97 +12,6 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/rl_photo"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:padding="@dimen/common_padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/common_padding"
-                android:gravity="center_vertical"
-                android:text="@string/photo"
-                android:textColor="@color/black"
-                android:textSize="@dimen/item_size" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
-                android:src="@mipmap/right" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#2000" />
-
-        <RelativeLayout
-            android:id="@+id/rl_syn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:padding="@dimen/common_padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/common_padding"
-                android:gravity="center_vertical"
-                android:text="@string/syn"
-                android:textColor="@color/black"
-                android:textSize="@dimen/item_size" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
-                android:src="@mipmap/right" />
-        </RelativeLayout>
-
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_wifi"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:padding="@dimen/common_padding">-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:text="@string/commit"-->
-        <!--android:textColor="@color/black"-->
-        <!--android:textSize="@dimen/item_size" />-->
-
-        <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:src="@mipmap/right" />-->
-        <!--</RelativeLayout>-->
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#2000" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin_top"
-        android:background="@color/white"
-        android:orientation="vertical">
-
         <RelativeLayout
             android:id="@+id/rl_change_pwd"
             android:layout_width="match_parent"
@@ -158,6 +67,44 @@
                 android:src="@mipmap/right" />
         </RelativeLayout>
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin_top"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_system_setting"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:padding="@dimen/common_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/common_padding"
+                android:gravity="center_vertical"
+                android:text="@string/systemSetting"
+                android:textColor="@color/black"
+                android:textSize="@dimen/item_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:src="@mipmap/right" />
+        </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -176,36 +123,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/common_padding"
                 android:gravity="center_vertical"
-                android:text="@string/version"
-                android:textColor="@color/black"
-                android:textSize="@dimen/item_size" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
-                android:src="@mipmap/right" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#2000" />
-
-        <RelativeLayout
-            android:id="@+id/rl_system_setting"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:padding="@dimen/common_padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/common_padding"
-                android:gravity="center_vertical"
-                android:text="@string/systemSetting"
+                android:text="@string/appInfo"
                 android:textColor="@color/black"
                 android:textSize="@dimen/item_size" />
 

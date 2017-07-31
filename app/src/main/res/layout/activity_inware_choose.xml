@@ -6,48 +6,122 @@
 
     <include layout="@layout/header" />
 
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="150dp"-->
+    <!--android:padding="@dimen/common_padding">-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="@dimen/common_dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/shape_bg_green"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_in_hand"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:text="手动入库"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="@dimen/common_head_text_size" />-->
+
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="@dimen/common_dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/shape_bg_yellow"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_in_mark"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:text="二维码扫描"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="@dimen/common_head_text_size" />-->
+    <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:padding="@dimen/common_padding">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_padding"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-        <LinearLayout
+
+        <EditText
+            android:id="@+id/et_order_num"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/common_dp"
-            android:layout_weight="1"
-            android:background="@color/green"
-            android:orientation="vertical">
+            android:layout_height="40dp"
+            android:layout_weight="3"
+            android:background="@drawable/shape_circle"
+            android:hint="@string/inputOrder"
+            android:padding="@dimen/common_dp"
+            android:textSize="@dimen/common_text_size" />
 
-            <TextView
-                android:id="@+id/tv_in_hand"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="手动入库"
-                android:textColor="@color/white"
-                android:textSize="@dimen/common_head_text_size" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <Button
+            android:id="@+id/btn_find"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/common_dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/marginleft"
             android:layout_weight="1"
-            android:background="@color/orange"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_in_mark"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="二维码扫描"
-                android:textColor="@color/white"
-                android:textSize="@dimen/common_head_text_size" />
-        </LinearLayout>
-
+            android:background="@drawable/shape_circle_state"
+            android:text="查询"
+            android:textColor="@color/white" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2000" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_light">
+
+        <me.maxwin.view.XListView
+            android:id="@+id/lv_in_ware"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_light"
+
+            android:scrollbars="none" />
+
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="无信息!"
+            android:textColor="#6000"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_infoOperating"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_light"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/infoOperating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                android:src="@mipmap/jiazai" />
+        </RelativeLayout>
+    </RelativeLayout>
 </LinearLayout>

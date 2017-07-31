@@ -39,4 +39,10 @@
         <item name="android:windowEnterAnimation">@anim/in</item>
         <item name="android:windowExitAnimation">@anim/out</item>
     </style>
+
+    <style name="ItemView">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/item_size</item>
+        <item name="android:textColor">@color/light_black</item>
+    </style>
 </resources>

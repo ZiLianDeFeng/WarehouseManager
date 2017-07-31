@@ -17,14 +17,14 @@ import java.io.IOException;
 public class NetUtil {
 
 
-    public static <Res extends BaseReponse> void sendRequest(BaseRequest request, Class<Res> responseClass, Callback callback) {
+    public static <Res extends BaseResponse> void sendRequest(BaseRequest request, Class<Res> responseClass, Callback callback) {
 
         new NetTask().execute(new NetBean(request, responseClass, callback));
     }
 
     private static class NetBean {
 
-        public NetBean(BaseRequest request, Class<? extends BaseReponse> responseClass, Callback callback) {
+        public NetBean(BaseRequest request, Class<? extends BaseResponse> responseClass, Callback callback) {
             this.request = request;
             this.responseClass = responseClass;
             this.callback = callback;
@@ -33,10 +33,10 @@ public class NetUtil {
         BaseRequest request;
         Callback callback;
         //响应结果对象的字节码
-        Class<? extends BaseReponse> responseClass;
+        Class<? extends BaseResponse> responseClass;
 
         //响应封装的对象
-        BaseReponse baseReponse;
+        BaseResponse baseReponse;
         //异常信息
         Exception exception;
 
@@ -58,7 +58,7 @@ public class NetUtil {
                 String stringResponse = HttpWrapper.getInstance().getStringResponse(netBean.request);
                 if (stringResponse != null) {
 
-//                Log.d("NetUtil", "获取的json数据:" + stringResponse);
+                Log.e("NetUtil", "获取的json数据:" + stringResponse);
 //                    if (stringResponse.contains("nulldata")) {
 //                        stringResponse = stringResponse.replaceAll("\"nulldata\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],", "");
 //                        stringResponse = stringResponse.replaceAll("\"nulldata\":[\"\",\"\",\"\",\"\",\"\",\"\"],", "");
@@ -68,7 +68,7 @@ public class NetUtil {
 //                String response = jsonObject.toString();
 //                if (!"error".equals(response)) {
 
-                    BaseReponse baseReponse = new Gson().fromJson(stringResponse, netBean.responseClass);
+                    BaseResponse baseReponse = new Gson().fromJson(stringResponse, netBean.responseClass);
                     netBean.baseReponse = baseReponse;
                 } else {
                     Log.d("NetUtil", "null");

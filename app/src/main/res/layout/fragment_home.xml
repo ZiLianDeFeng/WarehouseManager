@@ -149,10 +149,10 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_user_setting"
+                        android:id="@+id/tv_task_notification"
                         style="@style/table_text"
                         android:drawableTop="@mipmap/take_phone_0"
-                        android:text="个人设置"
+                        android:text="任务通知"
                         android:textSize="@dimen/common_head_text_size" />
                 </LinearLayout>
 

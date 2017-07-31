@@ -46,28 +46,26 @@
         android:layout_height="match_parent"
         android:background="@color/background_light">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/srl"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--<android.support.v4.widget.SwipeRefreshLayout-->
+            <!--android:id="@+id/srl"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
 
-            <ListView
+            <me.maxwin.view.XListView
                 android:id="@+id/lv_order"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/background_light"
-                android:divider="@null"
-                android:dividerHeight="@dimen/marginleft"
                 android:scrollbars="none" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
         <TextView
             android:id="@+id/tv_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="暂无数据!"
+            android:text="暂无数据"
             android:textColor="#6000"
             android:textSize="20sp" />
 
@@ -86,7 +84,5 @@
                 android:scaleType="center"
                 android:src="@mipmap/jiazai" />
         </RelativeLayout>
-
-
     </RelativeLayout>
 </LinearLayout>

@@ -11,14 +11,23 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
+import com.hgad.warehousemanager.bean.request.WareHouseRequest;
+import com.hgad.warehousemanager.bean.response.ErrorResponseInfo;
+import com.hgad.warehousemanager.bean.response.WareHouseResponse;
+import com.hgad.warehousemanager.constants.Constants;
+import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.Callback;
+import com.hgad.warehousemanager.net.NetUtil;
 import com.hgad.warehousemanager.util.CommonUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/4.
  */
-public class BottonPopupWindowUtils {
+public class BottonPopupWindowUtils implements Callback {
     private String ware;
     private String row;
     private String column;
@@ -167,16 +176,22 @@ public class BottonPopupWindowUtils {
         return pop_confirm.getText().toString();
     }
 
-    public void initSeatTable(final int[] rows, final int[] columns, final int[] unSeatRows, final int[] unSeatColums, int[] unFullRows, int[] unFullColums) {
-        seatView.setData(15, 15);
+    private List<String> unSeatRows = new ArrayList<>();
+    private List<String> unSeatColums = new ArrayList<>();
+    private List<String> seatRows = new ArrayList<>();
+    private List<String> seatColums = new ArrayList<>();
+    private List<String> unFullRows = new ArrayList<>();
+    private List<String> unFullColums = new ArrayList<>();
 
+    public void initSeatTable(final List<String> rows, final List<String> columns, final List<String> unSeatRows, final List<String> unSeatColums, final List<String> unFullRows, final List<String> unFullColums) {
+        seatView.setType(Constants.CHOOSE);
         seatView.setMaxSelected(1);
         seatView.setSeatChecker(new SeatTable.SeatChecker() {
 
             @Override
             public boolean isValidSeat(int row, int column) {
-                for (int i = 0; i < unSeatRows.length; i++) {
-                    if (row == (unSeatRows[i] - 1) && column == (unSeatColums[i] - 1)) {
+                for (int i = 0; i < unSeatRows.size(); i++) {
+                    if (row == (Integer.parseInt(unSeatRows.get(i)) - 1) && column == (Integer.parseInt(unSeatColums.get(i)) - 1)) {
                         return false;
                     }
                 }
@@ -185,8 +200,8 @@ public class BottonPopupWindowUtils {
 
             @Override
             public boolean isSold(int row, int column) {
-                for (int i = 0; i < rows.length; i++) {
-                    if (row == (rows[i] - 1) && column == (columns[i] - 1)) {
+                for (int i = 0; i < rows.size(); i++) {
+                    if (row == (Integer.parseInt(rows.get(i)) - 1) && column == (Integer.parseInt(columns.get(i)) - 1)) {
                         return true;
                     }
                 }
@@ -195,8 +210,16 @@ public class BottonPopupWindowUtils {
 
             @Override
             public void checked(int row, int column) {
-                BottonPopupWindowUtils.this.row = row + 1 + "";
-                BottonPopupWindowUtils.this.column = column + 1 + "";
+                if (row < 9) {
+                    BottonPopupWindowUtils.this.row = "0" + (row + 1);
+                } else {
+                    BottonPopupWindowUtils.this.row = "" + (row + 1);
+                }
+                if (column < 9) {
+                    BottonPopupWindowUtils.this.column = "0" + (column + 1);
+                } else {
+                    BottonPopupWindowUtils.this.row = "" + (column + 1);
+                }
             }
 
             @Override
@@ -206,11 +229,21 @@ public class BottonPopupWindowUtils {
 
             @Override
             public boolean isUnFull(int row, int column) {
-//                    for (int i = 0; i < unFullRows.length; i++) {
-//                        if (row == (unFullRows[i] - 1) && column == (unFullColums[i] - 1)) {
-//                            return true;
-//                        }
-//                    }
+                for (int i = 0; i < unFullRows.size(); i++) {
+                    if (row == (Integer.parseInt(unFullRows.get(i)) - 1) && column == (Integer.parseInt(unFullColums.get(i)) - 1)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public boolean isCurrentSeat(int row, int column) {
+                return false;
+            }
+
+            @Override
+            public boolean isCheckSeat(int row, int column) {
                 return false;
             }
 
@@ -261,8 +294,8 @@ public class BottonPopupWindowUtils {
 
     public void change() {
         if (index == 1) {
-            seatView.setScreenName(ware + "号仓库");
-            seatView.invalidate();
+            WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
+            NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, this);
             pop_address.setVisibility(View.INVISIBLE);
             pop_switch.setVisibility(View.INVISIBLE);
             index++;
@@ -279,6 +312,65 @@ public class BottonPopupWindowUtils {
         } else if (index == 3) {
 
         }
+
+    }
+
+    @Override
+    public void onSuccess(BaseRequest request, Object response) {
+        if (request instanceof WareHouseRequest) {
+            WareHouseResponse wareHouseResponse = (WareHouseResponse) response;
+            if (wareHouseResponse.getResponseCode().getCode() == 200) {
+                if (wareHouseResponse.getErrorMsg().equals("请求成功")) {
+                    WareHouseResponse.DataEntity dataEntity = wareHouseResponse.getData().get(0);
+                    int rows = dataEntity.getRows();
+                    int cols = dataEntity.getCols();
+                    String name = dataEntity.getName();
+                    List<WareHouseResponse.DataEntity.PositionListEntity> positionList = dataEntity.getPositionList();
+                    for (WareHouseResponse.DataEntity.PositionListEntity positionListEntity : positionList) {
+                        String raw = positionListEntity.getPositionCode().substring(2, 4);
+                        String column = positionListEntity.getPositionCode().substring(4, 6);
+                        List<String> storey = positionListEntity.getStorey();
+                        boolean hava = false;
+                        boolean unfull = false;
+                        if (storey.get(0) != null) {
+                            hava = true;
+                        }
+                        if (storey.get(storey.size() - 1) == null) {
+                            unfull = true;
+                        }
+//                        for (String info : storey) {
+//                            if (!TextUtils.isEmpty(info)) {
+//                                hava = true;
+//                            } else {
+//                                unfull = true;
+//                            }
+//                        }
+                        if (hava) {
+                            if (unfull) {
+                                unFullRows.add(raw);
+                                unFullColums.add(column);
+                            } else {
+                                seatRows.add(raw);
+                                seatColums.add(column);
+                            }
+                        }
+                    }
+                    seatView.setData(rows, cols);
+                    initSeatTable(seatRows, seatColums, unSeatRows, unSeatColums, unFullRows, unFullColums);
+                    seatView.setScreenName(name);
+                    seatView.invalidate();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onOther(BaseRequest request, ErrorResponseInfo errorResponseInfo) {
+
+    }
+
+    @Override
+    public void onError(BaseRequest request, Exception e) {
 
     }
 }

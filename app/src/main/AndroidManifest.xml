@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".base.BaseApplication"
@@ -42,7 +42,38 @@
         <activity android:name=".ui.activity.WeatherActivity" />
         <activity android:name=".ui.activity.OtherInfoActivity" />
         <activity android:name=".ui.activity.UserSettingActivity" />
+        <activity android:name=".ui.activity.IpSettingActivity" />
+        <activity android:name=".ui.activity.AddIpActivity" />
+        <activity android:name=".ui.activity.CheckRecordActivity" />
+        <activity android:name=".ui.activity.ProductListActivity" />
+        <activity android:name=".ui.activity.VersionActivity" />
+        <activity android:name=".ui.activity.NotificationActivity" />
+        <activity android:name=".ui.activity.GeneralToolsActivity" />
+        <activity android:name=".ui.activity.FaroriteActivity" />
+        <activity android:name=".ui.activity.CheckDetailActivity" />
+        <activity android:name=".ui.activity.CheckResultActivity" />
 
+        <service android:name=".ui.service.PushService" />
+
+        <!-- User defined. 用户自定义的广播接收器-->
+        <receiver
+            android:name=".ui.receiver.PushReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <!--Required 用户注册SDK的intent-->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!--Required 用户接收SDK消息的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!--Required 用户接收SDK通知栏信息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!--Required 用户打开自定义通知栏的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

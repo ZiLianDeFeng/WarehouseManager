@@ -29,4 +29,9 @@
     <string name="drawer_menu_setting">设置</string>
     <string name="drawer_menu_air">天气</string>
     <string name="not_null">账号或密码不能为空</string>
+    <string name="address_not_choose">未选择仓库位置</string>
+    <string name="appInfo">应用信息</string>
+    <string name="info_check">信息校验中</string>
+    <string name="commit_data">数据提交中</string>
+    <string name="by_hand">手动输入</string>
 </resources>

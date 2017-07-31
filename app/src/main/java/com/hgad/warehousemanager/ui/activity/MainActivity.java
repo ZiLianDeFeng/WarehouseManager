@@ -1,12 +1,19 @@
 package com.hgad.warehousemanager.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +31,7 @@ import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
 import com.hgad.warehousemanager.constants.SPConstants;
-import com.hgad.warehousemanager.net.BaseReponse;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.ui.adapter.DrawerAdapter;
 import com.hgad.warehousemanager.ui.fragment.HomeFragment;
@@ -33,7 +40,10 @@ import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.FastBlurUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,6 +62,7 @@ public class MainActivity extends BaseActivity {
     private Bitmap roundBitmap;
     private Handler handler = new Handler();
     private ImageView iv_user_icon;
+    private Uri uri;
 
     @Override
     protected void setContentView() {
@@ -86,7 +97,7 @@ public class MainActivity extends BaseActivity {
 //        });
 //        ((RadioButton) rg.getChildAt(0)).setChecked(true);
         addHideShow(homeFragment);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.dog);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.touxiang);
         roundBitmap = FastBlurUtils.toRoundBitmap(bitmap);
         iv_user_icon.setImageBitmap(roundBitmap);
     }
@@ -144,7 +155,7 @@ public class MainActivity extends BaseActivity {
         drawerAdapter.setHeadClickListener(new DrawerAdapter.OnHeadClickListener() {
             @Override
             public void headClick() {
-                Intent intent = new Intent(MainActivity.this,UserSettingActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserSettingActivity.class);
                 startActivity(intent);
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -159,19 +170,31 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case PHOTO_REQUEST_TAKEPHOTO:
+                if (resultCode == RESULT_OK) {
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                }
+        }
+    }
 
     public class OnItemClickListener implements DrawerAdapter.OnItemClickListener {
 
         @Override
         public void itemClick(DrawerAdapter.DrawerItemNormal drawerItemNormal) {
             switch (drawerItemNormal.titleRes) {
-                case R.string.drawer_menu_camera://首页
+                case R.string.drawer_menu_camera://相机
+                    takePhoto();
                     break;
-                case R.string.drawer_menu_gallery://排行榜
+                case R.string.drawer_menu_gallery://相册
                     break;
                 case R.string.drawer_menu_tools://栏目
+                    tool();
                     break;
                 case R.string.drawer_menu_favorites://搜索
+                    favorite();
                     break;
                 case R.string.drawer_menu_setting://设置
                     go();
@@ -185,7 +208,47 @@ public class MainActivity extends BaseActivity {
                 public void run() {
                     drawer.closeDrawer(GravityCompat.START);
                 }
-            }, 500);
+            }, 1000);
+        }
+    }
+
+    private void favorite() {
+        Intent intent = new Intent(this, FaroriteActivity.class);
+        startActivity(intent);
+    }
+
+    private void tool() {
+        Intent intent = new Intent(this, GeneralToolsActivity.class);
+        startActivity(intent);
+    }
+
+    private static final int PHOTO_REQUEST_TAKEPHOTO = 1;// 拍照
+    private static final int TAKE_PHOTO_REQUEST_CODE = 2;
+
+    private void takePhoto() {
+        String state = Environment.getExternalStorageState(); //拿到sdcard是否可用的状态码
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CAMERA},
+                    TAKE_PHOTO_REQUEST_CODE);
+        }
+        if (state.equals(Environment.MEDIA_MOUNTED)) {   //如果可用
+            try {
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                Date date = new Date(System.currentTimeMillis());
+                String fileName = format.format(date);
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), fileName + ".jpg");
+                uri = Uri.fromFile(file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, PHOTO_REQUEST_TAKEPHOTO);
+            } catch (Exception e) {
+
+            }
+        } else {
+            Toast.makeText(MainActivity.this, "sdcard不可用", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -222,7 +285,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onSuccessResult(BaseRequest request, BaseReponse response) {
+    public void onSuccessResult(BaseRequest request, BaseResponse response) {
 
     }
 

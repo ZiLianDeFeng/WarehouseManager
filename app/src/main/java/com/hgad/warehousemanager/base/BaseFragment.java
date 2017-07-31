@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hgad.warehousemanager.bean.response.ErrorResponseInfo;
-import com.hgad.warehousemanager.net.BaseReponse;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.Callback;
 import com.hgad.warehousemanager.net.NetUtil;
@@ -17,7 +17,7 @@ import com.hgad.warehousemanager.net.NetUtil;
 /**
  * Created by Administrator on 2017/6/26.
  */
-public abstract class BaseFragment extends Fragment implements Callback<BaseReponse>, View.OnClickListener {
+public abstract class BaseFragment extends Fragment implements Callback<BaseResponse>, View.OnClickListener {
 
     protected Context mContext;
     private View rootView;
@@ -52,15 +52,15 @@ public abstract class BaseFragment extends Fragment implements Callback<BaseRepo
 
     public abstract View getChildViewLayout(LayoutInflater inflater);
 
-    public void sendRequest(BaseRequest request, Class<? extends BaseReponse> responseClass) {
+    public void sendRequest(BaseRequest request, Class<? extends BaseResponse> responseClass) {
 
         NetUtil.sendRequest(request, responseClass, this);
     }
 
-    public abstract <Res extends BaseReponse> void onSuccessResult(BaseRequest request, Res response);
+    public abstract <Res extends BaseResponse> void onSuccessResult(BaseRequest request, Res response);
 
     @Override
-    public void onSuccess(BaseRequest request, BaseReponse response) {
+    public void onSuccess(BaseRequest request, BaseResponse response) {
 
         onSuccessResult(request, response);
     }

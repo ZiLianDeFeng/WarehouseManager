@@ -198,7 +198,6 @@ public class CommonUtils {
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
@@ -262,12 +261,13 @@ public class CommonUtils {
 
     /**
      * 根据提供的年月日获取该月份的第一天
-     * @Description: (这里用一句话描述这个方法的作用)
-     * @Author: gyz
-     * @Since: 2017-1-9下午2:26:57
+     *
      * @param year
      * @param monthOfYear
      * @return
+     * @Description: (这里用一句话描述这个方法的作用)
+     * @Author: gyz
+     * @Since: 2017-1-9下午2:26:57
      */
     public static Date getSupportBeginDayofMonth(int year, int monthOfYear) {
         Calendar cal = Calendar.getInstance();
@@ -289,12 +289,13 @@ public class CommonUtils {
 
     /**
      * 根据提供的年月获取该月份的最后一天
-     * @Description: (这里用一句话描述这个方法的作用)
-     * @Author: gyz
-     * @Since: 2017-1-9下午2:29:38
+     *
      * @param year
      * @param monthOfYear
      * @return
+     * @Description: (这里用一句话描述这个方法的作用)
+     * @Author: gyz
+     * @Since: 2017-1-9下午2:29:38
      */
     public static Date getSupportEndDayofMonth(int year, int monthOfYear) {
         Calendar cal = Calendar.getInstance();
@@ -318,19 +319,18 @@ public class CommonUtils {
         char[] charArray = chineseStr.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
             //是否是Unicode编码,除了"�"这个字符.这个字符要另外处理
-            if ((charArray[i] >= '\u0000' && charArray[i] < '\uFFFD')||((charArray[i] > '\uFFFD' && charArray[i] < '\uFFFF'))) {
+            if ((charArray[i] >= '\u0000' && charArray[i] < '\uFFFD') || ((charArray[i] > '\uFFFD' && charArray[i] < '\uFFFF'))) {
                 continue;
-            }
-            else{
+            } else {
                 return false;
             }
         }
         return true;
     }
 
-    public static final boolean isSpecialCharacter(String str){
+    public static final boolean isSpecialCharacter(String str) {
         //是"�"这个特殊字符的乱码情况
-        if(str.contains("ï¿½")){
+        if (str.contains("ï¿½")) {
             return true;
         }
         return false;
@@ -341,12 +341,15 @@ public class CommonUtils {
 //        int fstart = string.indexOf(string2[0]);
 //        int fend = fstart + string2[0].length();
 //        ColorStateList redColors = ColorStateList.valueOf(0x66ff0000);
+        for (int i = 0; i < string2.length; i++) {
+            string = string.replace(string2[i], " " + string2[i] + "  ");
+        }
         SpannableStringBuilder style = new SpannableStringBuilder(string);
         for (int i = 0; i < string2.length; i++) {
-                int bstart=string.indexOf(string2[i])-string3[i].length()-1;
-                int bend=bstart+string3[i].length();
-                style.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, 80, null, null), bstart, bend,
-                        Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            int bstart = string.indexOf(string2[i]) - string3[i].length() - 1;
+            int bend = bstart + string3[i].length();
+            style.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, 80, null, null), bstart, bend,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         }
 //        style.setSpan(new ForegroundColorSpan(Color.RED), fstart, fend,
 //                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -387,4 +390,12 @@ public class CommonUtils {
         return false;
     }
 
+    public static String formatAddress(String address) {
+        StringBuffer str = new StringBuffer(address);
+        str.insert(2, "仓");
+        str.insert(5, "排");
+        str.insert(8, "垛");
+        str.insert(11, "层");
+        return str.toString();
+    }
 }

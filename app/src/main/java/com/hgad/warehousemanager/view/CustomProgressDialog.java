@@ -46,6 +46,11 @@ public class CustomProgressDialog extends ProgressDialog {
         initData();
     }
 
+    @Override
+    public void show() {
+        super.show();
+    }
+
     private void initData() {
 
         // 通过ImageView对象拿到背景显示的AnimationDrawable

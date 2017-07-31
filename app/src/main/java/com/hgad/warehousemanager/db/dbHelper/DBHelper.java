@@ -3,8 +3,7 @@ package com.hgad.warehousemanager.db.dbHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.hgad.warehousemanager.bean.UserInfo;
-import com.hgad.warehousemanager.util.DatabaseUtil;
+import com.hgad.warehousemanager.bean.IpInfo;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -23,14 +22,15 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Map<String, Dao> daos = new HashMap<String, Dao>();
 
     private DBHelper(Context context) {
-        super(context, TABLE_NAME, null, 9);
+        super(context, TABLE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database,
                          ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, UserInfo.class);
+//            TableUtils.createTable(connectionSource, UserInfo.class);
+            TableUtils.createTable(connectionSource, IpInfo.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,7 +40,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database,
                           ConnectionSource connectionSource, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
-            DatabaseUtil.upgradeTable(database, connectionSource, UserInfo.class, DatabaseUtil.OPERATION_TYPE.ADD);
+//            DatabaseUtil.upgradeTable(database, connectionSource, UserInfo.class, DatabaseUtil.OPERATION_TYPE.ADD);
             onCreate(database, connectionSource);
         }
     }

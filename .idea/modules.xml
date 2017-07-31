@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WarehouseManager.iml" filepath="$PROJECT_DIR$/WarehouseManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-xlv/lib-xlv.iml" filepath="$PROJECT_DIR$/lib-xlv/lib-xlv.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pinnedSectionRefreshListView/pinnedSectionRefreshListView.iml" filepath="$PROJECT_DIR$/pinnedSectionRefreshListView/pinnedSectionRefreshListView.iml" />
     </modules>
   </component>
 </project>

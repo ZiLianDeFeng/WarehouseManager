@@ -15,11 +15,12 @@ import com.hgad.warehousemanager.base.BaseFragment;
 import com.hgad.warehousemanager.bean.UserInfo;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.db.dao.BaseDaoImpl;
-import com.hgad.warehousemanager.net.BaseReponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.activity.ChangeWareActivity;
-import com.hgad.warehousemanager.ui.activity.CheckActivity;
+import com.hgad.warehousemanager.ui.activity.CheckRecordActivity;
 import com.hgad.warehousemanager.ui.activity.InWareChooseActivity;
+import com.hgad.warehousemanager.ui.activity.NotificationActivity;
 import com.hgad.warehousemanager.ui.activity.OutWareActivity;
 import com.hgad.warehousemanager.ui.activity.ScanResultActivity;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
@@ -58,7 +59,7 @@ public class HomeFragment extends BaseFragment {
         mView.findViewById(R.id.tv_out_ware).setOnClickListener(this);
         mView.findViewById(R.id.tv_code_scanning).setOnClickListener(this);
         mView.findViewById(R.id.tv_check).setOnClickListener(this);
-        mView.findViewById(R.id.tv_user_setting).setOnClickListener(this);
+        mView.findViewById(R.id.tv_task_notification).setOnClickListener(this);
         mView.findViewById(R.id.iv_scan).setOnClickListener(this);
         convenientBanner = (ConvenientBanner<String>) mView.findViewById(R.id.convenientBanner);
         convenientBanner.setPages(new CBViewHolderCreator<ImageViewHolder>() {
@@ -70,7 +71,6 @@ public class HomeFragment extends BaseFragment {
                 .setPageIndicator(new int[]  {R.drawable.shape_oval_gray,R.drawable.shape_oval_white}) //设置两个点作为指示器
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL); //设置指示器的方向水平  居中
         convenientBanner.setCanLoop(true);
-
     }
 
     public class ImageViewHolder implements Holder<String> {
@@ -108,7 +108,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public <Res extends BaseReponse> void onSuccessResult(BaseRequest request, Res response) {
+    public <Res extends BaseResponse> void onSuccessResult(BaseRequest request, Res response) {
 
     }
 
@@ -145,12 +145,18 @@ public class HomeFragment extends BaseFragment {
             case R.id.tv_check:
                 go2Check();
                 break;
-            case R.id.tv_user_setting:
+            case R.id.tv_task_notification:
+                go2Notification();
                 break;
             case R.id.iv_scan:
                 go2Scan();
                 break;
         }
+    }
+
+    private void go2Notification() {
+        Intent intent = new Intent(mContext, NotificationActivity.class);
+        startActivity(intent);
     }
 
     private void go2Scan() {
@@ -164,7 +170,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void go2Check() {
-        Intent intent = new Intent(mContext, CheckActivity.class);
+        Intent intent = new Intent(mContext, CheckRecordActivity.class);
         startActivity(intent);
     }
 
