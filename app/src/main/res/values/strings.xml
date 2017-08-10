@@ -34,4 +34,10 @@
     <string name="info_check">信息校验中</string>
     <string name="commit_data">数据提交中</string>
     <string name="by_hand">手动输入</string>
+    <string name="not_accept">该任务还未被接受，无法操作</string>
+    <string name="done_task">该任务已经完成，无法操作</string>
+    <string name="check_net">请检查网络</string>
+    <string name="text_size">字体大小</string>
+    <string name="inputMarkNum">请输入标签号</string>
+    <string name="poor_signal">当前网络信号较差</string>
 </resources>

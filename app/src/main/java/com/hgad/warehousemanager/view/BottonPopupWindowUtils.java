@@ -1,15 +1,23 @@
 package com.hgad.warehousemanager.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.bean.request.WareHouseRequest;
 import com.hgad.warehousemanager.bean.response.ErrorResponseInfo;
@@ -19,6 +27,7 @@ import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.Callback;
 import com.hgad.warehousemanager.net.NetUtil;
 import com.hgad.warehousemanager.util.CommonUtils;
+import com.hgad.warehousemanager.util.CommonViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +57,17 @@ public class BottonPopupWindowUtils implements Callback {
     private WheelView wl_floor;
     private WheelView wl_ware;
     private WheelView wv_ware_num;
-    private WheelView wv_floor;
+    //    private WheelView wv_floor;
+    private String type;
+    private LinearLayout ll_ware;
+    private LinearLayout ll_map_ware;
+    private TextView tv_fixed_ware;
+    private TextView tv_fixed_map_ware;
+    private boolean connect;
+    private AlertView mAlertViewExt;
+    private CustomProgressDialog customProgressDialog;
+    private String[] numbers;
+    private String chooseFloor;
 
 
     public String getWare() {
@@ -83,14 +102,16 @@ public class BottonPopupWindowUtils implements Callback {
         isMap = map;
     }
 
-    public BottonPopupWindowUtils(String ware, String floor, String title) {
+    public BottonPopupWindowUtils(String ware, String floor, String title, String type) {
         this.ware = ware;
         this.floor = floor;
         this.title = title;
+        this.type = type;
         isMap = false;
     }
 
     public PopupWindow creat(Context context, String[] wareNums, String[] rows, String[] columns, String[] floors, View.OnClickListener listener) {
+        this.numbers = floors;
         this.context = context;
         View popupWindowView = View.inflate(context, R.layout.popupwindow_address, null);
         bottonPopupWindow = new PopupWindow(popupWindowView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -110,6 +131,10 @@ public class BottonPopupWindowUtils implements Callback {
         seatView = (SeatTable) popupWindowView.findViewById(R.id.seatView);
         TextView poptitle = (TextView) popupWindowView.findViewById(R.id.pop_title);
         poptitle.setText(title);
+//        ll_ware = (LinearLayout) popupWindowView.findViewById(R.id.ll_ware);
+//        ll_map_ware = (LinearLayout) popupWindowView.findViewById(R.id.ll_map_ware);
+        tv_fixed_ware = (TextView) popupWindowView.findViewById(R.id.tv_fixed_ware);
+        tv_fixed_map_ware = (TextView) popupWindowView.findViewById(R.id.tv_fixed_map_ware);
         wv_ware_num = (WheelView) popupWindowView.findViewById(R.id.wv_ware_num);
         wv_ware_num.setOffset(1);
         wv_ware_num.setItems(Arrays.asList(wareNums));
@@ -119,15 +144,15 @@ public class BottonPopupWindowUtils implements Callback {
                 ware = item;
             }
         });
-        wv_floor = (WheelView) popupWindowView.findViewById(R.id.wv_floor);
-        wv_floor.setOffset(1);
-        wv_floor.setItems(Arrays.asList(floors));
-        wv_floor.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-            @Override
-            public void onSelected(int selectedIndex, String item) {
-                floor = item;
-            }
-        });
+//        wv_floor = (WheelView) popupWindowView.findViewById(R.id.wv_floor);
+//        wv_floor.setOffset(1);
+//        wv_floor.setItems(Arrays.asList(floors));
+//        wv_floor.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+//            @Override
+//            public void onSelected(int selectedIndex, String item) {
+//                floor = item;
+//            }
+//        });
         wl_ware = (WheelView) popupWindowView.findViewById(R.id.wl_ware);
         wl_ware.setOffset(1);
         wl_ware.setItems(Arrays.asList(wareNums));
@@ -146,7 +171,6 @@ public class BottonPopupWindowUtils implements Callback {
                 floor = item;
             }
         });
-
         wl_row = (WheelView) popupWindowView.findViewById(R.id.wl_row);
         wl_row.setOffset(1);
         wl_row.setItems(Arrays.asList(rows));
@@ -218,13 +242,15 @@ public class BottonPopupWindowUtils implements Callback {
                 if (column < 9) {
                     BottonPopupWindowUtils.this.column = "0" + (column + 1);
                 } else {
-                    BottonPopupWindowUtils.this.row = "" + (column + 1);
+                    BottonPopupWindowUtils.this.column = "" + (column + 1);
                 }
+                showFloorDialog();
             }
 
             @Override
             public void unCheck(int row, int column) {
-
+                BottonPopupWindowUtils.this.row = null;
+                BottonPopupWindowUtils.this.column = null;
             }
 
             @Override
@@ -255,6 +281,67 @@ public class BottonPopupWindowUtils implements Callback {
         });
     }
 
+    private void showFloorDialog() {
+        chooseFloor = null;
+        //拓展窗口
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alertext_floor, null);
+        GridView gl = (GridView) extView.findViewById(R.id.gl_floor);
+        final NumberAdapter numberAdapter = new NumberAdapter();
+        gl.setAdapter(numberAdapter);
+        gl.setNumColumns(9);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT).setTitle("选择层号")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (chooseFloor!=null) {
+                            floor = chooseFloor;
+                            pop_switch.setText(floor + "层");
+                        }else {
+                            CommonUtils.showToast(context,"未选择层号");
+                        }
+                    }
+                }).setNegativeButton("取消", null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        alertDialog.setView(extView);
+        alertDialog.show();
+    }
+
+    class NumberAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return numbers.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            CommonViewHolder holder = CommonViewHolder.createCVH(convertView, parent, R.layout.item_number);
+            final TextView tv_number = (TextView) holder.getView(R.id.tv_number);
+            tv_number.setText(numbers[position]);
+            tv_number.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        chooseFloor = ((TextView) v).getText().toString().trim();
+                    }
+                }
+            });
+            return holder.convertView;
+        }
+    }
+
     private View.OnClickListener switchListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -264,7 +351,7 @@ public class BottonPopupWindowUtils implements Callback {
                 fl_map.setVisibility(View.VISIBLE);
                 pop_confirm.setText("下一步");
                 ware = wv_ware_num.getSeletedItem();
-                floor = wv_floor.getSeletedItem();
+//                floor = wv_floor.getSeletedItem();
                 row = null;
                 column = null;
             } else {
@@ -275,7 +362,7 @@ public class BottonPopupWindowUtils implements Callback {
                 row = wl_row.getSeletedItem();
                 column = wl_column.getSeletedItem();
                 ware = wl_ware.getSeletedItem();
-                floor = wl_floor.getSeletedItem();
+//                floor = wl_floor.getSeletedItem();
             }
         }
     };
@@ -288,17 +375,47 @@ public class BottonPopupWindowUtils implements Callback {
 //        pop_switch.setVisibility(View.VISIBLE);
 //        pop_confirm.setVisibility(View.INVISIBLE);
         pop_confirm.setText("确定");
+        if (Constants.CHANGE_WARE.equals(type)) {
+            wv_ware_num.setVisibility(View.INVISIBLE);
+            wl_ware.setVisibility(View.INVISIBLE);
+            tv_fixed_map_ware.setText(ware);
+            tv_fixed_map_ware.setVisibility(View.VISIBLE);
+            tv_fixed_ware.setText(ware);
+            tv_fixed_ware.setVisibility(View.VISIBLE);
+        }
     }
 
     private int index = 1;
+    Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public void change() {
         if (index == 1) {
-            WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
-            NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, this);
-            pop_address.setVisibility(View.INVISIBLE);
-            pop_switch.setVisibility(View.INVISIBLE);
-            index++;
+            boolean isNetWork = CommonUtils.checkNetWork(context);
+            if (isNetWork) {
+                connect = false;
+                mainHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!connect) {
+                            seatView.setData(15, 99);
+                            seatView.setScreenName(ware+"号仓库");
+                            initSeatTable(seatRows, seatColums, unSeatRows, unSeatColums, unFullRows, unFullColums);
+                            seatView.invalidate();
+                        }
+                    }
+                }, 2000);
+
+                WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
+                NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, this);
+                pop_address.setVisibility(View.INVISIBLE);
+//                pop_switch.setVisibility(View.INVISIBLE);
+                pop_switch.setText(floor+"层");
+                pop_switch.setOnClickListener(null);
+                pop_confirm.setText("确定");
+                index++;
+            } else {
+                CommonUtils.showToast(context, context.getString(R.string.check_net));
+            }
         } else if (index == 2) {
             if (row == null || column == null) {
                 CommonUtils.showToast(context, "还未选择地址");
@@ -318,6 +435,7 @@ public class BottonPopupWindowUtils implements Callback {
     @Override
     public void onSuccess(BaseRequest request, Object response) {
         if (request instanceof WareHouseRequest) {
+            connect = true;
             WareHouseResponse wareHouseResponse = (WareHouseResponse) response;
             if (wareHouseResponse.getResponseCode().getCode() == 200) {
                 if (wareHouseResponse.getErrorMsg().equals("请求成功")) {
@@ -338,13 +456,6 @@ public class BottonPopupWindowUtils implements Callback {
                         if (storey.get(storey.size() - 1) == null) {
                             unfull = true;
                         }
-//                        for (String info : storey) {
-//                            if (!TextUtils.isEmpty(info)) {
-//                                hava = true;
-//                            } else {
-//                                unfull = true;
-//                            }
-//                        }
                         if (hava) {
                             if (unfull) {
                                 unFullRows.add(raw);

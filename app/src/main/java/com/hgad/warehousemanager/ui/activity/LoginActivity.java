@@ -12,6 +12,7 @@ import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.bean.request.LoginRequest;
 import com.hgad.warehousemanager.bean.response.LoginResponse;
+import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
@@ -157,6 +158,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void login() {
+        if (Constants.DEBUG){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         name = et_username.getText().toString().trim();
         pwd = et_password.getText().toString().trim();
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)) {

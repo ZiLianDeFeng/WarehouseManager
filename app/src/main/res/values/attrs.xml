@@ -8,17 +8,21 @@
         <attr name="seat_unfull" format="reference" />
         <attr name="overview_checked" format="color" />
         <attr name="overview_sold" format="color" />
-        <attr name="txt_color" format="color"/>
-        <attr name="overview_unfull" format="color"/>
-        <attr name="seat_check" format="color"/>
-        <attr name="seat_current" format="color"/>
+        <attr name="txt_color" format="color" />
+        <attr name="overview_unfull" format="color" />
+        <attr name="seat_check" format="color" />
+        <attr name="seat_current" format="color" />
     </declare-styleable>
 
     <declare-styleable name="Toggle">
         <!-- name属性名  format数据类型   所有的数据类型都是小写 -->
-        <attr name="name" format="string"/>
-        <attr name="type" format="string"/>
-        <attr name="isToggle" format="boolean"/>
+        <attr name="name" format="string" />
+        <attr name="type" format="string" />
+        <attr name="isToggle" format="boolean" />
     </declare-styleable>
+
+
+    <attr name="commonTextSize" format="reference|dimension" />
+    <attr name="itemSize" format="reference|dimension" />
 
 </resources>

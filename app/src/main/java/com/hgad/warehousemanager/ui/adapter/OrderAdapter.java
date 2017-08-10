@@ -1,12 +1,9 @@
 package com.hgad.warehousemanager.ui.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
@@ -16,10 +13,8 @@ import com.hgad.warehousemanager.bean.response.ErrorResponseInfo;
 import com.hgad.warehousemanager.bean.response.UpdateResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.Callback;
-import com.hgad.warehousemanager.net.NetUtil;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.CommonViewHolder;
-import com.hgad.warehousemanager.util.DialogUtils;
 
 import java.util.List;
 
@@ -62,7 +57,7 @@ public class OrderAdapter extends BaseAdapter implements Callback {
         TextView tv_in_ware = (TextView) holder.getView(R.id.tv_in_ware);
         TextView tv_total = (TextView) holder.getView(R.id.tv_total);
         TextView tv_state = (TextView) holder.getView(R.id.tv_state);
-        Button btn_accept = (Button) holder.getView(R.id.btn_accept);
+//        Button btn_accept = (Button) holder.getView(R.id.btn_accept);
         final OrderInfo orderInfo = data.get(position);
         if (orderInfo.getState().equals("3")) {
             tv_in_ware.setTextColor(context.getResources().getColor(R.color.black));
@@ -72,28 +67,28 @@ public class OrderAdapter extends BaseAdapter implements Callback {
         tv_in_ware.setText(orderInfo.getInWareCount() + "");
         tv_total.setText(orderInfo.getProductCount() + "");
         tv_order_num.setText(orderInfo.getOrderNum());
-        if ("1".equals(orderInfo.getState())) {
-            btn_accept.setText("接受");
-            btn_accept.setTextColor(context.getResources().getColor(R.color.white));
-            btn_accept.setBackgroundResource(R.drawable.shape_bg_red);
-            btn_accept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogUtils.showAlert(context, "提示", "确认开始该任务？", "确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            UpdateRequest updateRequest = new UpdateRequest(orderInfo.getTaskId(), "2");
-                            NetUtil.sendRequest(updateRequest, UpdateResponse.class, OrderAdapter.this);
-                        }
-                    }, "取消", null, AlertDialog.THEME_HOLO_LIGHT);
-                }
-            });
-        } else {
-            btn_accept.setText("已接受");
-            btn_accept.setBackgroundResource(R.drawable.shape_circle);
-            btn_accept.setTextColor(context.getResources().getColor(R.color.gray));
-            btn_accept.setOnClickListener(null);
-        }
+//        if ("1".equals(orderInfo.getState())) {
+//            btn_accept.setText("接受");
+//            btn_accept.setTextColor(context.getResources().getColor(R.color.white));
+//            btn_accept.setBackgroundResource(R.drawable.shape_bg_red);
+//            btn_accept.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    DialogUtils.showAlert(context, "提示", "确认开始该任务？", "确定", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            UpdateRequest updateRequest = new UpdateRequest(orderInfo.getTaskId(), "2");
+//                            NetUtil.sendRequest(updateRequest, UpdateResponse.class, OrderAdapter.this);
+//                        }
+//                    }, "取消", null, AlertDialog.THEME_HOLO_LIGHT);
+//                }
+//            });
+//        } else {
+//            btn_accept.setText("已接受");
+//            btn_accept.setBackgroundResource(R.drawable.shape_circle);
+//            btn_accept.setTextColor(context.getResources().getColor(R.color.gray));
+//            btn_accept.setOnClickListener(null);
+//        }
         if (orderInfo.getType().equals("0")) {
             if (orderInfo.getState().equals("3")) {
                 tv_state.setText("已入库");

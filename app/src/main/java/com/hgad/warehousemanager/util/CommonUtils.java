@@ -337,7 +337,7 @@ public class CommonUtils {
     }
 
     public static void stringInterceptionChangeLarge(TextView numtext,
-                                                     String string, String[] string3, String... string2) {
+                                                     String string, String... string2) {
 //        int fstart = string.indexOf(string2[0]);
 //        int fend = fstart + string2[0].length();
 //        ColorStateList redColors = ColorStateList.valueOf(0x66ff0000);
@@ -346,8 +346,8 @@ public class CommonUtils {
         }
         SpannableStringBuilder style = new SpannableStringBuilder(string);
         for (int i = 0; i < string2.length; i++) {
-            int bstart = string.indexOf(string2[i]) - string3[i].length() - 1;
-            int bend = bstart + string3[i].length();
+            int bstart = string.indexOf(string2[i]) - 3;
+            int bend = bstart + 2;
             style.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, 80, null, null), bstart, bend,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         }
@@ -397,5 +397,13 @@ public class CommonUtils {
         str.insert(8, "垛");
         str.insert(11, "层");
         return str.toString();
+    }
+
+    public static String formatAddressForUse(String address) {
+        address = address.replace("仓", "");
+        address = address.replace("排", "");
+        address = address.replace("垛", "");
+        address = address.replace("层", "");
+        return address;
     }
 }

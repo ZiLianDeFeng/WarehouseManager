@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/item_selector"
-    android:orientation="vertical"
     android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
     android:padding="@dimen/common_padding">
 
     <RelativeLayout
@@ -77,13 +77,19 @@
                 android:textSize="@dimen/item_size" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_accept"
-            android:layout_width="60dp"
-            android:layout_height="25dp"
+        <!--<Button-->
+        <!--android:id="@+id/btn_accept"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:background="@drawable/shape_bg_red"-->
+        <!--android:text="接受"-->
+        <!--android:textColor="@color/white" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/shape_bg_red"
-            android:text="接受"
-            android:textColor="@color/white" />
+            android:text="1000KG"
+            android:textSize="@dimen/common_text_size" />
     </RelativeLayout>
 </LinearLayout>

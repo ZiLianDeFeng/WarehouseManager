@@ -28,8 +28,8 @@ import com.hgad.warehousemanager.bean.request.TaskRequest;
 import com.hgad.warehousemanager.bean.response.TaskResponse;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
-import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.adapter.OrderAdapter;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
@@ -58,6 +58,7 @@ public class OutWareActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Constants.NOTIFY:
+                    isConnect = true;
                     if (isRefresh) {
                         lv.stopRefresh();
                         lv.setRefreshTime(CommonUtils.getCurrentTime());
@@ -81,6 +82,7 @@ public class OutWareActivity extends BaseActivity {
     private String type = Constants.OUT_TYPE;
     private int currentPage = 1;
     private int userId;
+    private boolean isConnect;
 
     @Override
     protected void setContentView() {
@@ -89,7 +91,7 @@ public class OutWareActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        initHeader("出库");
+        initHeader("出库订单");
         userId = SPUtils.getInt(this, SPConstants.USER_ID);
         Intent intent = getIntent();
         String orderNum = intent.getStringExtra(Constants.ORDER_NUMBER);
@@ -97,14 +99,42 @@ public class OutWareActivity extends BaseActivity {
             et_order_num.setText(orderNum);
             search();
         } else {
-            if (operatingAnim != null) {
-                rl_info.setVisibility(View.VISIBLE);
-                infoOperating.startAnimation(operatingAnim);
-//                rl_info.setVisibility(View.INVISIBLE);
-//                infoOperating.clearAnimation();
-                TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-                sendRequest(taskRequest, TaskResponse.class);
-                currentPage--;
+
+            boolean netWork = CommonUtils.checkNetWork(this);
+            if (netWork) {
+                if (operatingAnim != null) {
+                    rl_info.setVisibility(View.VISIBLE);
+                    infoOperating.startAnimation(operatingAnim);
+                }
+                isConnect = false;
+                if (Constants.DEBUG) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 10; i++) {
+                                data.add(new OrderInfo("F3Q4235" + i, 50, 25, "2", "1", i));
+                            }
+                            orderAdapter.notifyDataSetChanged();
+                            rl_info.setVisibility(View.INVISIBLE);
+                            infoOperating.clearAnimation();
+                        }
+                    }, 2000);
+                } else {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isConnect) {
+                                rl_info.setVisibility(View.INVISIBLE);
+                                infoOperating.clearAnimation();
+                            }
+                        }
+                    }, 5000);
+                    TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
+                    sendRequest(taskRequest, TaskResponse.class);
+                    currentPage--;
+                }
+            } else {
+                CommonUtils.showToast(this, getString(R.string.check_net));
             }
         }
     }

@@ -30,7 +30,7 @@
                 android:layout_height="40dp"
                 android:layout_weight="3"
                 android:background="@drawable/shape_circle"
-                android:hint="请输入标签号"
+                android:hint="@string/inputMarkNum"
                 android:padding="@dimen/common_dp"
                 android:textSize="@dimen/common_text_size" />
 

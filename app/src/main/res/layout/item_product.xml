@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="库位："
-                android:textSize="@dimen/item_size" />
+                android:textSize="?itemSize" />
 
             <TextView
                 android:id="@+id/tv_addressWare"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/old_red"
-                android:textSize="@dimen/item_size" />
+                android:textSize="?itemSize" />
         </LinearLayout>
 
         <TextView
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="重量："
-                    android:textSize="@dimen/item_size" />
+                    android:textSize="?itemSize" />
 
                 <TextView
                     android:id="@+id/tv_weight"
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/item_size" />
+                    android:textSize="?itemSize" />
             </LinearLayout>
 
             <LinearLayout
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="状态："
-                    android:textSize="@dimen/item_size" />
+                    android:textSize="?itemSize" />
 
                 <TextView
                     android:id="@+id/tv_type"
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/item_size" />
+                    android:textSize="?itemSize" />
             </LinearLayout>
         </LinearLayout>
 

@@ -51,8 +51,8 @@ public class CustomProgressDialog extends ProgressDialog {
         super.show();
     }
 
-    private void initData() {
 
+    private void initData() {
         // 通过ImageView对象拿到背景显示的AnimationDrawable
 //        mAnimation = (AnimationDrawable) mImageView.getBackground();
         operatingAnim = AnimationUtils.loadAnimation(mContext, R.anim.tip);

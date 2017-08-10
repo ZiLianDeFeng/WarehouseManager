@@ -92,24 +92,35 @@ public class SeatTable extends View {
     int column;
 
     /**
-     * 可选时座位的图片
+     * 可选储位的图片
      */
     Bitmap seatBitmap;
 
     /**
-     * 选中时座位的图片
+     * 选中储位的图片
      */
     Bitmap checkedSeatBitmap;
 
     /**
-     * 座位已经售出时的图片
+     * 已满储位的图片
      */
     Bitmap seatSoldBitmap;
 
     Bitmap overviewBitmap;
 
+    /**
+     * 未满储位的图片
+     */
     Bitmap seatUnfullBitmap;
+
+    /**
+     * 已盘点储位的图片
+     */
     Bitmap seatCheckBitmap;
+
+    /**
+     * 当前入库货品的储位的图片
+     */
     Bitmap seatCurrentBitmap;
 
     int lastX;
@@ -153,7 +164,7 @@ public class SeatTable extends View {
     /**
      * 概览图的比例
      */
-    float overviewScale = 4.8f;
+    float overviewScale = 10f;
 
     /**
      * 荧幕高度
@@ -316,6 +327,7 @@ public class SeatTable extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
+//        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SeatTableView);
         overview_checked = typedArray.getColor(R.styleable.SeatTableView_overview_checked, Color.parseColor("#5A9E64"));
         overview_sold = typedArray.getColor(R.styleable.SeatTableView_overview_sold, Color.parseColor("#F4483C"));
@@ -422,7 +434,6 @@ public class SeatTable extends View {
         }
 
         matrix.postTranslate(numberWidth + spacing, headHeight + screenHeight + borderHeight + verSpacing + lineNumberTxtHeight * 2);
-
     }
 
     @Override
@@ -431,7 +442,6 @@ public class SeatTable extends View {
         if (row <= 0 || column == 0) {
             return;
         }
-
         drawSeat(canvas);
         drawNumber(canvas);
         drawColumn(canvas);
@@ -582,9 +592,9 @@ public class SeatTable extends View {
 
             float currentSeatBitmapX = startX;
             tempMatrix.setScale(xScale1, yScale1);
-            tempMatrix.postTranslate(currentSeatBitmapX, (headHeight - seatHeight*3) / 2);
+            tempMatrix.postTranslate(currentSeatBitmapX, (headHeight - seatHeight * 3) / 2);
             canvas.drawBitmap(seatCurrentBitmap, tempMatrix, headPaint);
-            canvas.drawText("当前位置", currentSeatBitmapX + spacing1 + seatWidth, txtY/2, headPaint);
+            canvas.drawText("当前位置", currentSeatBitmapX + spacing1 + seatWidth, txtY / 2, headPaint);
         }
 
         //绘制分割线
@@ -617,9 +627,9 @@ public class SeatTable extends View {
 
         canvas.drawPath(path, pathPaint);
 
+
         pathPaint.setColor(Color.BLACK);
         pathPaint.setTextSize(sp2Px(14));
-
         canvas.drawText(screenName, centerX - pathPaint.measureText(screenName) / 2, getBaseLine(pathPaint, startY, startY + screenHeight * getMatrixScaleY()), pathPaint);
     }
 
@@ -678,10 +688,8 @@ public class SeatTable extends View {
                         drawText(canvas, i, j, top, left);
                         break;
                 }
-
             }
         }
-
         if (DBG) {
             long drawTime = System.currentTimeMillis() - startTime;
             Log.d("drawTime", "seatDrawTime:" + drawTime);
@@ -693,7 +701,6 @@ public class SeatTable extends View {
         if (isHave(getID(row, column)) >= 0) {
             return SEAT_TYPE_SELECTED;
         }
-
         if (seatChecker != null) {
             if (!seatChecker.isValidSeat(row, column)) {
                 return SEAT_TYPE_NOT_AVAILABLE;
@@ -937,7 +944,7 @@ public class SeatTable extends View {
      * 往左边滑动,自动回弹到行号右边
      * 往右边滑动,自动回弹到右边
      * 往上,下滑动,自动回弹到顶部
-     * <p/>
+     * <p>
      * 整个大小超过控件大小的时候:
      * 往左侧滑动,回弹到最右边,往右侧滑回弹到最左边
      * 往上滑动,回弹到底部,往下滑动回弹到顶部

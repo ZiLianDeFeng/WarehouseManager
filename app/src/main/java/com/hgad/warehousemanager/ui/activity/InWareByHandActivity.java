@@ -25,8 +25,8 @@ import com.hgad.warehousemanager.bean.response.InWareResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
-import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.view.BottonPopupWindowUtils;
@@ -66,6 +66,11 @@ public class InWareByHandActivity extends BaseActivity {
     private LinearLayout ll_detail;
     private TextView tv_markNum;
     private TextView tv_ware_name;
+    String[] wareNums = new String[6];
+    String[] rows = new String[15];
+    String[] columns = new String[99];
+    String[] floors = new String[27];
+    private boolean isConnect;
 
     @Override
     protected void setContentView() {
@@ -74,6 +79,7 @@ public class InWareByHandActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        initWheelData();
         username = SPUtils.getString(this, SPConstants.USER_NAME);
         Intent intent = getIntent();
         type = intent.getStringExtra(Constants.TYPE);
@@ -88,6 +94,35 @@ public class InWareByHandActivity extends BaseActivity {
         } else if (Constants.OUT_WARE.equals(type)) {
             initHeader("出库-手动出库");
 //            ll_address.setVisibility(View.GONE);
+        }
+    }
+
+    private void initWheelData() {
+        for (int i = 0; i < 6; i++) {
+            wareNums[i] = "0" + (i + 1);
+        }
+        for (int i = 0; i < 15; i++) {
+            if (i < 9) {
+                rows[i] = "0" + (i + 1);
+            } else {
+                rows[i] = i + 1 + "";
+            }
+        }
+        for (int i = 0; i < 99; i++) {
+            if (i < 9) {
+                columns[i] = "0" + (i + 1);
+            } else {
+                columns[i] = i + 1 + "";
+            }
+        }
+        for (int i = 0; i < 27; i++) {
+            if (i < 9) {
+                floors[i] = "0" + (i + 1);
+            } else if (i >= 9 && i < 18) {
+                floors[i] = i + 2 + "";
+            } else if (i >= 18) {
+                floors[i] = i + 3 + "";
+            }
         }
     }
 
@@ -108,20 +143,9 @@ public class InWareByHandActivity extends BaseActivity {
 //        initBottonPopupWindow();
     }
 
-    String[] wareNums = {"01", "02", "03", "04", "05", "06"};
-    String[] rows = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
-    String[] columns = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
-    String[] floors = {"01", "02", "03"};
-
     //    private void initBottonPopupWindow() {
 //
 //    }
-    final int[] seatRows = new int[]{4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6};
-    final int[] seatColumns = new int[]{4, 5, 6, 7, 8, 9, 10, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
-    final int[] unSeatColums = new int[]{1, 2, 3, 4, 12, 13, 14, 15, 1, 2, 3, 13, 14, 15, 1, 2, 14, 15, 1, 15};
-    final int[] unFullRows = new int[]{7, 7, 7, 8, 8, 8};
-    final int[] unFullColums = new int[]{14, 12, 13, 13, 14, 12};
 
     @Override
     public void onBackPressed() {
@@ -131,6 +155,7 @@ public class InWareByHandActivity extends BaseActivity {
 
     @Override
     public void onSuccessResult(BaseRequest request, BaseResponse response) {
+        isConnect = true;
         if (customProgressDialog != null) {
             customProgressDialog.dismiss();
         }
@@ -166,13 +191,8 @@ public class InWareByHandActivity extends BaseActivity {
                         tv_ware_name.setText(wareInfo.getProName());
                         if (!TextUtils.isEmpty(entity.getPositionCode())) {
                             address = wareInfo.getAddress();
-                            StringBuffer str = new StringBuffer(this.address);
-                            str.insert(2, "仓");
-                            str.insert(5, "排");
-                            str.insert(8, "垛");
-                            str.insert(11, "层");
-                            address = str.toString();
-                            tv_addressWare.setText(address);
+                            address = CommonUtils.formatAddress(this.address);
+                            CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "层");
                             if (type.equals(Constants.IN_WARE)) {
                                 tv_addressWare.setOnClickListener(null);
                                 btn_commit.setOnClickListener(new View.OnClickListener() {
@@ -194,13 +214,13 @@ public class InWareByHandActivity extends BaseActivity {
                                         CommonUtils.showToast(InWareByHandActivity.this, "该货品已出库，无法再次出库");
                                     }
                                 });
-                            }else if (type.equals(Constants.CHANGE_WARE)){
+                            } else if (type.equals(Constants.CHANGE_WARE)) {
                                 tv_addressWare.setText("无");
                                 tv_addressWare.setOnClickListener(null);
                                 btn_commit.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        CommonUtils.showToast(InWareByHandActivity.this,"该货品不在库中，无法移位");
+                                        CommonUtils.showToast(InWareByHandActivity.this, "该货品不在库中，无法移位");
                                     }
                                 });
                             }
@@ -246,13 +266,9 @@ public class InWareByHandActivity extends BaseActivity {
         String markNum = et_markNum.getText().toString().trim();
         boolean checkNetWork = CommonUtils.checkNetWork(this);
         if (checkNetWork) {
-            customProgressDialog = new CustomProgressDialog(this, "数据校验中");
-            customProgressDialog.setCancelable(false);
-            customProgressDialog.setCanceledOnTouchOutside(false);
-            customProgressDialog.show();
+            showDialog(getString(R.string.info_check));
             WareInfoRequest wareInfoRequest = new WareInfoRequest(markNum);
             sendRequest(wareInfoRequest, WareInfoResponse.class);
-            return;
         } else {
             CommonUtils.showToast(this, "请检查网络");
         }
@@ -305,11 +321,7 @@ public class InWareByHandActivity extends BaseActivity {
                 if (i == 1) {
                     isLast = true;
                 }
-                customProgressDialog = new CustomProgressDialog(this, "数据提交中");
-//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                customProgressDialog.setCancelable(false);
-                customProgressDialog.setCanceledOnTouchOutside(false);
-                customProgressDialog.show();
+                showDialog(getString(R.string.commit_data));
                 InWareRequest inWareRequest = new InWareRequest(wareInfo.getMarkNum(), username, isLast ? wareInfo.getTaskId() : null, "1", address);
                 sendRequest(inWareRequest, InWareResponse.class);
             } else {
@@ -333,11 +345,7 @@ public class InWareByHandActivity extends BaseActivity {
                 finish();
             }
         }, 2000);
-        customProgressDialog = new CustomProgressDialog(this, "信息校验中");
-//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        customProgressDialog.setCancelable(false);
-        customProgressDialog.setCanceledOnTouchOutside(false);
-        customProgressDialog.show();
+        showDialog(getString(R.string.info_check));
     }
 
     private void inCommit() {
@@ -363,17 +371,10 @@ public class InWareByHandActivity extends BaseActivity {
                 if (i == 1) {
                     isLast = true;
                 }
-                address = address.replace("仓", "");
-                address = address.replace("排", "");
-                address = address.replace("垛", "");
-                address = address.replace("层", "");
+                address = CommonUtils.formatAddressForUse(address);
                 InWareRequest inWareRequest = new InWareRequest(markNum, username, isLast ? wareInfo.getTaskId() : null, "0", address);
                 sendRequest(inWareRequest, InWareResponse.class);
-                customProgressDialog = new CustomProgressDialog(this, "数据提交中");
-//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                customProgressDialog.setCancelable(false);
-                customProgressDialog.setCanceledOnTouchOutside(false);
-                customProgressDialog.show();
+                showDialog(getString(R.string.commit_data));
             } else {
                 CommonUtils.showToast(this, "该货品不在该次任务中，请重新扫描！");
 //                tv_addressWare.setText("无");
@@ -384,17 +385,10 @@ public class InWareByHandActivity extends BaseActivity {
 
     private void changeCommit() {
         String markNum = et_markNum.getText().toString().trim();
-        address = address.replace("仓", "");
-        address = address.replace("排", "");
-        address = address.replace("垛", "");
-        address = address.replace("层", "");
+        address = CommonUtils.formatAddressForUse(address);
         ChangeWareRequest changeWareRequset = new ChangeWareRequest(markNum, address, username);
         sendRequest(changeWareRequset, ChangeWareResponse.class);
-        customProgressDialog = new CustomProgressDialog(this, "数据提交中");
-//        customProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        customProgressDialog.setCancelable(false);
-        customProgressDialog.setCanceledOnTouchOutside(false);
-        customProgressDialog.show();
+        showDialog(getString(R.string.commit_data));
     }
 
     private void confirmAddress() {
@@ -408,12 +402,12 @@ public class InWareByHandActivity extends BaseActivity {
         column = bottonPopupWindowUtils.getColumn();
         floor = bottonPopupWindowUtils.getFloor();
         address = ware + "仓" + row + "排" + column + "垛" + floor + "层";
-        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
+        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "层");
         bottonPopupWindow.dismiss();
     }
 
     private void chooseAddress() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getResources().getString(R.string.choose_address));
+        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getString(R.string.choose_address), type);
         bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
         bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -424,5 +418,25 @@ public class InWareByHandActivity extends BaseActivity {
 //        bottonPopupWindowUtils.initSeatTable(seatRows, seatColumns, unSeatRows, unSeatColums, unFullRows, unFullColums);
         bottonPopupWindowUtils.show(btn_commit, Gravity.BOTTOM, 0, 0);
         CommonUtils.backgroundAlpha(0.8f, this);
+    }
+
+    private void showDialog(String content) {
+        customProgressDialog = new CustomProgressDialog(this, content);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
+//        customProgressDialog.setContent(content);
+        isConnect = false;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isConnect) {
+                    if (customProgressDialog != null) {
+                        customProgressDialog.dismiss();
+                        CommonUtils.showToast(InWareByHandActivity.this, getString(R.string.poor_signal));
+                    }
+                }
+            }
+        }, 5000);
     }
 }

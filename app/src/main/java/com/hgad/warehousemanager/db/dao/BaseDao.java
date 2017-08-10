@@ -74,6 +74,7 @@ public abstract class BaseDao<T, Integer> {
 
     /**
      * 增或更新，带事务操作
+     *
      * @param t 泛型实体类
      * @return Dao.CreateOrUpdateStatus
      * @throws SQLException SQLException异常
@@ -98,6 +99,7 @@ public abstract class BaseDao<T, Integer> {
 
     /**
      * 增，带事务操作
+     *
      * @param t 泛型实体类集合
      * @return 影响的行数
      * @throws SQLException SQLException异常
@@ -124,6 +126,7 @@ public abstract class BaseDao<T, Integer> {
 
     /**
      * 增或更新，带事务操作
+     *
      * @param t 泛型实体类集合
      * @return 影响的行数
      * @throws SQLException SQLException异常
@@ -255,6 +258,7 @@ public abstract class BaseDao<T, Integer> {
 
     /**
      * 删，带事务操作
+     *
      * @param ids id集合
      * @return 影响的行数
      * @throws SQLException SQLException异常
@@ -277,6 +281,7 @@ public abstract class BaseDao<T, Integer> {
         }
         return 0;
     }
+
     /**
      * 删，带事务操作
      *
@@ -329,6 +334,7 @@ public abstract class BaseDao<T, Integer> {
 
     /**
      * 改，带事务操作
+     *
      * @param preparedUpdate PreparedUpdate对象
      * @return 影响的行数
      * @throws SQLException SQLException异常
@@ -350,6 +356,7 @@ public abstract class BaseDao<T, Integer> {
         }
         return 0;
     }
+
     /**
      * 查，带事务操作
      *
@@ -362,7 +369,7 @@ public abstract class BaseDao<T, Integer> {
         try {
             databaseConnection = dao.startThreadConnection();
             dao.setAutoCommit(databaseConnection, false);
-                List<T> query = dao.queryForAll();
+            List<T> query = dao.queryForAll();
             dao.commit(databaseConnection);
             return query;
         } catch (SQLException e) {
@@ -438,15 +445,15 @@ public abstract class BaseDao<T, Integer> {
      * @throws SQLException SQLException异常
      */
     public List<T> query(String[] columnNames, Object[] columnValues) throws SQLException {
-        if (columnNames.length != columnNames.length) {
+        if (columnNames.length != columnValues.length) {
             throw new InvalidParameterException("params size is not equal");
         }
         QueryBuilder<T, Integer> queryBuilder = getDao().queryBuilder();
         Where<T, Integer> wheres = queryBuilder.where();
         for (int i = 0; i < columnNames.length; i++) {
-            if (i==0){
+            if (i == 0) {
                 wheres.eq(columnNames[i], columnValues[i]);
-            }else{
+            } else {
                 wheres.and().eq(columnNames[i], columnValues[i]);
             }
 

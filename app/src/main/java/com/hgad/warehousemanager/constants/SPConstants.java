@@ -12,4 +12,5 @@ public class SPConstants {
     public static final String USER_ID = "userId";
     public static final String SET_ALIAS_SUCCESS = "setAliasSuccess";
     public static final String IP_ALL = "ipAll";
+    public static final String TEXT_SIZE = "textSize";
 }

@@ -28,8 +28,8 @@ import com.hgad.warehousemanager.bean.response.InWareResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
-import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.view.BottonPopupWindowUtils;
@@ -46,7 +46,7 @@ public class ScanResultActivity extends BaseActivity {
     private TextView tv_markNum;
     private TextView tv_type;
     private TextView tv_net_weight;
-    private TextView tv_gross_weight;
+    //    private TextView tv_gross_weight;
     private TextView tv_test;
     private Button btn_commit;
     private String row = "1";
@@ -74,6 +74,11 @@ public class ScanResultActivity extends BaseActivity {
     private String username;
     private boolean isLast;
     private String markNum;
+    private boolean isConnect;
+    String[] wareNums = new String[6];
+    String[] rows = new String[15];
+    String[] columns = new String[99];
+    String[] floors = new String[27];
 
     @Override
     protected void setContentView() {
@@ -82,6 +87,7 @@ public class ScanResultActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        initWheelData();
         Intent intent = getIntent();
         type = intent.getStringExtra(Constants.TYPE);
         username = SPUtils.getString(this, SPConstants.USER_NAME);
@@ -133,27 +139,33 @@ public class ScanResultActivity extends BaseActivity {
                 tv_test.setText(result);
                 btn_commit.setVisibility(View.INVISIBLE);
             } else {
-                markNum = result.substring(result.indexOf("标签号") + 5, result.indexOf("订单号") - 2).trim();
-                String spec = result.substring(result.indexOf("规格") + 8, result.indexOf("加工性能") - 2).trim();
-                String grossW = result.substring(result.indexOf("毛重") + 4, result.indexOf("净重") - 2).trim();
-                String netW = result.substring(result.indexOf("净重") + 4, result.indexOf("日期") - 2).trim();
+                String markNumStr = result.substring(result.indexOf("标签号"));
+                markNum = subStringInfo(markNumStr);
+                String specStr = result.substring(result.indexOf("规格"));
+                String spec = subStringInfo(specStr);
+                String netWStr = result.substring(result.indexOf("净重"));
+                String netW = subStringInfo(netWStr);
+                String orderNumStr = result.substring(result.indexOf("订单号"));
+                String orderNum = subStringInfo(orderNumStr);
+                String orderNameStr = result.substring(result.indexOf("品名"));
+                String orderName = subStringInfo(orderNameStr);
                 tv_markNum.setText(markNum);
                 tv_type.setText(spec);
-                tv_gross_weight.setText(grossW);
+//                tv_gross_weight.setText(grossW);
                 tv_net_weight.setText(netW);
                 if (type.equals(Constants.OUT_WARE)) {
                     tv_addressWare.setText("无");
                     tv_addressWare.setOnClickListener(null);
                 }
-                boolean checkNetWork = CommonUtils.checkNetWork(this);
-                if (checkNetWork) {
-                    showDialog(getResources().getString(R.string.info_check));
-                    WareInfoRequest wareInfoRequest = new WareInfoRequest(markNum);
-                    sendRequest(wareInfoRequest, WareInfoResponse.class);
-                    return;
-                } else {
-                    CommonUtils.showToast(this, "请检查网络");
-                }
+//                boolean checkNetWork = CommonUtils.checkNetWork(this);
+//                if (checkNetWork) {
+//                    showDialog(getString(R.string.info_check));
+//                    WareInfoRequest wareInfoRequest = new WareInfoRequest(markNum);
+//                    sendRequest(wareInfoRequest, WareInfoResponse.class);
+//                    return;
+//                } else {
+//                    CommonUtils.showToast(this, getString(R.string.check_net));
+//                }
             }
         }
         wareInfo = (WareInfo) intent.getSerializableExtra(Constants.WARE_INFO);
@@ -161,7 +173,7 @@ public class ScanResultActivity extends BaseActivity {
             markNum = wareInfo.getMarkNum();
             tv_markNum.setText(markNum);
             tv_type.setText(wareInfo.getSpec());
-            tv_gross_weight.setText(wareInfo.getGrossWeight() + "kg");
+//            tv_gross_weight.setText(wareInfo.getGrossWeight() + "kg");
             tv_net_weight.setText(wareInfo.getNetWeight() + "kg");
             String wareInfoAddress = wareInfo.getAddress();
             if (!TextUtils.isEmpty(wareInfoAddress)) {
@@ -170,9 +182,8 @@ public class ScanResultActivity extends BaseActivity {
                 column = wareInfoAddress.substring(4, 6);
                 floor = wareInfoAddress.substring(6, 8);
                 address = ware + "仓" + row + "排" + column + "垛" + floor + "层";
-                CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
+                CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "层");
             }
-
             String state = wareInfo.getState();
             if (!"0".equals(state)) {
                 btn_commit.setVisibility(View.INVISIBLE);
@@ -212,6 +223,39 @@ public class ScanResultActivity extends BaseActivity {
         }
     }
 
+    private void initWheelData() {
+        for (int i = 0; i < 6; i++) {
+            wareNums[i] = "0" + (i + 1);
+        }
+        for (int i = 0; i < 15; i++) {
+            if (i < 9) {
+                rows[i] = "0" + (i + 1);
+            } else {
+                rows[i] = i + 1 + "";
+            }
+        }
+        for (int i = 0; i < 99; i++) {
+            if (i < 9) {
+                columns[i] = "0" + (i + 1);
+            } else {
+                columns[i] = i + 1 + "";
+            }
+        }
+        for (int i = 0; i < 27; i++) {
+            if (i < 9) {
+                floors[i] = "0" + (i + 1);
+            } else if (i >= 9 && i < 18) {
+                floors[i] = i + 2 + "";
+            } else if (i >= 18) {
+                floors[i] = i + 3 + "";
+            }
+        }
+    }
+
+    private String subStringInfo(String str) {
+        return str.substring(str.indexOf(":") + 1, str.indexOf("|")).trim();
+    }
+
     @Override
     public void onBackPressed() {
         backWarm();
@@ -222,7 +266,7 @@ public class ScanResultActivity extends BaseActivity {
         tv_markNum = (TextView) findViewById(R.id.tv_markNum);
         tv_type = (TextView) findViewById(R.id.tv_type);
         tv_net_weight = (TextView) findViewById(R.id.tv_net_weight);
-        tv_gross_weight = (TextView) findViewById(R.id.tv_gross_weight);
+//        tv_gross_weight = (TextView) findViewById(R.id.tv_gross_weight);
         tv_addressWare = (TextView) findViewById(R.id.tv_addressWare);
         tv_addressWare.setOnClickListener(this);
         tv_test = (TextView) findViewById(R.id.tv_test);
@@ -233,13 +277,6 @@ public class ScanResultActivity extends BaseActivity {
         ll_more = (LinearLayout) findViewById(R.id.ll_search);
         sv_main = (ScrollView) findViewById(R.id.sv_main);
     }
-
-    final int[] seatRows = new int[]{4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6};
-    final int[] seatColumns = new int[]{4, 5, 6, 7, 8, 9, 10, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    final int[] unSeatRows = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
-    final int[] unSeatColums = new int[]{1, 2, 3, 4, 12, 13, 14, 15, 1, 2, 3, 13, 14, 15, 1, 2, 14, 15, 1, 15};
-    final int[] unFullRows = new int[]{7, 7, 7, 8, 8, 8};
-    final int[] unFullColums = new int[]{14, 12, 13, 13, 14, 12};
 
     private void initMorePopupWindow() {
         View contentView = View.inflate(this, R.layout.popupwindow_more, null);
@@ -264,6 +301,7 @@ public class ScanResultActivity extends BaseActivity {
         if (customProgressDialog != null) {
             customProgressDialog.dismiss();
         }
+        isConnect = true;
         if (request instanceof InWareRequest) {
             InWareResponse inWareResponse = (InWareResponse) response;
             if (inWareResponse != null) {
@@ -289,7 +327,7 @@ public class ScanResultActivity extends BaseActivity {
                             markNum = wareInfo.getMarkNum();
                             tv_markNum.setText(markNum);
                             tv_type.setText(wareInfo.getSpec());
-                            tv_gross_weight.setText(wareInfo.getGrossWeight() + "kg");
+//                            tv_gross_weight.setText(wareInfo.getGrossWeight() + "kg");
                             tv_net_weight.setText(wareInfo.getNetWeight() + "kg");
                             address = wareInfo.getAddress();
                             String str = CommonUtils.formatAddress(address);
@@ -420,10 +458,7 @@ public class ScanResultActivity extends BaseActivity {
     }
 
     private void outCommit() {
-        address = address.replace("仓", "");
-        address = address.replace("排", "");
-        address = address.replace("垛", "");
-        address = address.replace("层", "");
+        address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
         InWareRequest inWareRequest = new InWareRequest(wareInfo.getMarkNum(), username, isLast ? wareInfo.getTaskId() : null, "1", address);
         sendRequest(inWareRequest, InWareResponse.class);
@@ -445,33 +480,37 @@ public class ScanResultActivity extends BaseActivity {
 
     private void inCommit() {
 //        String currentTime = CommonUtils.getCurrentTime();
-        address = address.replace("仓", "");
-        address = address.replace("排", "");
-        address = address.replace("垛", "");
-        address = address.replace("层", "");
+        address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
         InWareRequest inWareRequest = new InWareRequest(markNum, username, isLast ? wareInfo.getTaskId() : null, "0", address);
         sendRequest(inWareRequest, InWareResponse.class);
     }
 
     private void changeCommit() {
-        address = address.replace("仓", "");
-        address = address.replace("排", "");
-        address = address.replace("垛", "");
-        address = address.replace("层", "");
+        address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
         ChangeWareRequest changeWareRequest = new ChangeWareRequest(markNum, address, username);
         sendRequest(changeWareRequest, ChangeWareResponse.class);
     }
 
     private void showDialog(String content) {
-        if (customProgressDialog == null) {
-            customProgressDialog = new CustomProgressDialog(this, content);
-        }
+        customProgressDialog = new CustomProgressDialog(this, content);
         customProgressDialog.setCancelable(false);
         customProgressDialog.setCanceledOnTouchOutside(false);
         customProgressDialog.show();
-        customProgressDialog.setContent(content);
+//        customProgressDialog.setContent(content);
+        isConnect = false;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isConnect) {
+                    if (customProgressDialog != null) {
+                        customProgressDialog.dismiss();
+                        CommonUtils.showToast(ScanResultActivity.this, getString(R.string.poor_signal));
+                    }
+                }
+            }
+        }, 5000);
     }
 
     private void showMore() {
@@ -490,7 +529,7 @@ public class ScanResultActivity extends BaseActivity {
         column = bottonPopupWindowUtils.getColumn();
         floor = bottonPopupWindowUtils.getFloor();
         address = ware + "仓" + row + "排" + column + "垛" + floor + "层";
-        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, new String[]{ware, row, column, floor}, "仓", "排", "垛", "层");
+        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "层");
         bottonPopupWindow.dismiss();
     }
 
@@ -506,7 +545,7 @@ public class ScanResultActivity extends BaseActivity {
             intent.putExtra(Constants.TYPE, Constants.OUT_WARE);
             startActivity(intent);
         } else {
-            bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getString(R.string.choose_address));
+            bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getString(R.string.choose_address), type);
             bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
             bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
@@ -520,10 +559,6 @@ public class ScanResultActivity extends BaseActivity {
         }
     }
 
-    String[] wareNums = {"01", "02", "03", "04", "05", "06"};
-    String[] rows = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
-    String[] columns = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
-    String[] floors = {"01", "02", "03"};
 
     /**
      * 设置添加屏幕的背景透明度

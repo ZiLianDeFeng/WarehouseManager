@@ -98,6 +98,7 @@
                 android:gravity="center">
 
                 <LinearLayout
+                    android:id="@+id/ll_map_ware"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -110,12 +111,31 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/item_size" />
 
-                    <com.hgad.warehousemanager.view.WheelView
-                        android:id="@+id/wv_ware_num"
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <com.hgad.warehousemanager.view.WheelView
+                                android:id="@+id/wv_ware_num"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_fixed_map_ware"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:text="01"
+                            android:textSize="@dimen/item_size"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+                    </FrameLayout>
+                </LinearLayout>
 
             </LinearLayout>
         </FrameLayout>
@@ -129,6 +149,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/ll_ware"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -141,10 +162,30 @@
                     android:textColor="@color/light_black"
                     android:textSize="@dimen/item_size" />
 
-                <com.hgad.warehousemanager.view.WheelView
-                    android:id="@+id/wl_ware"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content">
+
+                        <com.hgad.warehousemanager.view.WheelView
+                            android:id="@+id/wl_ware"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_fixed_ware"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="01"
+                        android:textSize="@dimen/item_size"
+                        android:textColor="@color/black"
+                        android:visibility="gone" />
+                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout

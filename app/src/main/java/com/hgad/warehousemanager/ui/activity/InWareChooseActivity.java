@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.bean.OrderInfo;
+import com.hgad.warehousemanager.bean.WareInfo;
 import com.hgad.warehousemanager.bean.request.TaskRequest;
 import com.hgad.warehousemanager.bean.response.TaskResponse;
 import com.hgad.warehousemanager.constants.Constants;
@@ -30,6 +31,7 @@ import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.adapter.OrderAdapter;
+import com.hgad.warehousemanager.ui.adapter.ProductAdapter;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
@@ -56,6 +58,7 @@ public class InWareChooseActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Constants.NOTIFY:
+                    isConnect = true;
                     if (isRefresh) {
                         lv.stopRefresh();
                         lv.setRefreshTime(CommonUtils.getCurrentTime());
@@ -69,18 +72,19 @@ public class InWareChooseActivity extends BaseActivity {
                     } else {
                         lv.setPullLoadEnable(true);
                     }
-                    orderAdapter.notifyDataSetChanged();
+                    productAdapter.notifyDataSetChanged();
                     break;
             }
         }
     };
     private XListView lv;
-    private List<OrderInfo> data = new ArrayList<>();
-    private OrderAdapter orderAdapter;
+    private List<WareInfo> data = new ArrayList<>();
+    private ProductAdapter productAdapter;
     private EditText et_order_num;
     private int currentPage = 1;
     private String type = Constants.IN_TYPE;
     private int userId;
+    private boolean isConnect = false;
 
     @Override
     protected void setContentView() {
@@ -89,18 +93,41 @@ public class InWareChooseActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        initHeader("入库");
+        initHeader("入库货品");
         userId = SPUtils.getInt(this, SPConstants.USER_ID);
-        if (operatingAnim != null) {
-            rl_info.setVisibility(View.VISIBLE);
-            infoOperating.startAnimation(operatingAnim);
+        boolean netWork = CommonUtils.checkNetWork(this);
+        if (netWork) {
             if (operatingAnim != null) {
                 rl_info.setVisibility(View.VISIBLE);
                 infoOperating.startAnimation(operatingAnim);
-                TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-                sendRequest(taskRequest, TaskResponse.class);
+//                TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
+//                sendRequest(taskRequest, TaskResponse.class);
                 currentPage--;
+                isConnect = false;
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isConnect) {
+                            rl_info.setVisibility(View.INVISIBLE);
+                            infoOperating.clearAnimation();
+                        }
+                    }
+                }, 5000);
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 10; i++) {
+                            data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", 500, 510, "1", i + "", "0"));
+                        }
+                        productAdapter.notifyDataSetChanged();
+                        rl_info.setVisibility(View.INVISIBLE);
+                        infoOperating.clearAnimation();
+                    }
+                }, 2000);
             }
+        } else {
+            CommonUtils.showToast(this, getString(R.string.check_net));
         }
     }
 
@@ -109,18 +136,18 @@ public class InWareChooseActivity extends BaseActivity {
         lv = (XListView) findViewById(R.id.lv_in_ware);
         TextView tv_empty = (TextView) findViewById(R.id.tv_empty);
         lv.setEmptyView(tv_empty);
-        orderAdapter = new OrderAdapter(data, this);
-        orderAdapter.setCallFreshListener(callRefreshListener);
-        lv.setAdapter(orderAdapter);
+        productAdapter = new ProductAdapter(data, this);
+//        productAdapter.setCallFreshListener(callRefreshListener);
+        lv.setAdapter(productAdapter);
         lv.setOnItemClickListener(onItemListener);
         lv.setPullLoadEnable(true);
         lv.setPullRefreshEnable(true);
         lv.setXListViewListener(xlistviewListener);
-//        ImageView iv_more = (ImageView) findViewById(R.id.search);
-//        iv_more.setImageResource(R.mipmap.and);
-//        ll_more = (LinearLayout) findViewById(R.id.ll_search);
-//        ll_more.setVisibility(View.VISIBLE);
-//        ll_more.setOnClickListener(this);
+        ImageView iv_more = (ImageView) findViewById(R.id.search);
+        iv_more.setImageResource(R.mipmap.and);
+        ll_more = (LinearLayout) findViewById(R.id.ll_search);
+        ll_more.setVisibility(View.VISIBLE);
+        ll_more.setOnClickListener(this);
         et_order_num = (EditText) findViewById(R.id.et_order_num);
         findViewById(R.id.btn_find).setOnClickListener(this);
         initMorePopupWindow();
@@ -130,12 +157,17 @@ public class InWareChooseActivity extends BaseActivity {
     private AdapterView.OnItemClickListener onItemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            OrderInfo orderInfo = data.get(position - 1);
-            Intent intent = new Intent(InWareChooseActivity.this, ProductListActivity.class);
-//            intent.putExtra(Constants.ORDER_NUMBER, orderInfo.getOrderNum());
+//            OrderInfo orderInfo = data.get(position - 1);
+//            Intent intent = new Intent(InWareChooseActivity.this, ProductListActivity.class);
+////            intent.putExtra(Constants.ORDER_NUMBER, orderInfo.getOrderNum());
+//            intent.putExtra(Constants.TYPE, Constants.IN_WARE);
+////            intent.putExtra(Constants.ORDER_ID, orderInfo.getTaskId());
+//            intent.putExtra(Constants.ORDER_INFO, orderInfo);
+//            startActivity(intent);
+            WareInfo wareInfo = data.get(position - 1);
+            Intent intent = new Intent(InWareChooseActivity.this, ScanResultActivity.class);
             intent.putExtra(Constants.TYPE, Constants.IN_WARE);
-//            intent.putExtra(Constants.ORDER_ID, orderInfo.getTaskId());
-            intent.putExtra(Constants.ORDER_INFO, orderInfo);
+            intent.putExtra(Constants.WARE_INFO, wareInfo);
             startActivity(intent);
         }
     };
@@ -163,10 +195,19 @@ public class InWareChooseActivity extends BaseActivity {
         boolean isNetWork = CommonUtils.checkNetWork(this);
         if (isNetWork) {
             isRefresh = false;
+            isConnect = false;
             currentPage++;
             TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
             sendRequest(taskRequest, TaskResponse.class);
             currentPage--;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isConnect) {
+                        lv.stopLoadMore();
+                    }
+                }
+            }, 5000);
         } else {
             lv.stopLoadMore();
         }
@@ -178,10 +219,19 @@ public class InWareChooseActivity extends BaseActivity {
         boolean isNetWork = CommonUtils.checkNetWork(this);
         if (isNetWork) {
             isRefresh = true;
+            isConnect = false;
             currentPage = 1;
             TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
             sendRequest(taskRequest, TaskResponse.class);
             currentPage--;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isConnect) {
+                        lv.stopRefresh();
+                    }
+                }
+            }, 5000);
         } else {
             lv.stopRefresh();
         }
@@ -203,8 +253,10 @@ public class InWareChooseActivity extends BaseActivity {
                     for (TaskResponse.DataEntity.ListEntity listEntity : list) {
                         OrderInfo orderInfo = new OrderInfo();
                         orderInfo.setData(listEntity);
-                        data.add(orderInfo);
+//                        data.add(orderInfo);
                     }
+                } else {
+                    currentPage--;
                 }
                 handler.sendEmptyMessageDelayed(Constants.NOTIFY, 200);
             }
@@ -281,14 +333,15 @@ public class InWareChooseActivity extends BaseActivity {
 
     private void go2InHand() {
         morePopupWindow.dismiss();
-        Intent intent = new Intent(this, InWareByHandActivity.class);
+        Intent intent = new Intent(this, HandOperateActivity.class);
         intent.putExtra(Constants.TYPE, Constants.IN_WARE);
+        startActivity(intent);
     }
 
     private void search() {
         final String orderNum = et_order_num.getText().toString().trim();
         if (TextUtils.isEmpty(orderNum)) {
-            CommonUtils.showToast(this, "未输入订单号哦！");
+            CommonUtils.showToast(this, "未输入标签号哦！");
             return;
         }
     }

@@ -33,4 +33,5 @@ public class Constants {
     public static final String MESSAGE_INFO = "messageInfo";
     public static final String IP_INFO = "ipInfo";
     public static final String EDIT_IP ="editIp" ;
+    public static final boolean DEBUG = true;
 }

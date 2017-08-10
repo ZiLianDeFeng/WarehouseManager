@@ -32,9 +32,23 @@ public class BaseApplication extends Application {
         }
     }
 
-    public void finishActivity(Activity activity) {
-        if (activityList.contains(activity)) {
-            activity.finish();
+    public void removeActivity(Activity activity) {
+        if (activity != null) {
+            activityList.remove(activity);
+//            activity.finish();
+            activity = null;
+        }
+    }
+
+    /**
+     * 结束指定类名的Activity
+     */
+    public void finishActivity(Class<?> cls) {
+        for (Activity activity : activityList) {
+            if (activity.getClass().equals(cls)) {
+//                finishActivity(activity);
+                activity.finish();
+            }
         }
     }
 

@@ -36,6 +36,15 @@ public class SplashActivity extends BaseActivity {
                 return;//finish()之后该活动会继续执行后面的代码，你可以logCat验证，加return避免可能的exception
             }
         }
+    }
+
+    @Override
+    protected void setContentView() {
+        setContentView(R.layout.activity_splash);
+    }
+
+    @Override
+    protected void initData() {
         final boolean loginSuccess = SPUtils.getBoolean(this, SPConstants.LOGIN_SUCCESS);
         if (loginSuccess) {
             userName = SPUtils.getString(this, SPConstants.USER_NAME);
@@ -49,6 +58,7 @@ public class SplashActivity extends BaseActivity {
                     if (checkNetWork) {
                         LoginRequest loginRequest = new LoginRequest(userName, password);
                         sendRequest(loginRequest, LoginResponse.class);
+                        notConnect = true;
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -71,16 +81,6 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         }, 2000);
-    }
-
-    @Override
-    protected void setContentView() {
-        setContentView(R.layout.activity_splash);
-    }
-
-    @Override
-    protected void initData() {
-
     }
 
     @Override

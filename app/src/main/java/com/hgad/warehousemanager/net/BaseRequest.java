@@ -9,8 +9,6 @@ import java.util.Map;
  */
 public abstract class BaseRequest {
 
-
-
     public enum HttpMethod {
         GET, POST;
     }

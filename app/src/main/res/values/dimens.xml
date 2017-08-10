@@ -6,7 +6,7 @@
     <dimen name="common_padding">10dp</dimen>
     <dimen name="common_dp">5dp</dimen>
     <dimen name="common_margin_top">10dp</dimen>
-    <dimen name="common_head_text_size">18sp</dimen>
+    <dimen name="common_head_text_size">20sp</dimen>
     <dimen name="marginleft">8dp</dimen>
     <dimen name="common_min_padding">5dp</dimen>
     <dimen name="head_height">73dp</dimen>

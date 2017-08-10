@@ -35,6 +35,7 @@ public class SettingActivity extends BaseActivity {
         findViewById(R.id.tv_loginout).setOnClickListener(this);
         findViewById(R.id.rl_change_pwd).setOnClickListener(this);
         findViewById(R.id.rl_version).setOnClickListener(this);
+        findViewById(R.id.rl_system_setting).setOnClickListener(this);
     }
 
     @Override
@@ -54,7 +55,15 @@ public class SettingActivity extends BaseActivity {
             case R.id.rl_version:
                 toVersion();
                 break;
+            case R.id.rl_system_setting:
+                toSystemSetting();
+                break;
         }
+    }
+
+    private void toSystemSetting() {
+        Intent intent = new Intent(this, SystemSettingActivity.class);
+        startActivity(intent);
     }
 
     private void changePwd() {

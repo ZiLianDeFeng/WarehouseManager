@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -59,7 +60,7 @@ import java.util.Vector;
 public class CaptureActivity extends Activity implements Callback {
 
     private Button btnLight;
-    private Button btnOpenImage;
+    private TextView btnOpenImage;
     private boolean playBeep;
     private boolean vibrate;
     private boolean hasSurface;
@@ -83,7 +84,8 @@ public class CaptureActivity extends Activity implements Callback {
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         btnLight = (Button) findViewById(R.id.btn_light);
-        btnOpenImage = (Button) findViewById(R.id.btn_openimg);
+        btnOpenImage = (TextView) findViewById(R.id.btn_openimg);
+//        TextView tv_hand = (TextView) findViewById(R.id.tv_hand);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
         setListener();
@@ -391,4 +393,8 @@ public class CaptureActivity extends Activity implements Callback {
         }
     };
 
+//    public void hand(View view) {
+//        Intent intent = new Intent(this, InWareByHandActivity.class);
+//        startActivity(intent);
+//    }
 }

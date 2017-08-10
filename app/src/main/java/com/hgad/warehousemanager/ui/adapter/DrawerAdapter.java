@@ -38,10 +38,10 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             new DrawerItemNormal(R.drawable.ic_menu_camera, R.string.drawer_menu_camera),
             new DrawerItemNormal(R.drawable.ic_menu_gallery, R.string.drawer_menu_gallery),
             new DrawerItemNormal(R.drawable.ic_menu_tools, R.string.drawer_menu_tools),
-            new DrawerItemNormal(R.drawable.ic_menu_camera, R.string.drawer_menu_favorites),
+            new DrawerItemNormal(R.drawable.ic_grade_black, R.string.drawer_menu_favorites),
             new DrawerItemDivider(),
-            new DrawerItemNormal(R.drawable.ic_menu_tools, R.string.drawer_menu_setting),
-            new DrawerItemNormal(R.drawable.ic_menu_gallery, R.string.drawer_menu_air)
+            new DrawerItemNormal(R.drawable.ic_settings_black, R.string.drawer_menu_setting),
+            new DrawerItemNormal(R.drawable.ic_cloud_black, R.string.drawer_menu_air)
     );
 
 
@@ -113,7 +113,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             String userName = SPUtils.getString(context, SPConstants.USER_NAME);
             headerViewHolder.tv_name.setText(userName);
         }
-
     }
 
     public OnItemClickListener listener;
@@ -186,6 +185,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
         public NormalViewHolder(View itemView) {
             super(itemView);
             view = itemView;
+
             tv = (TextView) itemView.findViewById(R.id.tv);
             iv = (ImageView) itemView.findViewById(R.id.iv);
         }
@@ -214,4 +214,5 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             tv_email = (TextView) itemView.findViewById(R.id.tv_email);
         }
     }
+
 }

@@ -46,15 +46,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/tv_hand"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:text="@string/by_hand"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="18dp" />-->
         </RelativeLayout>
 
         <RelativeLayout
@@ -67,23 +58,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:background="#00000000"
+                android:background="@color/tran"
                 android:onClick="IfOpenLight"
                 android:text="@string/str_open_light"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/btn_openimg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:background="#00000000"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:background="@color/tran"
                 android:onClick="pickPictureFromAblum"
                 android:text="@string/str_editphoto_wrapper_title"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
+            <!--<TextView-->
+            <!--android:id="@+id/tv_hand"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="@dimen/common_padding"-->
+            <!--android:onClick="hand"-->
+            <!--android:text="@string/by_hand"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="@dimen/common_text_size" />-->
         </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

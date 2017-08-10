@@ -52,6 +52,8 @@
         <activity android:name=".ui.activity.FaroriteActivity" />
         <activity android:name=".ui.activity.CheckDetailActivity" />
         <activity android:name=".ui.activity.CheckResultActivity" />
+        <activity android:name=".ui.activity.SystemSettingActivity" />
+        <activity android:name=".ui.activity.HandOperateActivity" />
 
         <service android:name=".ui.service.PushService" />
 
