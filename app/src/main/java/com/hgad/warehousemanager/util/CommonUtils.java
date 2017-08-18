@@ -395,7 +395,7 @@ public class CommonUtils {
         str.insert(2, "仓");
         str.insert(5, "排");
         str.insert(8, "垛");
-        str.insert(11, "层");
+        str.insert(11, "号");
         return str.toString();
     }
 
@@ -403,7 +403,7 @@ public class CommonUtils {
         address = address.replace("仓", "");
         address = address.replace("排", "");
         address = address.replace("垛", "");
-        address = address.replace("层", "");
+        address = address.replace("号", "");
         return address;
     }
 }

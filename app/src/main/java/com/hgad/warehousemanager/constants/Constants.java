@@ -6,6 +6,12 @@ import android.os.Environment;
  * Created by Administrator on 2017/6/26.
  */
 public class Constants {
+
+    //测试状态
+    public static final boolean DEBUG = false;
+    public static final boolean NORMAL = true;
+    public static final String MODEL = android.os.Build.MANUFACTURER + "-" + android.os.Build.BRAND + "-" + android.os.Build.MODEL;
+
     private static final String ABSOLUTE_BASE_PATH_PREFIX = Environment.getExternalStorageDirectory().getPath()
             + "/warehouse/";
     public static final String ABSOLUTE_LOG_PATH_PREFIX = ABSOLUTE_BASE_PATH_PREFIX + "Log/";
@@ -32,6 +38,7 @@ public class Constants {
     public static final String ORDER_INFO = "orderInfo";
     public static final String MESSAGE_INFO = "messageInfo";
     public static final String IP_INFO = "ipInfo";
-    public static final String EDIT_IP ="editIp" ;
-    public static final boolean DEBUG = true;
+    public static final String EDIT_IP = "editIp";
+    public static final String REVIEW_TYPE = "2";
+    public static final String REFRESH = "refresh";
 }

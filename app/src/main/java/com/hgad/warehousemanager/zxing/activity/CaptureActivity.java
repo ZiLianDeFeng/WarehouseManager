@@ -40,6 +40,10 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.hgad.warehousemanager.R;
+import com.hgad.warehousemanager.bean.WareInfo;
+import com.hgad.warehousemanager.constants.Constants;
+import com.hgad.warehousemanager.ui.activity.HandOperateActivity;
+import com.hgad.warehousemanager.ui.activity.InWareByHandActivity;
 import com.hgad.warehousemanager.zxing.camera.CameraManager;
 import com.hgad.warehousemanager.zxing.decoding.CaptureActivityHandler;
 import com.hgad.warehousemanager.zxing.decoding.InactivityTimer;
@@ -47,7 +51,9 @@ import com.hgad.warehousemanager.zxing.decoding.RGBLuminanceSource;
 import com.hgad.warehousemanager.zxing.view.ViewfinderView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -73,6 +79,8 @@ public class CaptureActivity extends Activity implements Callback {
     private InactivityTimer inactivityTimer;
     private static final float BEEP_VOLUME = 0.10f;
     private static final int TAKE_PHOTO_REQUEST_CODE = 2;
+    private String type;
+    private List<WareInfo> data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +90,9 @@ public class CaptureActivity extends Activity implements Callback {
         }
         setContentView(R.layout.act_capture);
         CameraManager.init(getApplication());
+        Intent intent = getIntent();
+        type = intent.getStringExtra(Constants.TYPE);
+        data = (List<WareInfo>) intent.getSerializableExtra(Constants.LIST_DATA);
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         btnLight = (Button) findViewById(R.id.btn_light);
         btnOpenImage = (TextView) findViewById(R.id.btn_openimg);
@@ -178,12 +189,22 @@ public class CaptureActivity extends Activity implements Callback {
      * 获取带二维码的相片进行扫描
      */
     public void pickPictureFromAblum(View v) {
-        Intent mIntent = new Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(mIntent, 1);
-
+//        Intent mIntent = new Intent(
+//                Intent.ACTION_PICK,
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//        startActivityForResult(mIntent, 1);
+        Intent intent = null;
+        if (Constants.IN_WARE.equals(type)) {
+            intent = new Intent(this, HandOperateActivity.class);
+            intent.putExtra(Constants.TYPE, type);
+        } else {
+            intent = new Intent(this, InWareByHandActivity.class);
+            intent.putExtra(Constants.TYPE, type);
+            intent.putExtra(Constants.LIST_DATA, ((Serializable) data));
+        }
+        startActivity(intent);
+        finish();
     }
 
     /*
@@ -227,7 +248,6 @@ public class CaptureActivity extends Activity implements Callback {
                             resultIntent.putExtras(bundle);
                             CaptureActivity.this.setResult(RESULT_OK, resultIntent);
                         }
-
                         CaptureActivity.this.finish();
                     }
 

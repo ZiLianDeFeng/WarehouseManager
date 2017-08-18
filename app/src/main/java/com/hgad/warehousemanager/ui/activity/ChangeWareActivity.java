@@ -66,6 +66,8 @@ public class ChangeWareActivity extends BaseActivity{
 
     private void go2Scan() {
         Intent intent = new Intent(this, CaptureActivity.class);
+        intent.putExtra(Constants.TYPE,Constants.CHANGE_WARE);
+        intent.putExtra(Constants.TYPE,Constants.CHANGE_WARE);
         startActivityForResult(intent, SCAN);
     }
 

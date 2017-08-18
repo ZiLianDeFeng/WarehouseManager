@@ -55,11 +55,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_padding"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:paddingLeft="@dimen/common_padding"
+        android:paddingRight="@dimen/common_padding">
 
 
         <EditText
-            android:id="@+id/et_order_num"
+            android:id="@+id/et_markNum"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="3"
@@ -70,14 +72,14 @@
 
         <Button
             android:id="@+id/btn_find"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_width="74dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/marginleft"
-            android:layout_weight="1"
             android:background="@drawable/shape_circle_state"
             android:text="查询"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_text_size" />
     </LinearLayout>
 
     <View

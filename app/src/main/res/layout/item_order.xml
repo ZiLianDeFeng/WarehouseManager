@@ -1,95 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_selector"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical"
-    android:padding="@dimen/common_padding">
+    android:background="@color/white"
+    swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_order_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="FA481246522"
-            android:textColor="@color/black"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
         <LinearLayout
+            android:id="@+id/ll_ask"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
-
-            <TextView
-                android:id="@+id/tv_in_ware"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="50"
-                android:textColor="@color/red"
-                android:textSize="@dimen/item_size" />
+            android:layout_height="match_parent"
+            android:background="@color/red"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/common_padding">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/marginleft"
-                android:layout_marginRight="@dimen/marginleft"
-                android:text="/"
-                android:textColor="@color/black"
+                android:padding="@dimen/common_dp"
+                android:text="申请出库"
+                android:textColor="@color/white"
                 android:textSize="@dimen/item_size" />
-
-            <TextView
-                android:id="@+id/tv_total"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="100"
-                android:textColor="@color/black"
-                android:textSize="@dimen/item_size" />
-
         </LinearLayout>
+    </LinearLayout>
 
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <LinearLayout
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/common_padding"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="@dimen/common_padding">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_dp">
 
-            <TextView
-                android:id="@+id/tv_state"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="订单号："
+                    android:textSize="@dimen/item_size" />
+
+                <TextView
+                    android:id="@+id/tv_order_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="FA481246522"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
+
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2017-8-15"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/item_size" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/common_dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="未入库"
-                android:textColor="@color/black"
-                android:textSize="@dimen/item_size" />
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <!--<Button-->
-        <!--android:id="@+id/btn_accept"-->
-        <!--android:layout_width="60dp"-->
-        <!--android:layout_height="25dp"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:background="@drawable/shape_bg_red"-->
-        <!--android:text="接受"-->
-        <!--android:textColor="@color/white" />-->
-        <TextView
-            android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="办单人："
+                    android:textSize="@dimen/item_size" />
+
+                <TextView
+                    android:id="@+id/tv_take_people"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/tv_in_ware"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/common_text_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/marginleft"
+                    android:layout_marginRight="@dimen/marginleft"
+                    android:text="/"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_size" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="1000KG"
-            android:textSize="@dimen/common_text_size" />
-    </RelativeLayout>
-</LinearLayout>
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/common_dp"
+            android:paddingRight="@dimen/common_dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="状&#8195;态："
+                    android:textSize="@dimen/item_size" />
+
+                <TextView
+                    android:id="@+id/tv_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_size" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_accept"
+                android:layout_width="60dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shape_bg_red"
+                android:text="接受"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</com.daimajia.swipe.SwipeLayout>

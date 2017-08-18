@@ -19,8 +19,8 @@
     <string name="str_open_light">开启闪光灯</string>
     <string name="str_close_light">关闭闪光灯</string>
     <string name="str_scan_hint">取景框对准二维码, 即可自动扫描</string>
-    <string name="str_editphoto_wrapper_title">相册</string>
-    <string name="inputOrder">请输入作业单号</string>
+    <string name="str_editphoto_wrapper_title">手动输入</string>
+    <string name="inputOrder">请输入合同号</string>
     <string name="choose_address">请选择位置</string>
     <string name="drawer_menu_camera">我的相机</string>
     <string name="drawer_menu_gallery">我的相册</string>
@@ -40,4 +40,6 @@
     <string name="text_size">字体大小</string>
     <string name="inputMarkNum">请输入标签号</string>
     <string name="poor_signal">当前网络信号较差</string>
+    <string name="inputOrderName">请输入品名</string>
+    <string name="inputOrderSpec">请输入规格</string>
 </resources>

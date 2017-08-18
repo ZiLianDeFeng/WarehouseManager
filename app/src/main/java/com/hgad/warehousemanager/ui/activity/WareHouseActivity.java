@@ -56,7 +56,7 @@ public class WareHouseActivity extends BaseActivity {
 //            int rWare = Integer.parseInt(address.substring(0, address.indexOf("仓")).trim());
 //            final int rRow = Integer.parseInt(address.substring(address.indexOf("仓") + 1, address.indexOf("排")).trim());
 //            final int rColumn = Integer.parseInt(address.substring(address.indexOf("排") + 1, address.indexOf("垛")).trim());
-//            final int rFloor = Integer.parseInt(address.substring(address.indexOf("垛") + 1, address.indexOf("层")).trim());
+//            final int rFloor = Integer.parseInt(address.substring(address.indexOf("垛") + 1, address.indexOf("号")).trim());
 //            seatView.setScreenName(rWare + "号仓库");
 //            seatView.setMaxSelected(0);
 //            seatView.setType(Constants.CURRENT);
@@ -202,7 +202,7 @@ public class WareHouseActivity extends BaseActivity {
             int rWare = Integer.parseInt(address.substring(0, address.indexOf("仓")).trim());
             final int rRow = Integer.parseInt(address.substring(address.indexOf("仓") + 1, address.indexOf("排")).trim());
             final int rColumn = Integer.parseInt(address.substring(address.indexOf("排") + 1, address.indexOf("垛")).trim());
-            final int rFloor = Integer.parseInt(address.substring(address.indexOf("垛") + 1, address.indexOf("层")).trim());
+            final int rFloor = Integer.parseInt(address.substring(address.indexOf("垛") + 1, address.indexOf("号")).trim());
             seatView.setScreenName(rWare + "号仓库");
             seatView.setMaxSelected(0);
             seatView.setType(Constants.CURRENT);
@@ -214,7 +214,6 @@ public class WareHouseActivity extends BaseActivity {
 
                 @Override
                 public boolean isSold(int row, int column) {
-
                     return false;
                 }
 

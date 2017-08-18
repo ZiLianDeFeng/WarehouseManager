@@ -2,7 +2,6 @@ package com.hgad.warehousemanager.ui.activity;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -18,10 +17,12 @@ import com.hgad.warehousemanager.bean.WareInfo;
 import com.hgad.warehousemanager.bean.request.ChangeWareRequest;
 import com.hgad.warehousemanager.bean.request.CheckRequest;
 import com.hgad.warehousemanager.bean.request.InWareRequest;
+import com.hgad.warehousemanager.bean.request.OutWareRequest;
 import com.hgad.warehousemanager.bean.request.WareInfoRequest;
 import com.hgad.warehousemanager.bean.response.ChangeWareResponse;
 import com.hgad.warehousemanager.bean.response.CheckResponse;
 import com.hgad.warehousemanager.bean.response.InWareResponse;
+import com.hgad.warehousemanager.bean.response.OutWareResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
@@ -29,7 +30,7 @@ import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
-import com.hgad.warehousemanager.view.BottonPopupWindowUtils;
+import com.hgad.warehousemanager.view.BottonPopupWindowView;
 import com.hgad.warehousemanager.view.CustomProgressDialog;
 
 import java.util.List;
@@ -40,7 +41,7 @@ import java.util.List;
 public class InWareByHandActivity extends BaseActivity {
 
     private EditText et_markNum;
-    private BottonPopupWindowUtils bottonPopupWindowUtils;
+    private BottonPopupWindowView bottonPopupWindowView;
     private PopupWindow bottonPopupWindow;
     private String row;
     private String column;
@@ -52,13 +53,7 @@ public class InWareByHandActivity extends BaseActivity {
     private String type;
     private LinearLayout ll_address;
     private CustomProgressDialog customProgressDialog;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            }
-        }
-    };
+    private Handler handler = new Handler();
     private String username;
     private List<WareInfo> data;
     private boolean isLast;
@@ -71,6 +66,10 @@ public class InWareByHandActivity extends BaseActivity {
     String[] columns = new String[99];
     String[] floors = new String[27];
     private boolean isConnect;
+    private String markNum;
+    private String orderNum;
+    private int id;
+    private String model;
 
     @Override
     protected void setContentView() {
@@ -80,6 +79,7 @@ public class InWareByHandActivity extends BaseActivity {
     @Override
     protected void initData() {
         initWheelData();
+        model = Constants.MODEL;
         username = SPUtils.getString(this, SPConstants.USER_NAME);
         Intent intent = getIntent();
         type = intent.getStringExtra(Constants.TYPE);
@@ -94,6 +94,8 @@ public class InWareByHandActivity extends BaseActivity {
         } else if (Constants.OUT_WARE.equals(type)) {
             initHeader("出库-手动出库");
 //            ll_address.setVisibility(View.GONE);
+        } else if (Constants.REVIEW_TYPE.equals(type)) {
+            initHeader("审核-手动审核");
         }
     }
 
@@ -140,12 +142,7 @@ public class InWareByHandActivity extends BaseActivity {
         btn_find.setOnClickListener(this);
         tv_markNum = (TextView) findViewById(R.id.tv_markNum);
         tv_ware_name = (TextView) findViewById(R.id.tv_ware_name);
-//        initBottonPopupWindow();
     }
-
-    //    private void initBottonPopupWindow() {
-//
-//    }
 
     @Override
     public void onBackPressed() {
@@ -186,13 +183,15 @@ public class InWareByHandActivity extends BaseActivity {
                         wareInfo.setData(entity);
                         ll_markNum.setVisibility(View.GONE);
                         ll_detail.setVisibility(View.VISIBLE);
-                        String markNum = wareInfo.getMarkNum();
+                        markNum = wareInfo.getMarkNum();
+                        orderNum = wareInfo.getOrderNum();
+                        id = wareInfo.getId();
                         tv_markNum.setText(markNum);
                         tv_ware_name.setText(wareInfo.getProName());
-                        if (!TextUtils.isEmpty(entity.getPositionCode())) {
+                        if (!TextUtils.isEmpty(entity.getPositionCode().trim())) {
                             address = wareInfo.getAddress();
                             address = CommonUtils.formatAddress(this.address);
-                            CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "层");
+                            CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
                             if (type.equals(Constants.IN_WARE)) {
                                 tv_addressWare.setOnClickListener(null);
                                 btn_commit.setOnClickListener(new View.OnClickListener() {
@@ -223,11 +222,22 @@ public class InWareByHandActivity extends BaseActivity {
                                         CommonUtils.showToast(InWareByHandActivity.this, "该货品不在库中，无法移位");
                                     }
                                 });
+                            } else if (type.equals(Constants.REVIEW_TYPE)) {
+                                tv_addressWare.setText("无");
+                                tv_addressWare.setOnClickListener(null);
                             }
                         }
                     } else {
                         CommonUtils.showToast(this, "服务器中查询不到该货品");
                     }
+                }
+            }
+        } else if (request instanceof OutWareRequest) {
+            OutWareResponse outWareResponse = (OutWareResponse) response;
+            if (outWareResponse.getResponseCode().getCode() == 200) {
+                CommonUtils.showToast(InWareByHandActivity.this, outWareResponse.getErrorMsg());
+                if ("请求成功".equals(outWareResponse.getErrorMsg())) {
+                    finish();
                 }
             }
         }
@@ -243,18 +253,18 @@ public class InWareByHandActivity extends BaseActivity {
                 commit();
                 break;
             case R.id.pop_confirm:
-                String text = bottonPopupWindowUtils.getConfirmText();
-                if ("下一步".equals(text)) {
-                    changeChoose();
-                } else if ("确定".equals(text)) {
+                String text = bottonPopupWindowView.getConfirmText();
+//                if ("下一步".equals(text)) {
+//                    changeChoose();
+//                } else if ("确定".equals(text)) {
                     confirmAddress();
-                }
+//                }
                 break;
             case R.id.pop_cancle:
                 bottonPopupWindow.dismiss();
                 break;
             case R.id.pop_switch:
-                changeChoose();
+//                changeChoose();
                 break;
             case R.id.btn_find:
                 search();
@@ -270,13 +280,13 @@ public class InWareByHandActivity extends BaseActivity {
             WareInfoRequest wareInfoRequest = new WareInfoRequest(markNum);
             sendRequest(wareInfoRequest, WareInfoResponse.class);
         } else {
-            CommonUtils.showToast(this, "请检查网络");
+            CommonUtils.showToast(this, getString(R.string.check_net));
         }
     }
 
-    private void changeChoose() {
-        bottonPopupWindowUtils.change();
-    }
+//    private void changeChoose() {
+//        bottonPopupWindowView.change();
+//    }
 
     private void commit() {
         if (Constants.OUT_WARE.equals(type)) {
@@ -295,11 +305,16 @@ public class InWareByHandActivity extends BaseActivity {
             inCommit();
         } else if (Constants.CHECK.equals(type)) {
             checkCommit();
+        } else if (Constants.REVIEW_TYPE.equals(type)) {
+            reviewCommit();
         }
     }
 
+    private void reviewCommit() {
+
+    }
+
     private void outCommit() {
-        String markNum = et_markNum.getText().toString().trim();
         WareInfo wareInfo = null;
         if (data != null) {
             boolean hava = false;
@@ -322,8 +337,8 @@ public class InWareByHandActivity extends BaseActivity {
                     isLast = true;
                 }
                 showDialog(getString(R.string.commit_data));
-                InWareRequest inWareRequest = new InWareRequest(wareInfo.getMarkNum(), username, isLast ? wareInfo.getTaskId() : null, "1", address);
-                sendRequest(inWareRequest, InWareResponse.class);
+                OutWareRequest outWareRequest = new OutWareRequest(markNum, username, orderNum, address, id, model);
+                sendRequest(outWareRequest, OutWareResponse.class);
             } else {
                 CommonUtils.showToast(this, "该货品不在该次任务中，请重新扫描！");
 //                tv_addressWare.setText("无");
@@ -372,8 +387,8 @@ public class InWareByHandActivity extends BaseActivity {
                     isLast = true;
                 }
                 address = CommonUtils.formatAddressForUse(address);
-                InWareRequest inWareRequest = new InWareRequest(markNum, username, isLast ? wareInfo.getTaskId() : null, "0", address);
-                sendRequest(inWareRequest, InWareResponse.class);
+//                InWareRequest inWareRequest = new InWareRequest(markNum, username, isLast ? wareInfo.getOrderNum() : null, "0", address);
+//                sendRequest(inWareRequest, InWareResponse.class);
                 showDialog(getString(R.string.commit_data));
             } else {
                 CommonUtils.showToast(this, "该货品不在该次任务中，请重新扫描！");
@@ -384,39 +399,39 @@ public class InWareByHandActivity extends BaseActivity {
     }
 
     private void changeCommit() {
-        String markNum = et_markNum.getText().toString().trim();
+//        String markNum = et_markNum.getText().toString().trim();
         address = CommonUtils.formatAddressForUse(address);
-        ChangeWareRequest changeWareRequset = new ChangeWareRequest(markNum, address, username);
+        ChangeWareRequest changeWareRequset = new ChangeWareRequest(markNum, address, username, model);
         sendRequest(changeWareRequset, ChangeWareResponse.class);
         showDialog(getString(R.string.commit_data));
     }
 
     private void confirmAddress() {
-        if (bottonPopupWindowUtils.getRow() == null
-                || bottonPopupWindowUtils.getColumn() == null) {
+        if (bottonPopupWindowView.getRow() == null
+                || bottonPopupWindowView.getColumn() == null) {
             CommonUtils.showToast(this, getString(R.string.address_not_choose));
             return;
         }
-        ware = bottonPopupWindowUtils.getWare();
-        row = bottonPopupWindowUtils.getRow();
-        column = bottonPopupWindowUtils.getColumn();
-        floor = bottonPopupWindowUtils.getFloor();
-        address = ware + "仓" + row + "排" + column + "垛" + floor + "层";
-        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "层");
+        ware = bottonPopupWindowView.getWare();
+        row = bottonPopupWindowView.getRow();
+        column = bottonPopupWindowView.getColumn();
+        floor = bottonPopupWindowView.getFloor();
+        address = ware + "仓" + row + "排" + column + "垛" + floor + "号";
+        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
         bottonPopupWindow.dismiss();
     }
 
     private void chooseAddress() {
-        bottonPopupWindowUtils = new BottonPopupWindowUtils(ware, floor, getString(R.string.choose_address), type);
-        bottonPopupWindow = bottonPopupWindowUtils.creat(this, wareNums, rows, columns, floors, this);
+        bottonPopupWindowView = new BottonPopupWindowView(ware, floor, getString(R.string.choose_address), type);
+        bottonPopupWindow = bottonPopupWindowView.creat(this, wareNums, rows, columns, floors, this);
         bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 CommonUtils.backgroundAlpha(1f, InWareByHandActivity.this);
             }
         });
-//        bottonPopupWindowUtils.initSeatTable(seatRows, seatColumns, unSeatRows, unSeatColums, unFullRows, unFullColums);
-        bottonPopupWindowUtils.show(btn_commit, Gravity.BOTTOM, 0, 0);
+//        bottonPopupWindowView.initSeatTable(seatRows, seatColumns, unSeatRows, unSeatColums, unFullRows, unFullColums);
+        bottonPopupWindowView.show(btn_commit, Gravity.BOTTOM, 0, 0);
         CommonUtils.backgroundAlpha(0.8f, this);
     }
 

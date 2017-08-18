@@ -4,35 +4,32 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.bean.OrderInfo;
-import com.hgad.warehousemanager.bean.request.TaskRequest;
-import com.hgad.warehousemanager.bean.response.TaskResponse;
 import com.hgad.warehousemanager.constants.Constants;
-import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.adapter.OrderAdapter;
+import com.hgad.warehousemanager.ui.fragment.OutWareFragment;
+import com.hgad.warehousemanager.ui.fragment.ReviewFragment;
 import com.hgad.warehousemanager.util.CommonUtils;
-import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -53,36 +50,15 @@ public class OutWareActivity extends BaseActivity {
     private Animation operatingAnim;
     private RelativeLayout rl_info;
     private ImageView infoOperating;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Constants.NOTIFY:
-                    isConnect = true;
-                    if (isRefresh) {
-                        lv.stopRefresh();
-                        lv.setRefreshTime(CommonUtils.getCurrentTime());
-                    } else {
-                        lv.stopLoadMore();
-                    }
-                    rl_info.setVisibility(View.INVISIBLE);
-                    infoOperating.clearAnimation();
-                    if (data.size() < 10) {
-                        lv.setPullLoadEnable(false);
-                    } else {
-                        lv.setPullLoadEnable(true);
-                    }
-                    orderAdapter.notifyDataSetChanged();
-                    break;
-            }
-        }
-    };
+
     private LinearLayout ll_more;
     private PopupWindow morePopupWindow;
-    private String type = Constants.OUT_TYPE;
-    private int currentPage = 1;
-    private int userId;
-    private boolean isConnect;
+
+    private RadioGroup rg_title;
+    private RadioButton rb_out_ware;
+    private RadioButton rb_review;
+    private OutWareFragment outWareFragment;
+    private ReviewFragment reviewFragment;
 
     @Override
     protected void setContentView() {
@@ -91,121 +67,61 @@ public class OutWareActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        initHeader("出库订单");
-        userId = SPUtils.getInt(this, SPConstants.USER_ID);
-        Intent intent = getIntent();
-        String orderNum = intent.getStringExtra(Constants.ORDER_NUMBER);
-        if (orderNum != null) {
-            et_order_num.setText(orderNum);
-            search();
-        } else {
-
-            boolean netWork = CommonUtils.checkNetWork(this);
-            if (netWork) {
-                if (operatingAnim != null) {
-                    rl_info.setVisibility(View.VISIBLE);
-                    infoOperating.startAnimation(operatingAnim);
-                }
-                isConnect = false;
-                if (Constants.DEBUG) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < 10; i++) {
-                                data.add(new OrderInfo("F3Q4235" + i, 50, 25, "2", "1", i));
-                            }
-                            orderAdapter.notifyDataSetChanged();
-                            rl_info.setVisibility(View.INVISIBLE);
-                            infoOperating.clearAnimation();
-                        }
-                    }, 2000);
-                } else {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!isConnect) {
-                                rl_info.setVisibility(View.INVISIBLE);
-                                infoOperating.clearAnimation();
-                            }
-                        }
-                    }, 5000);
-                    TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-                    sendRequest(taskRequest, TaskResponse.class);
-                    currentPage--;
-                }
-            } else {
-                CommonUtils.showToast(this, getString(R.string.check_net));
-            }
-        }
+//        initHeader("出库订单");
+//        Intent intent = getIntent();
+//        String orderNum = intent.getStringExtra(Constants.ORDER_NUMBER);
+        ((RadioButton) rg_title.getChildAt(0)).setChecked(true);
     }
 
     @Override
     protected void initView() {
-        lv = (XListView) findViewById(R.id.lv_order);
-        orderAdapter = new OrderAdapter(data, this);
-        orderAdapter.setCallFreshListener(callRefreshListener);
-        lv.setAdapter(orderAdapter);
-        lv.setOnItemClickListener(itemListener);
-        lv.setPullLoadEnable(true);
-        lv.setPullRefreshEnable(true);
-        lv.setXListViewListener(xlistviewListener);
-        TextView tv_empty = (TextView) findViewById(R.id.tv_empty);
-        lv.setEmptyView(tv_empty);
+        rg_title = (RadioGroup) findViewById(R.id.rg_title);
+        rb_out_ware = (RadioButton) findViewById(R.id.rb_out_ware);
+        rb_review = (RadioButton) findViewById(R.id.rb_review);
+        rg_title.setOnCheckedChangeListener(listener);
+        outWareFragment = new OutWareFragment();
+        reviewFragment = new ReviewFragment();
         et_order_num = (EditText) findViewById(R.id.et_order_num);
         findViewById(R.id.btn_find).setOnClickListener(this);
-//        ImageView iv_more = (ImageView) findViewById(R.id.search);
-//        iv_more.setImageResource(R.mipmap.and);
-//        ll_more = (LinearLayout) findViewById(R.id.ll_search);
-//        ll_more.setVisibility(View.VISIBLE);
-//        ll_more.setOnClickListener(this);
-//        initMorePopupWindow();
-        initAnimation();
     }
 
-    private OrderAdapter.CallFreshListener callRefreshListener = new OrderAdapter.CallFreshListener() {
+    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener() {
         @Override
-        public void callFresh() {
-            callRefresh();
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case R.id.rb_out_ware:
+                    if (outWareFragment.isAdded()) {
+                        replaceFragment(reviewFragment, outWareFragment);
+                    } else {
+                        replaceFragment(outWareFragment);
+                    }
+                    break;
+                case R.id.rb_review:
+                    if (reviewFragment.isAdded()) {
+                        replaceFragment(outWareFragment, reviewFragment);
+                    } else {
+                        replaceFragment(reviewFragment);
+                    }
+                    break;
+            }
         }
     };
 
-    private boolean isRefresh;
-    private XListView.IXListViewListener xlistviewListener = new XListView.IXListViewListener() {
-        @Override
-        public void onRefresh() {
-            callRefresh();
-        }
-
-        @Override
-        public void onLoadMore() {
-            callLoadMore();
-        }
-    };
-
-    private void callLoadMore() {
-        boolean isNetWork = CommonUtils.checkNetWork(this);
-        if (isNetWork) {
-            isRefresh = false;
-            currentPage++;
-            TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-            sendRequest(taskRequest, TaskResponse.class);
-            currentPage--;
+    public void replaceFragment(Fragment from, Fragment to) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                .beginTransaction();
+        if (!to.isAdded()) {    // 先判断是否被add过
+            fragmentTransaction.hide(from).add(R.id.fl, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
         } else {
-            lv.stopLoadMore();
+            fragmentTransaction.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
         }
     }
 
-    private void callRefresh() {
-        boolean isNetWork = CommonUtils.checkNetWork(this);
-        if (isNetWork) {
-            isRefresh = true;
-            currentPage = 1;
-            TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-            sendRequest(taskRequest, TaskResponse.class);
-            currentPage--;
-        } else {
-            lv.stopRefresh();
-        }
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fl, fragment)
+                .commit();
     }
 
     private void initMorePopupWindow() {
@@ -227,26 +143,6 @@ public class OutWareActivity extends BaseActivity {
         contentView.findViewById(R.id.ll_in_scan).setOnClickListener(this);
     }
 
-    private void initAnimation() {
-        rl_info = (RelativeLayout) findViewById(R.id.rl_infoOperating);
-        infoOperating = (ImageView) findViewById(R.id.infoOperating);
-        operatingAnim = AnimationUtils.loadAnimation(this, R.anim.tip);
-        LinearInterpolator lin = new LinearInterpolator();
-        operatingAnim.setInterpolator(lin);
-    }
-
-    private AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            OrderInfo orderInfo = data.get(position - 1);
-            Intent intent = new Intent(OutWareActivity.this, ProductListActivity.class);
-//            intent.putExtra(Constants.ORDER_NUMBER, orderInfo.getOrderNum());
-            intent.putExtra(Constants.TYPE, Constants.OUT_WARE);
-//            intent.putExtra(Constants.ORDER_ID, orderInfo.getTaskId());
-            intent.putExtra(Constants.ORDER_INFO, orderInfo);
-            startActivity(intent);
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -264,26 +160,7 @@ public class OutWareActivity extends BaseActivity {
 
     @Override
     public void onSuccessResult(BaseRequest request, BaseResponse response) {
-        if (request instanceof TaskRequest) {
-            TaskResponse taskResponse = (TaskResponse) response;
-            if (taskResponse.getData() != null) {
-                currentPage++;
-                if (currentPage == 1) {
-                    if (data != null) {
-                        data.clear();
-                    }
-                }
-                if (currentPage == taskResponse.getData().getPage().getPage()) {
-                    List<TaskResponse.DataEntity.ListEntity> list = taskResponse.getData().getList();
-                    for (TaskResponse.DataEntity.ListEntity listEntity : list) {
-                        OrderInfo orderInfo = new OrderInfo();
-                        orderInfo.setData(listEntity);
-                        data.add(orderInfo);
-                    }
-                }
-                handler.sendEmptyMessageDelayed(Constants.NOTIFY, 200);
-            }
-        }
+
     }
 
     @Override
@@ -327,6 +204,11 @@ public class OutWareActivity extends BaseActivity {
         if (TextUtils.isEmpty(orderNum)) {
             CommonUtils.showToast(this, "未输入订单号哦！");
             return;
+        }
+        if (rb_out_ware.isChecked()) {
+            outWareFragment.search(orderNum);
+        } else {
+            reviewFragment.search(orderNum);
         }
     }
 }

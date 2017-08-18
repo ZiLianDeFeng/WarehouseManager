@@ -5,10 +5,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.bean.WareInfo;
+import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.CommonViewHolder;
 
@@ -20,10 +22,16 @@ import java.util.List;
 public class ProductAdapter extends BaseAdapter {
     private List<WareInfo> data;
     private Context context;
+    private String type;
 
-    public ProductAdapter(List<WareInfo> data, Context context) {
+    public ProductAdapter(List<WareInfo> data, Context context, String type) {
         this.data = data;
         this.context = context;
+        this.type = type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -47,21 +55,40 @@ public class ProductAdapter extends BaseAdapter {
         TextView tv_address = (TextView) holder.getView(R.id.tv_addressWare);
         TextView tv_order_num = (TextView) holder.getView(R.id.tv_order_num);
         TextView tv_weight = (TextView) holder.getView(R.id.tv_weight);
-        TextView tv_type = (TextView) holder.getView(R.id.tv_type);
+        TextView tv_state = (TextView) holder.getView(R.id.tv_state);
+        ImageView iv_operate = (ImageView) holder.getView(R.id.iv_operate);
         WareInfo wareInfo = data.get(position);
         String address = wareInfo.getAddress();
-        if (TextUtils.isEmpty(address)) {
+        if (TextUtils.isEmpty(address.trim())) {
             tv_address.setText("无");
         } else {
             address = CommonUtils.formatAddress(address);
             tv_address.setText(address);
         }
         tv_order_num.setText(wareInfo.getMarkNum());
-        tv_weight.setText(wareInfo.getGrossWeight() + "kg");
-        if ("0".equals(wareInfo.getType())) {
-            tv_type.setText("0".equals(wareInfo.getState()) ? "待入库" : "已入库");
-        } else if ("1".equals(wareInfo.getType())) {
-            tv_type.setText("0".equals(wareInfo.getState()) ? "待出库" : "已出库");
+        tv_weight.setText(wareInfo.getNetWeight() + "吨");
+        String state = wareInfo.getState();
+        if (Constants.IN_TYPE.equals(type)) {
+            if ("0".equals(state)) {
+                tv_state.setText("已入库");
+            } else if ("1".equals(state)) {
+                tv_state.setText("已审核");
+            }
+        } else if (Constants.OUT_TYPE.equals(type)) {
+            if ("0".equals(state)) {
+                tv_address.setText("待出库");
+            } else if ("1".equals(state)) {
+                tv_address.setText("已出库");
+            }
+        } else if (Constants.REVIEW_TYPE.equals(type)) {
+            if ("1".equals(state)) {
+                tv_state.setText("待审核");
+            } else if ("2".equals(state)) {
+                tv_state.setText("已审核");
+            }
+        }
+        if (!Constants.OUT_TYPE.equals(type)) {
+            iv_operate.setVisibility(View.INVISIBLE);
         }
         return holder.convertView;
     }

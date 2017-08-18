@@ -2,6 +2,7 @@ package com.hgad.warehousemanager.bean;
 
 import android.text.TextUtils;
 
+import com.hgad.warehousemanager.bean.response.InWareListResponse;
 import com.hgad.warehousemanager.bean.response.ProductListResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
 
@@ -15,47 +16,79 @@ public class WareInfo implements Serializable {
     private String markNum;
     private String address;
     private String spec;
-    private int netWeight;
+    private String netWeight;
     private int grossWeight;
     private String state;
-    private String taskId;
-    private String type;
+    private String orderNum;
     private String proName;
+    private String orderItem;
+    private String steelGrade;
 
     public WareInfo() {
     }
 
-    public WareInfo(int id, String markNum, String address, String spec, int netWeight, int grossWeight, String state, String taskId, String type) {
+    public WareInfo(int id, String markNum, String address, String spec, int netWeight, int grossWeight, String state, String orderNum, String type) {
         this.id = id;
         this.markNum = markNum;
         this.address = address;
         this.spec = spec;
-        this.netWeight = netWeight;
+//        this.netWeight = netWeight;
         this.grossWeight = grossWeight;
         this.state = state;
-        this.taskId = taskId;
-        this.type = type;
+        this.orderNum = orderNum;
     }
 
     public void setData(ProductListResponse.DataEntity.ListEntity entity) {
         this.id = entity.getId();
         this.markNum = entity.getIdentification();
         this.state = entity.getStatus();
-        this.taskId = entity.getInoutId();
-        this.address = entity.getPosition();
-        this.type = entity.getType();
+        this.orderNum = entity.getOrderNo();
+        this.address = entity.getPositionCode();
+        this.netWeight = entity.getNetWgt();
+        this.proName = entity.getProName();
+        this.spec = entity.getSpecification();
     }
 
     public void setData(WareInfoResponse.DataEntity entity) {
         this.id = entity.getId();
         this.markNum = entity.getIdentification();
         this.address = entity.getPositionCode();
-        if (!TextUtils.isEmpty(entity.getGrossWgt()) && !TextUtils.isEmpty(entity.getNetWgt())) {
-            this.grossWeight = Integer.parseInt(entity.getGrossWgt().trim());
-            this.netWeight = Integer.parseInt(entity.getNetWgt());
+        if (!TextUtils.isEmpty(entity.getNetWgt())) {
+            this.netWeight = entity.getNetWgt();
         }
         this.spec = entity.getSpecification();
         this.proName = entity.getProName();
+        this.orderNum = entity.getOrderNo();
+        this.state = entity.getStatus();
+    }
+
+    public void setData(InWareListResponse.DataEntity.ListEntity listEntity) {
+        this.id = listEntity.getId();
+        this.markNum = listEntity.getIdentification();
+        this.address = listEntity.getPositionCode();
+        this.proName = listEntity.getProName();
+        this.netWeight = listEntity.getNetWgt();
+        this.orderNum = listEntity.getOrderNo();
+        this.state = listEntity.getStatus();
+        this.spec = listEntity.getSpecification();
+        this.orderItem =listEntity.getOrderItem();
+        this.steelGrade = listEntity.getSteelGrade();
+    }
+
+    public String getSteelGrade() {
+        return steelGrade;
+    }
+
+    public void setSteelGrade(String steelGrade) {
+        this.steelGrade = steelGrade;
+    }
+
+    public String getOrderItem() {
+        return orderItem;
+    }
+
+    public void setOrderItem(String orderItem) {
+        this.orderItem = orderItem;
     }
 
     public String getProName() {
@@ -66,20 +99,13 @@ public class WareInfo implements Serializable {
         this.proName = proName;
     }
 
-    public String getType() {
-        return type;
+
+    public String getOrderNum() {
+        return orderNum;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
     }
 
     public String getSpec() {
@@ -114,11 +140,11 @@ public class WareInfo implements Serializable {
         this.address = address;
     }
 
-    public int getNetWeight() {
+    public String getNetWeight() {
         return netWeight;
     }
 
-    public void setNetWeight(int netWeight) {
+    public void setNetWeight(String netWeight) {
         this.netWeight = netWeight;
     }
 
@@ -137,4 +163,6 @@ public class WareInfo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+
 }

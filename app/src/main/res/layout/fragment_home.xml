@@ -37,8 +37,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/dark">
+        android:layout_height="180dp"
+        android:background="@mipmap/timg"
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,18 +48,23 @@
             android:padding="@dimen/common_padding">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="今日总录入100笔"
+                    android:textColor="@color/light_white"
+                    android:textSize="22sp" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/common_padding"
-                android:layout_marginTop="20dp"
                 android:gravity="center_vertical|left"
                 android:orientation="horizontal">
 
@@ -181,7 +187,7 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/home_item_height"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -191,14 +197,15 @@
                         android:id="@+id/tv_in_ware"
                         style="@style/table_text"
                         android:drawableTop="@mipmap/inspection"
-                        android:text="入库"
+                        android:text="货品入库"
                         android:textSize="?commonTextSize" />
 
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/home_item_height"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -208,13 +215,15 @@
                         android:id="@+id/tv_out_ware"
                         style="@style/table_text"
                         android:drawableTop="@mipmap/warning"
-                        android:text="出库"
+                        android:text="货品出库"
                         android:textSize="?commonTextSize" />
+
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/home_item_height"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -224,22 +233,79 @@
                         android:id="@+id/tv_change_ware"
                         style="@style/table_text"
                         android:drawableTop="@mipmap/upkeep"
-                        android:text="移位"
+                        android:text="货品移位"
                         android:textSize="?commonTextSize" />
                 </LinearLayout>
 
             </TableRow>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/background_light" />
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="@color/background_light" />-->
 
             <TableRow>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/home_item_height"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_out_review"
+                        style="@style/table_text"
+                        android:drawableTop="@mipmap/sign_in"
+                        android:text="出库审核"
+                        android:textSize="?commonTextSize" />
+
+                    <TextView
+                        android:id="@+id/tv_review_result"
+                        style="@style/table_text"
+                        android:drawableTop="@mipmap/sign_in"
+                        android:text="审核记录"
+                        android:visibility="gone"
+                        android:textSize="?commonTextSize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/common_dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_history"
+                        style="@style/table_text"
+                        android:drawableTop="@mipmap/history"
+                        android:text="历史查询"
+                        android:textSize="?commonTextSize" />
+
+                </LinearLayout>
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="@dimen/common_dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_task_notification"-->
+                        <!--style="@style/table_text"-->
+                        <!--android:drawableTop="@mipmap/news"-->
+                        <!--android:text="任务通知"-->
+                        <!--android:textSize="?commonTextSize" />-->
+                <!--</LinearLayout>-->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -249,46 +315,38 @@
                         android:id="@+id/tv_check"
                         style="@style/table_text"
                         android:drawableTop="@mipmap/tongbu"
-                        android:text="盘点"
+                        android:text="货品盘点"
                         android:textSize="?commonTextSize" />
 
                 </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/home_item_height"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_code_scanning"
-                        style="@style/table_text"
-                        android:drawableTop="@mipmap/history"
-                        android:text="历史查询"
-                        android:textSize="?commonTextSize" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/home_item_height"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_task_notification"
-                        style="@style/table_text"
-                        android:drawableTop="@mipmap/news"
-                        android:text="任务通知"
-                        android:textSize="?commonTextSize" />
                 </LinearLayout>
 
             </TableRow>
         </TableLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

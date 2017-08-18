@@ -4,36 +4,110 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/header" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/head_height"
+        android:background="@color/dark"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        android:paddingTop="25dp">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="back"
+            android:padding="20dp"
+            android:scaleType="center"
+            android:src="@mipmap/back" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true">
+
+            <RadioGroup
+                android:id="@+id/rg_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_bg_white"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_out_ware"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/radiobutton_selector"
+                    android:button="@null"
+                    android:paddingBottom="@dimen/common_min_padding"
+                    android:paddingLeft="@dimen/common_padding"
+                    android:paddingRight="@dimen/common_padding"
+                    android:paddingTop="@dimen/common_min_padding"
+                    android:text="出库"
+                    android:textColor="@color/text_radiobutton_selector" />
+
+                <RadioButton
+                    android:id="@+id/rb_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/radiobutton_selector"
+                    android:button="@null"
+                    android:paddingBottom="@dimen/common_min_padding"
+                    android:paddingLeft="@dimen/common_padding"
+                    android:paddingRight="@dimen/common_padding"
+                    android:paddingTop="@dimen/common_min_padding"
+                    android:text="审核"
+                    android:textColor="@color/text_radiobutton_selector" />
+            </RadioGroup>
+        </RelativeLayout>
+
+        <!--<LinearLayout-->
+        <!--android:id="@+id/ll_search"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="@dimen/common_dp"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="@dimen/common_padding">-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/search"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@mipmap/search" />-->
+        <!--</LinearLayout>-->
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_padding"
         android:focusable="true"
-        android:focusableInTouchMode="true">
-
+        android:focusableInTouchMode="true"
+        android:paddingLeft="@dimen/common_padding"
+        android:paddingRight="@dimen/common_padding">
 
         <EditText
             android:id="@+id/et_order_num"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:background="@drawable/shape_circle"
-            android:hint="@string/inputOrder"
+            android:hint="请输入订单号"
             android:padding="@dimen/common_dp"
             android:textSize="@dimen/common_text_size" />
 
         <Button
             android:id="@+id/btn_find"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_width="74dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/marginleft"
-            android:layout_weight="1"
             android:background="@drawable/shape_circle_state"
             android:text="查询"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_text_size" />
     </LinearLayout>
 
     <View
@@ -41,50 +115,10 @@
         android:layout_height="1dp"
         android:background="#2000" />
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_light">
-
-        <!--<android.support.v4.widget.SwipeRefreshLayout-->
-            <!--android:id="@+id/srl"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        android:layout_height="match_parent" />
 
 
-            <me.maxwin.view.XListView
-                android:id="@+id/lv_order"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background_light"
-                android:divider="@null"
-                android:dividerHeight="@dimen/marginleft"
-                android:scrollbars="none" />
-        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
-
-        <TextView
-            android:id="@+id/tv_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="暂无数据"
-            android:textColor="#6000"
-            android:textSize="20sp" />
-
-        <RelativeLayout
-            android:id="@+id/rl_infoOperating"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_light"
-            android:visibility="invisible">
-
-            <ImageView
-                android:id="@+id/infoOperating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:scaleType="center"
-                android:src="@mipmap/jiazai" />
-        </RelativeLayout>
-    </RelativeLayout>
 </LinearLayout>

@@ -1,14 +1,11 @@
 package com.hgad.warehousemanager.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -22,10 +19,11 @@ import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
-import com.hgad.warehousemanager.bean.OrderInfo;
 import com.hgad.warehousemanager.bean.WareInfo;
-import com.hgad.warehousemanager.bean.request.TaskRequest;
-import com.hgad.warehousemanager.bean.response.TaskResponse;
+import com.hgad.warehousemanager.bean.request.InWareListRequest;
+import com.hgad.warehousemanager.bean.request.WareInfoRequest;
+import com.hgad.warehousemanager.bean.response.InWareListResponse;
+import com.hgad.warehousemanager.bean.response.WareInfoResponse;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseRequest;
@@ -34,6 +32,7 @@ import com.hgad.warehousemanager.ui.adapter.OrderAdapter;
 import com.hgad.warehousemanager.ui.adapter.ProductAdapter;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
+import com.hgad.warehousemanager.view.CustomProgressDialog;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -58,7 +57,6 @@ public class InWareChooseActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Constants.NOTIFY:
-                    isConnect = true;
                     if (isRefresh) {
                         lv.stopRefresh();
                         lv.setRefreshTime(CommonUtils.getCurrentTime());
@@ -80,11 +78,12 @@ public class InWareChooseActivity extends BaseActivity {
     private XListView lv;
     private List<WareInfo> data = new ArrayList<>();
     private ProductAdapter productAdapter;
-    private EditText et_order_num;
-    private int currentPage = 1;
+    private EditText et_markNum;
+    private int currentPage = 0;
     private String type = Constants.IN_TYPE;
     private int userId;
     private boolean isConnect = false;
+    private CustomProgressDialog customProgressDialog;
 
     @Override
     protected void setContentView() {
@@ -100,8 +99,8 @@ public class InWareChooseActivity extends BaseActivity {
             if (operatingAnim != null) {
                 rl_info.setVisibility(View.VISIBLE);
                 infoOperating.startAnimation(operatingAnim);
-//                TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-//                sendRequest(taskRequest, TaskResponse.class);
+                InWareListRequest inWareListRequest = new InWareListRequest(currentPage);
+                sendRequest(inWareListRequest, InWareListResponse.class);
                 currentPage--;
                 isConnect = false;
                 handler.postDelayed(new Runnable() {
@@ -113,18 +112,19 @@ public class InWareChooseActivity extends BaseActivity {
                         }
                     }
                 }, 5000);
-
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 10; i++) {
-                            data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", 500, 510, "1", i + "", "0"));
+                if (Constants.DEBUG) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 10; i++) {
+                                data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", 500, 510, "1", i + "", "0"));
+                            }
+                            productAdapter.notifyDataSetChanged();
+                            rl_info.setVisibility(View.INVISIBLE);
+                            infoOperating.clearAnimation();
                         }
-                        productAdapter.notifyDataSetChanged();
-                        rl_info.setVisibility(View.INVISIBLE);
-                        infoOperating.clearAnimation();
-                    }
-                }, 2000);
+                    }, 2000);
+                }
             }
         } else {
             CommonUtils.showToast(this, getString(R.string.check_net));
@@ -136,7 +136,7 @@ public class InWareChooseActivity extends BaseActivity {
         lv = (XListView) findViewById(R.id.lv_in_ware);
         TextView tv_empty = (TextView) findViewById(R.id.tv_empty);
         lv.setEmptyView(tv_empty);
-        productAdapter = new ProductAdapter(data, this);
+        productAdapter = new ProductAdapter(data, this,type);
 //        productAdapter.setCallFreshListener(callRefreshListener);
         lv.setAdapter(productAdapter);
         lv.setOnItemClickListener(onItemListener);
@@ -144,13 +144,13 @@ public class InWareChooseActivity extends BaseActivity {
         lv.setPullRefreshEnable(true);
         lv.setXListViewListener(xlistviewListener);
         ImageView iv_more = (ImageView) findViewById(R.id.search);
-        iv_more.setImageResource(R.mipmap.and);
+        iv_more.setImageResource(R.mipmap.scan);
         ll_more = (LinearLayout) findViewById(R.id.ll_search);
         ll_more.setVisibility(View.VISIBLE);
         ll_more.setOnClickListener(this);
-        et_order_num = (EditText) findViewById(R.id.et_order_num);
+        et_markNum = (EditText) findViewById(R.id.et_markNum);
         findViewById(R.id.btn_find).setOnClickListener(this);
-        initMorePopupWindow();
+//        initMorePopupWindow();
         initAnimation();
     }
 
@@ -161,11 +161,11 @@ public class InWareChooseActivity extends BaseActivity {
 //            Intent intent = new Intent(InWareChooseActivity.this, ProductListActivity.class);
 ////            intent.putExtra(Constants.ORDER_NUMBER, orderInfo.getOrderNum());
 //            intent.putExtra(Constants.TYPE, Constants.IN_WARE);
-////            intent.putExtra(Constants.ORDER_ID, orderInfo.getTaskId());
+////            intent.putExtra(Constants.ORDER_ID, orderInfo.getOrderNum());
 //            intent.putExtra(Constants.ORDER_INFO, orderInfo);
 //            startActivity(intent);
             WareInfo wareInfo = data.get(position - 1);
-            Intent intent = new Intent(InWareChooseActivity.this, ScanResultActivity.class);
+            Intent intent = new Intent(InWareChooseActivity.this, ProductDetailActivity.class);
             intent.putExtra(Constants.TYPE, Constants.IN_WARE);
             intent.putExtra(Constants.WARE_INFO, wareInfo);
             startActivity(intent);
@@ -197,8 +197,8 @@ public class InWareChooseActivity extends BaseActivity {
             isRefresh = false;
             isConnect = false;
             currentPage++;
-            TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-            sendRequest(taskRequest, TaskResponse.class);
+            InWareListRequest inWareListRequest = new InWareListRequest(currentPage);
+            sendRequest(inWareListRequest, InWareListResponse.class);
             currentPage--;
             handler.postDelayed(new Runnable() {
                 @Override
@@ -220,9 +220,9 @@ public class InWareChooseActivity extends BaseActivity {
         if (isNetWork) {
             isRefresh = true;
             isConnect = false;
-            currentPage = 1;
-            TaskRequest taskRequest = new TaskRequest(type, currentPage, userId);
-            sendRequest(taskRequest, TaskResponse.class);
+            currentPage = 0;
+            InWareListRequest inWareListRequest = new InWareListRequest(currentPage);
+            sendRequest(inWareListRequest, InWareListResponse.class);
             currentPage--;
             handler.postDelayed(new Runnable() {
                 @Override
@@ -239,24 +239,42 @@ public class InWareChooseActivity extends BaseActivity {
 
     @Override
     public void onSuccessResult(BaseRequest request, BaseResponse response) {
-        if (request instanceof TaskRequest) {
-            TaskResponse taskResponse = (TaskResponse) response;
-            if (taskResponse.getData() != null) {
+        isConnect = true;
+        if (customProgressDialog != null) {
+            customProgressDialog.dismiss();
+        }
+        if (request instanceof InWareListRequest) {
+            InWareListResponse inWareListResponse = (InWareListResponse) response;
+            if (inWareListResponse.getData() != null) {
                 currentPage++;
-                if (currentPage == 1) {
+                if (currentPage == 0) {
                     if (data != null) {
                         data.clear();
                     }
                 }
-                if (currentPage == taskResponse.getData().getPage().getPage()) {
-                    List<TaskResponse.DataEntity.ListEntity> list = taskResponse.getData().getList();
-                    for (TaskResponse.DataEntity.ListEntity listEntity : list) {
-                        OrderInfo orderInfo = new OrderInfo();
-                        orderInfo.setData(listEntity);
-//                        data.add(orderInfo);
+                if (currentPage == inWareListResponse.getData().getPage().getPage()) {
+                    List<InWareListResponse.DataEntity.ListEntity> list = inWareListResponse.getData().getList();
+                    for (InWareListResponse.DataEntity.ListEntity listEntity : list) {
+                        WareInfo wareInfo = new WareInfo();
+                        wareInfo.setData(listEntity);
+                        data.add(wareInfo);
                     }
                 } else {
                     currentPage--;
+                }
+                handler.sendEmptyMessageDelayed(Constants.NOTIFY, 200);
+            }
+        } else if (request instanceof WareInfoRequest) {
+            data.clear();
+            WareInfoResponse wareInfoResponse = (WareInfoResponse) response;
+            if (wareInfoResponse.getResponseCode().getCode() == 200) {
+                if ("请求成功".equals(wareInfoResponse.getErrorMsg())) {
+                    WareInfoResponse.DataEntity entity = wareInfoResponse.getData();
+                    if (entity != null) {
+                        WareInfo wareInfo = new WareInfo();
+                        wareInfo.setData(entity);
+                        data.add(wareInfo);
+                    }
                 }
                 handler.sendEmptyMessageDelayed(Constants.NOTIFY, 200);
             }
@@ -282,31 +300,34 @@ public class InWareChooseActivity extends BaseActivity {
                 intent.putExtra(Constants.TYPE, Constants.IN_WARE);
                 startActivity(intent);
             }
+        } else if (resultCode == Constants.RESULT_OK && requestCode == HAND) {
+            callRefresh();
         }
     }
 
-    private void initMorePopupWindow() {
-        View contentView = View.inflate(this, R.layout.popupwindow_inware, null);
-        morePopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        morePopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000"))); //设置背景
-        morePopupWindow.setFocusable(true); //设置获取焦点
-//        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
-        morePopupWindow.setOutsideTouchable(true);
-        morePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                CommonUtils.backgroundAlpha(1f, InWareChooseActivity.this);
-            }
-        });
-        contentView.findViewById(R.id.ll_in_hand).setOnClickListener(this);
-        contentView.findViewById(R.id.ll_in_scan).setOnClickListener(this);
-    }
+//    private void initMorePopupWindow() {
+//        View contentView = View.inflate(this, R.layout.popupwindow_inware, null);
+//        morePopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        morePopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000"))); //设置背景
+//        morePopupWindow.setFocusable(true); //设置获取焦点
+////        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+//        morePopupWindow.setOutsideTouchable(true);
+//        morePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                CommonUtils.backgroundAlpha(1f, InWareChooseActivity.this);
+//            }
+//        });
+//        contentView.findViewById(R.id.ll_in_hand).setOnClickListener(this);
+//        contentView.findViewById(R.id.ll_in_scan).setOnClickListener(this);
+//    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_search:
-                showMore();
+//                showMore();
+                go2Scan();
                 break;
             case R.id.ll_in_hand:
                 go2InHand();
@@ -326,8 +347,9 @@ public class InWareChooseActivity extends BaseActivity {
     }
 
     private void go2Scan() {
-        morePopupWindow.dismiss();
+//        morePopupWindow.dismiss();
         Intent intent = new Intent(this, CaptureActivity.class);
+        intent.putExtra(Constants.TYPE, Constants.IN_WARE);
         startActivityForResult(intent, SCAN);
     }
 
@@ -335,14 +357,37 @@ public class InWareChooseActivity extends BaseActivity {
         morePopupWindow.dismiss();
         Intent intent = new Intent(this, HandOperateActivity.class);
         intent.putExtra(Constants.TYPE, Constants.IN_WARE);
-        startActivity(intent);
+        startActivityForResult(intent, HAND);
     }
 
     private void search() {
-        final String orderNum = et_order_num.getText().toString().trim();
-        if (TextUtils.isEmpty(orderNum)) {
-            CommonUtils.showToast(this, "未输入标签号哦！");
+        String markNum = et_markNum.getText().toString().trim();
+        if (TextUtils.isEmpty(markNum)) {
+            callRefresh();
             return;
         }
+        showDialog(getString(R.string.info_check));
+        WareInfoRequest wareInfoRequest = new WareInfoRequest(markNum);
+        sendRequest(wareInfoRequest, WareInfoResponse.class);
+    }
+
+    private void showDialog(String content) {
+        customProgressDialog = new CustomProgressDialog(this, content);
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.setCanceledOnTouchOutside(false);
+        customProgressDialog.show();
+//        customProgressDialog.setContent(content);
+        isConnect = false;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isConnect) {
+                    if (customProgressDialog != null) {
+                        customProgressDialog.dismiss();
+                        CommonUtils.showToast(InWareChooseActivity.this, getString(R.string.poor_signal));
+                    }
+                }
+            }
+        }, 5000);
     }
 }

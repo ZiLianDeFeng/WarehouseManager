@@ -167,7 +167,6 @@ public class WeatherActivity extends Activity {
                 String weatherCode = codes[which];
                 SPUtils.put(WeatherActivity.this, SPConstants.WEATHER_CITY, weatherCode);
                 selectWeather(weatherCode);
-
             }
         });
         builder.show();

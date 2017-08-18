@@ -4,19 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseFragment;
-import com.hgad.warehousemanager.bean.UserInfo;
 import com.hgad.warehousemanager.constants.Constants;
-import com.hgad.warehousemanager.db.dao.BaseDaoImpl;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.activity.ChangeWareActivity;
 import com.hgad.warehousemanager.ui.activity.CheckRecordActivity;
+import com.hgad.warehousemanager.ui.activity.HistoryActivity;
 import com.hgad.warehousemanager.ui.activity.InWareChooseActivity;
 import com.hgad.warehousemanager.ui.activity.NotificationActivity;
 import com.hgad.warehousemanager.ui.activity.OutWareActivity;
+import com.hgad.warehousemanager.ui.activity.ReviewActivity;
+import com.hgad.warehousemanager.ui.activity.ReviewResultActivity;
 import com.hgad.warehousemanager.ui.activity.ScanResultActivity;
 import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
 
@@ -30,13 +32,21 @@ public class HomeFragment extends BaseFragment {
     private static final int SCAN = 199;
 
     private View mView;
-    private BaseDaoImpl<UserInfo, Integer> userDao;
     //    private ConvenientBanner<String> convenientBanner;
     private List<String> mImageList = new ArrayList<>();
+    private TextView tv_out_review;
+    private TextView tv_review_result;
 
     @Override
     protected void initData() {
-        userDao = new BaseDaoImpl<>(mContext, UserInfo.class);
+        // TODO: 2017/8/14 根据用户权限在首页显示不同的功能
+        if (Constants.NORMAL) {
+            tv_out_review.setVisibility(View.GONE);
+            tv_review_result.setVisibility(View.VISIBLE);
+        } else {
+            tv_out_review.setVisibility(View.VISIBLE);
+            tv_review_result.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -49,10 +59,14 @@ public class HomeFragment extends BaseFragment {
         mView.findViewById(R.id.tv_in_ware).setOnClickListener(this);
         mView.findViewById(R.id.tv_change_ware).setOnClickListener(this);
         mView.findViewById(R.id.tv_out_ware).setOnClickListener(this);
-        mView.findViewById(R.id.tv_code_scanning).setOnClickListener(this);
+        mView.findViewById(R.id.tv_history).setOnClickListener(this);
         mView.findViewById(R.id.tv_check).setOnClickListener(this);
-        mView.findViewById(R.id.tv_task_notification).setOnClickListener(this);
+//        mView.findViewById(R.id.tv_task_notification).setOnClickListener(this);
         mView.findViewById(R.id.iv_scan).setOnClickListener(this);
+        tv_out_review = (TextView) mView.findViewById(R.id.tv_out_review);
+        tv_out_review.setOnClickListener(this);
+        tv_review_result = (TextView) mView.findViewById(R.id.tv_review_result);
+        tv_review_result.setOnClickListener(this);
 //        convenientBanner = (ConvenientBanner<String>) mView.findViewById(R.id.convenientBanner);
 //        convenientBanner.setPages(new CBViewHolderCreator<ImageViewHolder>() {
 //            @Override
@@ -80,6 +94,7 @@ public class HomeFragment extends BaseFragment {
 //            Picasso.with(mContext).load(data).into(imageView);
 //        }
 //    }
+
 
     @Override
     public void onResume() {
@@ -131,18 +146,40 @@ public class HomeFragment extends BaseFragment {
             case R.id.tv_out_ware:
                 go2OutWare();
                 break;
-            case R.id.tv_code_scanning:
+            case R.id.tv_history:
+                go2History();
                 break;
             case R.id.tv_check:
                 go2Check();
                 break;
-            case R.id.tv_task_notification:
-                go2Notification();
-                break;
+//            case R.id.tv_task_notification:
+//                go2Notification();
+//                break;
             case R.id.iv_scan:
                 go2Scan();
                 break;
+            case R.id.tv_out_review:
+                go2Review();
+                break;
+            case R.id.tv_review_result:
+                go2ReviewResult();
+                break;
         }
+    }
+
+    private void go2History() {
+        Intent intent = new Intent(mContext, HistoryActivity.class);
+        startActivity(intent);
+    }
+
+    private void go2ReviewResult() {
+        Intent intent = new Intent(mContext, ReviewResultActivity.class);
+        startActivity(intent);
+    }
+
+    private void go2Review() {
+        Intent intent = new Intent(mContext, ReviewActivity.class);
+        startActivity(intent);
     }
 
     private void go2Notification() {

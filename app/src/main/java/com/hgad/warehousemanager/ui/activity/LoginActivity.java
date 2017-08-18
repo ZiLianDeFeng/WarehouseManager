@@ -158,11 +158,21 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void login() {
-        if (Constants.DEBUG){
+        if (Constants.DEBUG) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
             return;
+//        } else {
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            }, 3000);
+//            return;
         }
         name = et_username.getText().toString().trim();
         pwd = et_password.getText().toString().trim();

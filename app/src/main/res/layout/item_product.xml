@@ -10,7 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/common_padding"
+        android:paddingRight="@dimen/common_padding">
 
         <LinearLayout
             android:id="@+id/ll_number"
@@ -38,25 +40,25 @@
             android:id="@+id/tv_order_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:gravity="center"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:paddingLeft="@dimen/common_padding">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text="重量："
                     android:textSize="?itemSize" />
 
@@ -64,37 +66,37 @@
                     android:id="@+id/tv_weight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:textColor="@color/black"
                     android:textSize="?itemSize" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text="状态："
                     android:textSize="?itemSize" />
 
                 <TextView
-                    android:id="@+id/tv_type"
+                    android:id="@+id/tv_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:textColor="@color/black"
                     android:textSize="?itemSize" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <ImageView
-        android:layout_width="30dp"
+        android:id="@+id/iv_operate"
+        android:layout_width="25dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/marginleft"
         android:padding="@dimen/common_dp"

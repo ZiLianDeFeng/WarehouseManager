@@ -67,6 +67,7 @@ public class BaseApplication extends Application {
         JPushInterface.init(this);
         JPushInterface.setLatestNotificationNumber(this, 1000);
         initNotification();
+
     }
 
     private void initNotification() {

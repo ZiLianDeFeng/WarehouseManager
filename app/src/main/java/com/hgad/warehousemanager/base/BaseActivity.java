@@ -21,6 +21,7 @@ import com.hgad.warehousemanager.util.SPUtils;
 
 public abstract class BaseActivity extends AppCompatActivity implements Callback<BaseResponse>, View.OnClickListener {
     private int states = 3;
+    private AlertView alertView;
 
     protected void initHeader(String text) {
         TextView tvTitle = (TextView) findViewById(R.id.tv_title);
@@ -54,16 +55,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
 //        alertDialog.setCancelable(false);
 //        alertDialog.show();
 
-        new AlertView("提示", "是否确认返回", "取消", new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Object o, int position) {
-                switch (position) {
-                    case 0:
-                        finish();
-                        break;
-                }
-            }
-        }).show();
+
+        if (!alertView.isShowing()) {
+            alertView.show();
+        }
     }
 
     @Override
@@ -74,6 +69,20 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
         setContentView();
         initView();
         initData();
+        initBackDialog();
+    }
+
+    private void initBackDialog() {
+        alertView = new AlertView("提示", "是否确认返回", "取消", new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                switch (position) {
+                    case 0:
+                        finish();
+                        break;
+                }
+            }
+        }).setCancelable(false);
     }
 
     private void setTextSize() {

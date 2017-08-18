@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity {
             public void onDrawerStateChanged(int newState) {
             }
         });
-        iv_user_icon = (ImageView) findViewById(R.id.iv_user_icon);
+        iv_user_icon = (ImageView)findViewById(R.id.iv_user_icon);
         iv_user_icon.setOnClickListener(this);
 
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

@@ -11,7 +11,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -169,7 +168,7 @@ public class SeatTable extends View {
     /**
      * 荧幕高度
      */
-    float screenHeight;
+//    float screenHeight;
 
     /**
      * 荧幕默认宽度与座位图的比例
@@ -384,7 +383,7 @@ public class SeatTable extends View {
         paint.setColor(Color.RED);
         numberWidth = (int) dip2Px(20);
 
-        screenHeight = dip2Px(20);
+//        screenHeight = dip2Px(20);
         headHeight = dip2Px(60);
 
         headPaint = new Paint();
@@ -433,7 +432,7 @@ public class SeatTable extends View {
             }
         }
 
-        matrix.postTranslate(numberWidth + spacing, headHeight + screenHeight + borderHeight + verSpacing + lineNumberTxtHeight * 2);
+        matrix.postTranslate(numberWidth + spacing, headHeight + borderHeight + verSpacing + lineNumberTxtHeight * 2);
     }
 
     @Override
@@ -450,7 +449,7 @@ public class SeatTable extends View {
         }
         canvas.drawBitmap(headBitmap, 0, 0, null);
 
-        drawScreen(canvas);
+//        drawScreen(canvas);
 
         if (isDrawOverview) {
             long s = System.currentTimeMillis();
@@ -607,31 +606,31 @@ public class SeatTable extends View {
     /**
      * 绘制中间屏幕
      */
-    void drawScreen(Canvas canvas) {
-        pathPaint.setStyle(Paint.Style.FILL);
-        pathPaint.setColor(Color.parseColor("#e2e2e2"));
-        float startY = headHeight + borderHeight;
-
-        float centerX = seatBitmapWidth * getMatrixScaleX() / 2 + getTranslateX();
-        float screenWidth = seatBitmapWidth * screenWidthScale * getMatrixScaleX();
-        if (screenWidth < defaultScreenWidth) {
-            screenWidth = defaultScreenWidth;
-        }
-
-        Path path = new Path();
-        path.moveTo(centerX, startY);
-        path.lineTo(centerX - screenWidth / 2, startY);
-        path.lineTo(centerX - screenWidth / 2 + 20, screenHeight * getMatrixScaleY() + startY);
-        path.lineTo(centerX + screenWidth / 2 - 20, screenHeight * getMatrixScaleY() + startY);
-        path.lineTo(centerX + screenWidth / 2, startY);
-
-        canvas.drawPath(path, pathPaint);
-
-
-        pathPaint.setColor(Color.BLACK);
-        pathPaint.setTextSize(sp2Px(14));
-        canvas.drawText(screenName, centerX - pathPaint.measureText(screenName) / 2, getBaseLine(pathPaint, startY, startY + screenHeight * getMatrixScaleY()), pathPaint);
-    }
+//    void drawScreen(Canvas canvas) {
+//        pathPaint.setStyle(Paint.Style.FILL);
+//        pathPaint.setColor(Color.parseColor("#e2e2e2"));
+//        float startY = headHeight + borderHeight;
+//
+//        float centerX = seatBitmapWidth * getMatrixScaleX() / 2 + getTranslateX();
+//        float screenWidth = seatBitmapWidth * screenWidthScale * getMatrixScaleX();
+//        if (screenWidth < defaultScreenWidth) {
+//            screenWidth = defaultScreenWidth;
+//        }
+//
+//        Path path = new Path();
+//        path.moveTo(centerX, startY);
+//        path.lineTo(centerX - screenWidth / 2, startY);
+//        path.lineTo(centerX - screenWidth / 2 + 20, screenHeight * getMatrixScaleY() + startY);
+//        path.lineTo(centerX + screenWidth / 2 - 20, screenHeight * getMatrixScaleY() + startY);
+//        path.lineTo(centerX + screenWidth / 2, startY);
+//
+//        canvas.drawPath(path, pathPaint);
+//
+//
+//        pathPaint.setColor(Color.BLACK);
+//        pathPaint.setTextSize(sp2Px(14));
+//        canvas.drawText(screenName, centerX - pathPaint.measureText(screenName) / 2, getBaseLine(pathPaint, startY, startY + screenHeight * getMatrixScaleY()), pathPaint);
+//    }
 
     Matrix tempMatrix = new Matrix();
 
@@ -825,7 +824,7 @@ public class SeatTable extends View {
 //        rectF.bottom = translateY + (seatBitmapHeight * scaleY) + lineNumberTxtHeight / 2;
 //        rectF.left = 0;
 //        rectF.right = numberWidth;
-        rectFC.top = headHeight + screenHeight * scaleX;
+        rectFC.top = headHeight;
         rectFC.bottom = rectFC.top + lineNumberTxtHeight * 2;
         rectFC.left = translateX - lineNumberTxtHeight / 2;
         rectFC.right = (seatBitmapWidth * scaleX) + translateX + lineNumberTxtHeight / 2;
@@ -944,7 +943,7 @@ public class SeatTable extends View {
      * 往左边滑动,自动回弹到行号右边
      * 往右边滑动,自动回弹到右边
      * 往上,下滑动,自动回弹到顶部
-     * <p>
+     * <p/>
      * 整个大小超过控件大小的时候:
      * 往左侧滑动,回弹到最右边,往右侧滑回弹到最左边
      * 往上滑动,回弹到底部,往下滑动回弹到顶部
@@ -983,7 +982,7 @@ public class SeatTable extends View {
 
         }
 
-        float startYPosition = screenHeight * getMatrixScaleY() + verSpacing * getMatrixScaleY() + lineNumberTxtHeight * 2 + headHeight + borderHeight;
+        float startYPosition = verSpacing * getMatrixScaleY() + lineNumberTxtHeight * 2 + headHeight + borderHeight;
 
         //处理上下滑动
         if (currentSeatBitmapHeight + headHeight < getHeight()) {
@@ -1050,6 +1049,10 @@ public class SeatTable extends View {
 
     private void remove(int index) {
         selects.remove(index);
+    }
+
+    public void clear() {
+        selects.clear();
     }
 
     float[] m = new float[9];
