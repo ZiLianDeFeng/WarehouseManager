@@ -40,6 +40,7 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.hgad.warehousemanager.R;
+import com.hgad.warehousemanager.bean.OrderInfo;
 import com.hgad.warehousemanager.bean.WareInfo;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.ui.activity.HandOperateActivity;
@@ -81,6 +82,8 @@ public class CaptureActivity extends Activity implements Callback {
     private static final int TAKE_PHOTO_REQUEST_CODE = 2;
     private String type;
     private List<WareInfo> data;
+    private int orderId;
+    private OrderInfo orderInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,7 @@ public class CaptureActivity extends Activity implements Callback {
         CameraManager.init(getApplication());
         Intent intent = getIntent();
         type = intent.getStringExtra(Constants.TYPE);
+        orderInfo = (OrderInfo) intent.getSerializableExtra(Constants.ORDER_INFO);
         data = (List<WareInfo>) intent.getSerializableExtra(Constants.LIST_DATA);
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         btnLight = (Button) findViewById(R.id.btn_light);
@@ -169,7 +173,7 @@ public class CaptureActivity extends Activity implements Callback {
      */
     public void handleDecode(Result result, Bitmap barcode) {
         inactivityTimer.onActivity();
-        playBeepSoundAndVibrate();
+//        playBeepSoundAndVibrate();
         String resultString = result.getText();
         if (resultString.equals("")) {
             Toast.makeText(CaptureActivity.this, "扫描失败!", Toast.LENGTH_SHORT)
@@ -201,6 +205,7 @@ public class CaptureActivity extends Activity implements Callback {
         } else {
             intent = new Intent(this, InWareByHandActivity.class);
             intent.putExtra(Constants.TYPE, type);
+            intent.putExtra(Constants.ORDER_INFO, orderInfo);
             intent.putExtra(Constants.LIST_DATA, ((Serializable) data));
         }
         startActivity(intent);

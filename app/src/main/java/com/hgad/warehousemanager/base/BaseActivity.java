@@ -35,27 +35,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
     }
 
     public void backWarm() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-//        builder.setTitle("提示").setMessage("是否确认返回");
-//        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                finish();
-//            }
-//        });
-//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.setCanceledOnTouchOutside(false);
-//        alertDialog.setCancelable(false);
-//        alertDialog.show();
-
-
         if (!alertView.isShowing()) {
             alertView.show();
         }
@@ -92,15 +71,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
         }
         if (1 == states) {
             setTheme(R.style.Default_TextSize_Small);
-
         } else if (2 == states) {
-
             setTheme(R.style.Default_TextSize_Middle);
         } else {
-
             setTheme(R.style.Default_TextSize_Big);
-
-
         }
     }
 

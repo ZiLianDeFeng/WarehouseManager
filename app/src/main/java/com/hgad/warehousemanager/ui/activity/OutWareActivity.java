@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,9 +51,9 @@ public class OutWareActivity extends BaseActivity {
     private LinearLayout ll_more;
     private PopupWindow morePopupWindow;
 
-    private RadioGroup rg_title;
-    private RadioButton rb_out_ware;
-    private RadioButton rb_review;
+    //    private RadioGroup rg_title;
+//    private RadioButton rb_out_ware;
+//    private RadioButton rb_review;
     private OutWareFragment outWareFragment;
     private ReviewFragment reviewFragment;
 
@@ -67,56 +64,61 @@ public class OutWareActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-//        initHeader("出库订单");
+        initHeader("出库");
 //        Intent intent = getIntent();
 //        String orderNum = intent.getStringExtra(Constants.ORDER_NUMBER);
-        ((RadioButton) rg_title.getChildAt(0)).setChecked(true);
+//        ((RadioButton) rg_title.getChildAt(0)).setChecked(true);
+        replaceFragment(outWareFragment);
     }
 
     @Override
     protected void initView() {
-        rg_title = (RadioGroup) findViewById(R.id.rg_title);
-        rb_out_ware = (RadioButton) findViewById(R.id.rb_out_ware);
-        rb_review = (RadioButton) findViewById(R.id.rb_review);
-        rg_title.setOnCheckedChangeListener(listener);
+//        rg_title = (RadioGroup) findViewById(R.id.rg_title);
+//        rb_out_ware = (RadioButton) findViewById(R.id.rb_out_ware);
+//        rb_review = (RadioButton) findViewById(R.id.rb_review);
+//        rg_title.setOnCheckedChangeListener(listener);
         outWareFragment = new OutWareFragment();
-        reviewFragment = new ReviewFragment();
+//        reviewFragment = new ReviewFragment();
         et_order_num = (EditText) findViewById(R.id.et_order_num);
         findViewById(R.id.btn_find).setOnClickListener(this);
+        TextView tv_review = (TextView) findViewById(R.id.btn_confirm);
+        tv_review.setText("复核");
+        tv_review.setOnClickListener(this);
+        tv_review.setVisibility(View.VISIBLE);
     }
 
-    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            switch (checkedId) {
-                case R.id.rb_out_ware:
-                    if (outWareFragment.isAdded()) {
-                        replaceFragment(reviewFragment, outWareFragment);
-                    } else {
-                        replaceFragment(outWareFragment);
-                    }
-                    break;
-                case R.id.rb_review:
-                    if (reviewFragment.isAdded()) {
-                        replaceFragment(outWareFragment, reviewFragment);
-                    } else {
-                        replaceFragment(reviewFragment);
-                    }
-                    break;
-            }
-        }
-    };
-
-    public void replaceFragment(Fragment from, Fragment to) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                .beginTransaction();
-        if (!to.isAdded()) {    // 先判断是否被add过
-            fragmentTransaction.hide(from).add(R.id.fl, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
-        } else {
-            fragmentTransaction.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
-        }
-    }
-
+    //    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener() {
+//        @Override
+//        public void onCheckedChanged(RadioGroup group, int checkedId) {
+//            switch (checkedId) {
+//                case R.id.rb_out_ware:
+//                    if (outWareFragment.isAdded()) {
+//                        replaceFragment(reviewFragment, outWareFragment);
+//                    } else {
+//                        replaceFragment(outWareFragment);
+//                    }
+//                    break;
+//                case R.id.rb_review:
+//                    if (reviewFragment.isAdded()) {
+//                        replaceFragment(outWareFragment, reviewFragment);
+//                    } else {
+//                        replaceFragment(reviewFragment);
+//                    }
+//                    break;
+//            }
+//        }
+//    };
+//
+//    public void replaceFragment(Fragment from, Fragment to) {
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+//                .beginTransaction();
+//        if (!to.isAdded()) {    // 先判断是否被add过
+//            fragmentTransaction.hide(from).add(R.id.fl, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
+//        } else {
+//            fragmentTransaction.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
+//        }
+//    }
+//
     private void replaceFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -142,7 +144,6 @@ public class OutWareActivity extends BaseActivity {
         contentView.findViewById(R.id.ll_in_hand).setOnClickListener(this);
         contentView.findViewById(R.id.ll_in_scan).setOnClickListener(this);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -178,7 +179,15 @@ public class OutWareActivity extends BaseActivity {
             case R.id.ll_in_scan:
                 go2Scan();
                 break;
+            case R.id.btn_confirm:
+                go2Review();
+                break;
         }
+    }
+
+    private void go2Review() {
+        Intent intent = new Intent(this, ReviewListActivity.class);
+        startActivity(intent);
     }
 
     private void showMore() {
@@ -205,10 +214,10 @@ public class OutWareActivity extends BaseActivity {
             CommonUtils.showToast(this, "未输入订单号哦！");
             return;
         }
-        if (rb_out_ware.isChecked()) {
-            outWareFragment.search(orderNum);
-        } else {
-            reviewFragment.search(orderNum);
-        }
+//        if (rb_out_ware.isChecked()) {
+        outWareFragment.search(orderNum);
+//        } else {
+//            reviewFragment.search(orderNum);
+//        }
     }
 }

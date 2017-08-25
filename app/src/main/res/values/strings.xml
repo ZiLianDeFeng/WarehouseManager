@@ -12,7 +12,7 @@
     <string name="photo">工作相册</string>
     <string name="warehouse">仓库管理</string>
     <string name="login">登录</string>
-    <string name="markNum">标  签  号：</string>
+    <string name="markNum">标&#32;&#32;签&#32;&#32;号：</string>
     <string name="addressWare">仓库位置：</string>
 
     <string name="str_scan_title">二维码扫描</string>

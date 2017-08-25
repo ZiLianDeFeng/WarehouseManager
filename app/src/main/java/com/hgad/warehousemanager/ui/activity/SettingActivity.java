@@ -3,6 +3,8 @@ package com.hgad.warehousemanager.ui.activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
@@ -72,6 +74,19 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void loginout() {
+        new AlertView("提示", "是否确定注销", "取消", new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                switch (position) {
+                    case 0:
+                        sendOutRequest();
+                        break;
+                }
+            }
+        }).setCancelable(false).show();
+    }
+
+    private void sendOutRequest() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         JPushInterface.setAlias(SettingActivity.this, "", new TagAliasCallback() {

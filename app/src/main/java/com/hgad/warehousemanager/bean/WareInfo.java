@@ -27,15 +27,15 @@ public class WareInfo implements Serializable {
     public WareInfo() {
     }
 
-    public WareInfo(int id, String markNum, String address, String spec, int netWeight, int grossWeight, String state, String orderNum, String type) {
+    public WareInfo(int id, String markNum, String address, String spec, String netWeight, String state, String orderNum,String proName) {
         this.id = id;
         this.markNum = markNum;
         this.address = address;
         this.spec = spec;
-//        this.netWeight = netWeight;
-        this.grossWeight = grossWeight;
+        this.netWeight = netWeight;
         this.state = state;
         this.orderNum = orderNum;
+        this.proName = proName;
     }
 
     public void setData(ProductListResponse.DataEntity.ListEntity entity) {
@@ -60,6 +60,8 @@ public class WareInfo implements Serializable {
         this.proName = entity.getProName();
         this.orderNum = entity.getOrderNo();
         this.state = entity.getStatus();
+        this.steelGrade = entity.getSteelGrade();
+        this.orderItem = entity.getOrderItem();
     }
 
     public void setData(InWareListResponse.DataEntity.ListEntity listEntity) {

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SimpleSwipeListener;
@@ -87,6 +88,18 @@ public class OrderAdapter extends BaseSwipeAdapter implements Callback {
         TextView tv_time = (TextView) convertView.findViewById(R.id.tv_time);
         TextView tv_take_people = (TextView) convertView.findViewById(R.id.tv_take_people);
         TextView tv_state = (TextView) convertView.findViewById(R.id.tv_state);
+        Button btn_accept = (Button) convertView.findViewById(R.id.btn_accept);
+        if (Constants.OUT_TYPE.equals(type)) {
+            btn_accept.setVisibility(View.INVISIBLE);
+            if ("1".equals(orderInfo.getState())) {
+                tv_state.setText("出库中");
+            }
+        } else if (Constants.REVIEW_TYPE.equals(type)) {
+            btn_accept.setVisibility(View.INVISIBLE);
+            if ("2".equals(orderInfo.getState())){
+                tv_state.setText("复核中");
+            }
+        }
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipe_layout);
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override

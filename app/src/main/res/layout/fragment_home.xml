@@ -26,6 +26,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/common_dp"
             android:padding="@dimen/common_dp"
+            android:visibility="invisible"
             android:src="@mipmap/scan" />
     </RelativeLayout>
 

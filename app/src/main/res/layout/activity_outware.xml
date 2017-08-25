@@ -4,80 +4,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/head_height"
-        android:background="@color/dark"
-        android:clipToPadding="true"
-        android:fitsSystemWindows="true"
-        android:paddingTop="25dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/head_height"-->
+    <!--android:background="@color/dark"-->
+    <!--android:clipToPadding="true"-->
+    <!--android:fitsSystemWindows="true"-->
+    <!--android:paddingTop="25dp">-->
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:onClick="back"
-            android:padding="20dp"
-            android:scaleType="center"
-            android:src="@mipmap/back" />
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_back"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:onClick="back"-->
+    <!--android:padding="20dp"-->
+    <!--android:scaleType="center"-->
+    <!--android:src="@mipmap/back" />-->
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_centerHorizontal="true">-->
 
-            <RadioGroup
-                android:id="@+id/rg_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/shape_bg_white"
-                android:orientation="horizontal">
+    <!--<RadioGroup-->
+    <!--android:id="@+id/rg_title"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:background="@drawable/shape_bg_white"-->
+    <!--android:orientation="horizontal">-->
 
-                <RadioButton
-                    android:id="@+id/rb_out_ware"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radiobutton_selector"
-                    android:button="@null"
-                    android:paddingBottom="@dimen/common_min_padding"
-                    android:paddingLeft="@dimen/common_padding"
-                    android:paddingRight="@dimen/common_padding"
-                    android:paddingTop="@dimen/common_min_padding"
-                    android:text="出库"
-                    android:textColor="@color/text_radiobutton_selector" />
+    <!--<RadioButton-->
+    <!--android:id="@+id/rb_out_ware"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/radiobutton_selector"-->
+    <!--android:button="@null"-->
+    <!--android:paddingBottom="@dimen/common_min_padding"-->
+    <!--android:paddingLeft="@dimen/common_padding"-->
+    <!--android:paddingRight="@dimen/common_padding"-->
+    <!--android:paddingTop="@dimen/common_min_padding"-->
+    <!--android:text="出库"-->
+    <!--android:textColor="@color/text_radiobutton_selector" />-->
 
-                <RadioButton
-                    android:id="@+id/rb_review"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radiobutton_selector"
-                    android:button="@null"
-                    android:paddingBottom="@dimen/common_min_padding"
-                    android:paddingLeft="@dimen/common_padding"
-                    android:paddingRight="@dimen/common_padding"
-                    android:paddingTop="@dimen/common_min_padding"
-                    android:text="审核"
-                    android:textColor="@color/text_radiobutton_selector" />
-            </RadioGroup>
-        </RelativeLayout>
+    <!--<RadioButton-->
+    <!--android:id="@+id/rb_review"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/radiobutton_selector"-->
+    <!--android:button="@null"-->
+    <!--android:paddingBottom="@dimen/common_min_padding"-->
+    <!--android:paddingLeft="@dimen/common_padding"-->
+    <!--android:paddingRight="@dimen/common_padding"-->
+    <!--android:paddingTop="@dimen/common_min_padding"-->
+    <!--android:text="审核"-->
+    <!--android:textColor="@color/text_radiobutton_selector" />-->
+    <!--</RadioGroup>-->
+    <!--</RelativeLayout>-->
 
-        <!--<LinearLayout-->
-        <!--android:id="@+id/ll_search"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="@dimen/common_dp"-->
-        <!--android:gravity="center"-->
-        <!--android:padding="@dimen/common_padding">-->
+    <!--</RelativeLayout>-->
 
-        <!--<ImageView-->
-        <!--android:id="@+id/search"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@mipmap/search" />-->
-        <!--</LinearLayout>-->
-    </RelativeLayout>
+    <include layout="@layout/header" />
 
     <LinearLayout
         android:layout_width="match_parent"

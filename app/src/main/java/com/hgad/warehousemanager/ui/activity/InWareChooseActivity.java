@@ -1,6 +1,9 @@
 package com.hgad.warehousemanager.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -84,10 +87,27 @@ public class InWareChooseActivity extends BaseActivity {
     private int userId;
     private boolean isConnect = false;
     private CustomProgressDialog customProgressDialog;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Constants.REFRESH)) {
+                callRefresh();
+            }
+        }
+    };
+
 
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_inware_choose);
+        registBroadcastReceiver(receiver);
+    }
+
+    private void registBroadcastReceiver(BroadcastReceiver receiver) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.REFRESH);
+        registerReceiver(receiver, intentFilter);
     }
 
     @Override
@@ -117,7 +137,7 @@ public class InWareChooseActivity extends BaseActivity {
                         @Override
                         public void run() {
                             for (int i = 0; i < 10; i++) {
-                                data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", 500, 510, "1", i + "", "0"));
+                                data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", "0.5", "1", i + "",""));
                             }
                             productAdapter.notifyDataSetChanged();
                             rl_info.setVisibility(View.INVISIBLE);
@@ -136,7 +156,7 @@ public class InWareChooseActivity extends BaseActivity {
         lv = (XListView) findViewById(R.id.lv_in_ware);
         TextView tv_empty = (TextView) findViewById(R.id.tv_empty);
         lv.setEmptyView(tv_empty);
-        productAdapter = new ProductAdapter(data, this,type);
+        productAdapter = new ProductAdapter(data, this, type);
 //        productAdapter.setCallFreshListener(callRefreshListener);
         lv.setAdapter(productAdapter);
         lv.setOnItemClickListener(onItemListener);
@@ -159,9 +179,7 @@ public class InWareChooseActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //            OrderInfo orderInfo = data.get(position - 1);
 //            Intent intent = new Intent(InWareChooseActivity.this, ProductListActivity.class);
-////            intent.putExtra(Constants.ORDER_NUMBER, orderInfo.getOrderNum());
 //            intent.putExtra(Constants.TYPE, Constants.IN_WARE);
-////            intent.putExtra(Constants.ORDER_ID, orderInfo.getOrderNum());
 //            intent.putExtra(Constants.ORDER_INFO, orderInfo);
 //            startActivity(intent);
             WareInfo wareInfo = data.get(position - 1);
@@ -171,6 +189,15 @@ public class InWareChooseActivity extends BaseActivity {
             startActivity(intent);
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+    }
 
     private OrderAdapter.CallFreshListener callRefreshListener = new OrderAdapter.CallFreshListener() {
         @Override
@@ -205,6 +232,7 @@ public class InWareChooseActivity extends BaseActivity {
                 public void run() {
                     if (!isConnect) {
                         lv.stopLoadMore();
+                        CommonUtils.showToast(InWareChooseActivity.this, getString(R.string.poor_signal));
                     }
                 }
             }, 5000);
@@ -229,6 +257,7 @@ public class InWareChooseActivity extends BaseActivity {
                 public void run() {
                     if (!isConnect) {
                         lv.stopRefresh();
+                        CommonUtils.showToast(InWareChooseActivity.this, getString(R.string.poor_signal));
                     }
                 }
             }, 5000);
@@ -329,12 +358,12 @@ public class InWareChooseActivity extends BaseActivity {
 //                showMore();
                 go2Scan();
                 break;
-            case R.id.ll_in_hand:
-                go2InHand();
-                break;
-            case R.id.ll_in_scan:
-                go2Scan();
-                break;
+//            case R.id.ll_in_hand:
+//                go2InHand();
+//                break;
+//            case R.id.ll_in_scan:
+//                go2Scan();
+//                break;
             case R.id.btn_find:
                 search();
                 break;

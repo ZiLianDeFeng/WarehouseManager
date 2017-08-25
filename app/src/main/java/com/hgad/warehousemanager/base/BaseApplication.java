@@ -3,9 +3,13 @@ package com.hgad.warehousemanager.base;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.hgad.warehousemanager.R;
+import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.util.CrashHandler;
+import com.hgad.warehousemanager.util.SPUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -67,7 +71,18 @@ public class BaseApplication extends Application {
         JPushInterface.init(this);
         JPushInterface.setLatestNotificationNumber(this, 1000);
         initNotification();
-
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int versionCode = packageInfo.versionCode;
+        int oldVersion = SPUtils.getInt(this, SPConstants.VERSION_CODE);
+        if (versionCode != oldVersion) {
+            SPUtils.put(this, SPConstants.NOT_FRIST, false);
+            SPUtils.put(this, SPConstants.VERSION_CODE, versionCode);
+        }
     }
 
     private void initNotification() {

@@ -70,21 +70,25 @@ public class ProductAdapter extends BaseAdapter {
         String state = wareInfo.getState();
         if (Constants.IN_TYPE.equals(type)) {
             if ("0".equals(state)) {
-                tv_state.setText("已入库");
+                tv_state.setText("待审核");
             } else if ("1".equals(state)) {
                 tv_state.setText("已审核");
             }
         } else if (Constants.OUT_TYPE.equals(type)) {
             if ("0".equals(state)) {
-                tv_address.setText("待出库");
+                tv_state.setText("待扫描");
             } else if ("1".equals(state)) {
-                tv_address.setText("已出库");
+                tv_state.setText("复核中");
+            } else if ("2".equals(state)) {
+                tv_state.setText("待复核");
+            } else if ("3".equals(state)) {
+                tv_state.setText("已复核");
             }
         } else if (Constants.REVIEW_TYPE.equals(type)) {
-            if ("1".equals(state)) {
-                tv_state.setText("待审核");
-            } else if ("2".equals(state)) {
-                tv_state.setText("已审核");
+            if ("2".equals(state)) {
+                tv_state.setText("复核待扫描");
+            } else if ("3".equals(state)) {
+                tv_state.setText("复核已扫描");
             }
         }
         if (!Constants.OUT_TYPE.equals(type)) {

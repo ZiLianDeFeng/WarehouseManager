@@ -9,7 +9,7 @@ public class Constants {
 
     //测试状态
     public static final boolean DEBUG = false;
-    public static final boolean NORMAL = true;
+    public static final boolean NORMAL = false;
     public static final String MODEL = android.os.Build.MANUFACTURER + "-" + android.os.Build.BRAND + "-" + android.os.Build.MODEL;
 
     private static final String ABSOLUTE_BASE_PATH_PREFIX = Environment.getExternalStorageDirectory().getPath()
@@ -41,4 +41,7 @@ public class Constants {
     public static final String EDIT_IP = "editIp";
     public static final String REVIEW_TYPE = "2";
     public static final String REFRESH = "refresh";
+    public static final String HISTORY_TYPE = "history";
+    public static final String ORDER_REFRESH = "orderRefresh";
+    public static final String HANDWRITE_CACHE = "/handwriteCache/";
 }

@@ -60,6 +60,9 @@
         <activity android:name=".ui.activity.ReviewResultActivity" />
         <activity android:name=".ui.activity.HistoryActivity" />
         <activity android:name=".ui.activity.ProductDetailActivity" />
+        <activity android:name=".ui.activity.HistoryListActivity" />
+        <activity android:name=".ui.activity.ReviewListActivity" />
+        <activity android:name=".ui.activity.GuideActivity" />
 
         <service android:name=".ui.service.PushService" />
 

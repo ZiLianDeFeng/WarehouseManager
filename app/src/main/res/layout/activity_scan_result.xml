@@ -38,7 +38,7 @@
                         style="@style/CommonTextview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="标  签  号：" />
+                        android:text="标&#32;&#32;签&#32;&#32;号：" />
 
                     <TextView
                         android:id="@+id/tv_markNum"
@@ -69,7 +69,7 @@
                         style="@style/CommonTextview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="规        格：" />
+                        android:text="规&#8195;&#8195;格：" />
 
                     <TextView
                         android:id="@+id/tv_type"
@@ -100,7 +100,7 @@
                         style="@style/CommonTextview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="净        重：" />
+                        android:text="净&#8195;&#8195;重：" />
 
                     <TextView
                         android:id="@+id/tv_net_weight"

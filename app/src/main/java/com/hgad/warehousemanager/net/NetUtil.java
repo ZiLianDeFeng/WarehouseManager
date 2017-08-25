@@ -15,7 +15,6 @@ import java.io.IOException;
  */
 public class NetUtil {
 
-
     public static <Res extends BaseResponse> void sendRequest(BaseRequest request, Class<Res> responseClass, Callback callback) {
 
             new NetTask().execute(new NetBean(request, responseClass, callback));

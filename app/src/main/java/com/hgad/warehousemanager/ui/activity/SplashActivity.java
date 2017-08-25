@@ -19,10 +19,12 @@ import com.hgad.warehousemanager.util.SPUtils;
  * Created by Administrator on 2017/1/4.
  */
 public class SplashActivity extends BaseActivity {
-    Handler handler = new Handler();
+    private Handler handler;
     private String userName;
     private String password;
     private boolean notConnect = true;
+    private Runnable splashRunnable;
+    private boolean loginSuccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,42 +47,71 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        final boolean loginSuccess = SPUtils.getBoolean(this, SPConstants.LOGIN_SUCCESS);
+        loginSuccess = SPUtils.getBoolean(this, SPConstants.LOGIN_SUCCESS);
         if (loginSuccess) {
             userName = SPUtils.getString(this, SPConstants.USER_NAME);
             password = SPUtils.getString(this, SPConstants.PWD);
         }
-        handler.postDelayed(new Runnable() {
+        initHandler();
+    }
+
+    private void initHandler() {
+        handler = new Handler();
+        splashRunnable = new Runnable() {
             @Override
             public void run() {
-                if (loginSuccess) {
-                    boolean checkNetWork = CommonUtils.checkNetWork(SplashActivity.this);
-                    if (checkNetWork) {
-                        LoginRequest loginRequest = new LoginRequest(userName, password);
-                        sendRequest(loginRequest, LoginResponse.class);
-                        notConnect = true;
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (notConnect) {
-                                    CommonUtils.showToast(SplashActivity.this, "服务器连接错误！");
-                                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                boolean notFirst = SPUtils.getBoolean(SplashActivity.this, SPConstants.NOT_FRIST);
+//                notFirst = false;
+                if (notFirst) {
+                    if (loginSuccess) {
+                        boolean checkNetWork = CommonUtils.checkNetWork(SplashActivity.this);
+                        if (checkNetWork) {
+                            LoginRequest loginRequest = new LoginRequest(userName, password);
+                            sendRequest(loginRequest, LoginResponse.class);
+                            notConnect = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (notConnect) {
+                                        CommonUtils.showToast(SplashActivity.this, "服务器连接错误！");
+                                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
-                            }
-                        }, 5000);
+                            }, 5000);
+                        } else {
+                            CommonUtils.showToast(SplashActivity.this, "请检查网络");
+                            finish();
+                        }
                     } else {
-                        CommonUtils.showToast(SplashActivity.this, "请检查网络");
+                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 } else {
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
                     startActivity(intent);
                     finish();
                 }
             }
-        }, 2000);
+        };
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (handler != null && splashRunnable != null) {
+            handler.removeCallbacks(splashRunnable);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (handler != null && splashRunnable != null) {
+            handler.postDelayed(splashRunnable, 3000);
+        }
     }
 
     @Override

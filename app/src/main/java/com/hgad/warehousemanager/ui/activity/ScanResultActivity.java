@@ -1,5 +1,7 @@
 package com.hgad.warehousemanager.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,14 +19,19 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
+import com.hgad.warehousemanager.bean.OrderInfo;
 import com.hgad.warehousemanager.bean.WareInfo;
 import com.hgad.warehousemanager.bean.request.ChangeWareRequest;
+import com.hgad.warehousemanager.bean.request.ForUpRequest;
 import com.hgad.warehousemanager.bean.request.InWareRequest;
 import com.hgad.warehousemanager.bean.request.OutWareRequest;
 import com.hgad.warehousemanager.bean.request.WareInfoRequest;
 import com.hgad.warehousemanager.bean.response.ChangeWareResponse;
+import com.hgad.warehousemanager.bean.response.ForUpResponse;
 import com.hgad.warehousemanager.bean.response.InWareResponse;
 import com.hgad.warehousemanager.bean.response.OutWareResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
@@ -85,12 +92,14 @@ public class ScanResultActivity extends BaseActivity {
     String[] rows = new String[15];
     String[] columns = new String[99];
     String[] floors = new String[27];
-    private String orderNum;
+    private String outOrderNum;
     private String orderName;
     private String netW;
     private String spec;
     private int id;
     private String model;
+    private int orderId;
+    private String inOrderNum;
 
     @Override
     protected void setContentView() {
@@ -104,6 +113,11 @@ public class ScanResultActivity extends BaseActivity {
         Intent intent = getIntent();
         type = intent.getStringExtra(Constants.TYPE);
         username = SPUtils.getString(this, SPConstants.USER_NAME);
+        OrderInfo orderInfo = (OrderInfo) intent.getSerializableExtra(Constants.ORDER_INFO);
+        if (orderInfo != null) {
+            orderId = orderInfo.getTaskId();
+            outOrderNum = orderInfo.getOrderNum();
+        }
         if (Constants.IN_WARE.equals(type)) {
             initHeader("入库");
             isLast = intent.getBooleanExtra(Constants.IS_LAST, false);
@@ -162,7 +176,7 @@ public class ScanResultActivity extends BaseActivity {
                 netW = subStringInfo(netWStr);
                 netW = formatterWeight(netW);
                 String orderNumStr = result.substring(result.indexOf("订单号"));
-                orderNum = subStringInfo(orderNumStr);
+                inOrderNum = subStringInfo(orderNumStr);
                 String orderNameStr = result.substring(result.indexOf("品名"));
                 orderName = subStringInfo(orderNameStr);
                 tv_markNum.setText(markNum);
@@ -187,7 +201,7 @@ public class ScanResultActivity extends BaseActivity {
         wareInfo = (WareInfo) intent.getSerializableExtra(Constants.WARE_INFO);
         if (wareInfo != null) {
             markNum = wareInfo.getMarkNum();
-            orderNum = wareInfo.getOrderNum();
+            outOrderNum = wareInfo.getOrderNum();
             id = wareInfo.getId();
             tv_markNum.setText(markNum);
             tv_type.setText(wareInfo.getSpec());
@@ -203,9 +217,15 @@ public class ScanResultActivity extends BaseActivity {
                 CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
             }
             String state = wareInfo.getState();
-            if (Constants.IN_TYPE.equals(type) || "1".equals(state)) {
+            if (Constants.IN_TYPE.equals(type) && "1".equals(state)) {
                 btn_commit.setVisibility(View.INVISIBLE);
                 tv_addressWare.setOnClickListener(null);
+            }
+            if (Constants.OUT_TYPE.equals(type) && !"0".equals(state)) {
+                btn_commit.setVisibility(View.INVISIBLE);
+            }
+            if (Constants.REVIEW_TYPE.equals(type) && !"2".equals(state)) {
+                btn_commit.setVisibility(View.INVISIBLE);
             }
 //            if (TextUtils.isEmpty(wareInfoAddress)) {
 //                tv_addressWare.setText("无");
@@ -336,8 +356,7 @@ public class ScanResultActivity extends BaseActivity {
                 if (inWareResponse.getResponseCode().getCode() == 200) {
                     CommonUtils.showToast(ScanResultActivity.this, inWareResponse.getErrorMsg());
                     if ("请求成功".equals(inWareResponse.getErrorMsg())) {
-                        setResult(Constants.RESULT_OK);
-                        finish();
+                        handler.sendEmptyMessage(FINISH);
                     }
                 } else {
                     CommonUtils.showToast(ScanResultActivity.this, inWareResponse.getErrorMsg());
@@ -413,7 +432,32 @@ public class ScanResultActivity extends BaseActivity {
             if (outWareResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(ScanResultActivity.this, outWareResponse.getErrorMsg());
                 if ("请求成功".equals(outWareResponse.getErrorMsg())) {
-                    handler.sendEmptyMessage(FINISH);
+                    if (isLast) {
+                        ForUpRequest forUpRequest = new ForUpRequest(orderId, "2");
+                        sendRequest(forUpRequest, ForUpResponse.class);
+                        isLast = false;
+                    } else {
+                        handler.sendEmptyMessage(FINISH);
+                    }
+                }
+            }
+        } else if (request instanceof ForUpRequest) {
+            ForUpResponse forUpResponse = (ForUpResponse) response;
+            if (forUpResponse.getResponseCode().getCode() == 200) {
+                CommonUtils.showToast(ScanResultActivity.this, forUpResponse.getErrorMsg());
+                if ("请求成功".equals(forUpResponse.getErrorMsg())) {
+                    new AlertView("提示", "所有货品已扫描完毕，订单将进入复核状态，请货品上车后进行复核", null, new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            switch (position) {
+                                case 0:
+                                    handler.sendEmptyMessage(FINISH);
+                                    Intent intent = new Intent(Constants.ORDER_REFRESH);
+                                    sendBroadcast(intent);
+                                    break;
+                            }
+                        }
+                    }).setCancelable(false).show();
                 }
             }
         }
@@ -426,12 +470,7 @@ public class ScanResultActivity extends BaseActivity {
                 chooseAddress();
                 break;
             case R.id.pop_confirm:
-                String text = bottonPopupWindowView.getConfirmText();
-//                if ("下一步".equals(text)) {
-//                    changeChoose();
-//                } else if ("确定".equals(text)) {
-                    confirmAddress();
-//                }
+                confirmAddress();
                 break;
             case R.id.pop_cancle:
                 bottonPopupWindow.dismiss();
@@ -499,13 +538,16 @@ public class ScanResultActivity extends BaseActivity {
     }
 
     private void reviewCommit() {
-
+        address = CommonUtils.formatAddressForUse(address);
+        showDialog(getString(R.string.commit_data));
+        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, "1");
+        sendRequest(outWareRequest, OutWareResponse.class);
     }
 
     private void outCommit() {
         address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
-        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, orderNum, address, id, model);
+        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, "0");
         sendRequest(outWareRequest, OutWareResponse.class);
     }
 
@@ -526,7 +568,7 @@ public class ScanResultActivity extends BaseActivity {
     private void inCommit() {
         address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
-        InWareRequest inWareRequest = new InWareRequest(markNum, username, orderNum, address, "1", netW, spec, orderName, "0", model);
+        InWareRequest inWareRequest = new InWareRequest(markNum, username, inOrderNum, address, "1", netW, spec, orderName, "0", model);
         sendRequest(inWareRequest, InWareResponse.class);
     }
 
@@ -542,7 +584,6 @@ public class ScanResultActivity extends BaseActivity {
         customProgressDialog.setCancelable(false);
         customProgressDialog.setCanceledOnTouchOutside(false);
         customProgressDialog.show();
-//        customProgressDialog.setContent(content);
         isConnect = false;
         handler.postDelayed(new Runnable() {
             @Override
@@ -556,6 +597,8 @@ public class ScanResultActivity extends BaseActivity {
             }
         }, 5000);
     }
+
+    // TODO: 2017/8/25 更换二维码扫描框架，当前框架扫描速度慢，信息不准确
 
     private void showMore() {
         morePopupWindow.showAsDropDown(ll_more);
@@ -573,8 +616,18 @@ public class ScanResultActivity extends BaseActivity {
         column = bottonPopupWindowView.getColumn();
         floor = bottonPopupWindowView.getFloor();
         address = ware + "仓" + row + "排" + column + "垛" + floor + "号";
-        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
-        bottonPopupWindow.dismiss();
+        new AlertDialog.Builder(this).setTitle("提示")
+                .setMessage("选择的货位为" + address)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
+                        bottonPopupWindow.dismiss();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .setCancelable(false)
+                .show();
     }
 
     private void chooseAddress() {

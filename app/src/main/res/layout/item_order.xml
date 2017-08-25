@@ -35,7 +35,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical"
         android:paddingBottom="@dimen/common_padding"
@@ -56,8 +55,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="订单号："
-                    android:textSize="@dimen/item_size" />
+                    android:text="订&#32;&#32;单&#32;&#32;号："
+                    android:textSize="@dimen/common_text_size" />
 
                 <TextView
                     android:id="@+id/tv_order_num"
@@ -103,8 +102,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="办单人："
-                    android:textSize="@dimen/item_size" />
+                    android:text="办&#32;&#32;单&#32;&#32;人："
+                    android:textSize="@dimen/common_text_size" />
 
                 <TextView
                     android:id="@+id/tv_take_people"
@@ -151,8 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/common_dp"
-            android:paddingRight="@dimen/common_dp">
+            android:padding="@dimen/common_dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,8 +160,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="状&#8195;态："
-                    android:textSize="@dimen/item_size" />
+                    android:text="状&#8195;&#8195;态："
+                    android:textSize="@dimen/common_text_size" />
 
                 <TextView
                     android:id="@+id/tv_state"

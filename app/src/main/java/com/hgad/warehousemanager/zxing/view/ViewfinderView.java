@@ -139,7 +139,7 @@ public final class ViewfinderView extends View {
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
 
-		paint.setColor(resultBitmap != null ? resultColor : maskColor);
+		paint.setColor(	resultBitmap != null ? resultColor : maskColor);
 
 		//画出扫描框外面的阴影部分，共四个部分，扫描框的上面到屏幕上面，扫描框的下面到屏幕下面
 		//扫描框的左边面到屏幕左边，扫描框的右边到屏幕右边
