@@ -19,18 +19,18 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnItemClickListener;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.bean.OrderInfo;
 import com.hgad.warehousemanager.bean.WareInfo;
 import com.hgad.warehousemanager.bean.request.ChangeWareRequest;
+import com.hgad.warehousemanager.bean.request.CheckRequest;
 import com.hgad.warehousemanager.bean.request.ForUpRequest;
 import com.hgad.warehousemanager.bean.request.InWareRequest;
 import com.hgad.warehousemanager.bean.request.OutWareRequest;
 import com.hgad.warehousemanager.bean.request.WareInfoRequest;
 import com.hgad.warehousemanager.bean.response.ChangeWareResponse;
+import com.hgad.warehousemanager.bean.response.CheckResponse;
 import com.hgad.warehousemanager.bean.response.ForUpResponse;
 import com.hgad.warehousemanager.bean.response.InWareResponse;
 import com.hgad.warehousemanager.bean.response.OutWareResponse;
@@ -90,7 +90,7 @@ public class ScanResultActivity extends BaseActivity {
     private boolean isConnect;
     String[] wareNums = new String[6];
     String[] rows = new String[15];
-    String[] columns = new String[99];
+    String[] columns = new String[17];
     String[] floors = new String[27];
     private String outOrderNum;
     private String orderName;
@@ -100,6 +100,10 @@ public class ScanResultActivity extends BaseActivity {
     private String model;
     private int orderId;
     private String inOrderNum;
+    private String steelGrade;
+    private String curAddress;
+    private String proName;
+    private String state;
 
     @Override
     protected void setContentView() {
@@ -125,7 +129,9 @@ public class ScanResultActivity extends BaseActivity {
             initHeader("移位");
         } else if (Constants.CHECK.equals(type)) {
             initHeader("盘点");
-            btn_commit.setText("盘点");
+            btn_commit.setText("确认");
+            curAddress = intent.getStringExtra(Constants.ADDRESS);
+            tv_addressWare.setOnClickListener(null);
         } else if (Constants.SCAN_RESULT.equals(type)) {
             initHeader("条码扫描");
             btn_commit.setVisibility(View.INVISIBLE);
@@ -135,16 +141,23 @@ public class ScanResultActivity extends BaseActivity {
         } else if (Constants.OUT_WARE.equals(type)) {
             initHeader("出库");
             isLast = intent.getBooleanExtra(Constants.IS_LAST, false);
+            tv_addressWare.setOnClickListener(null);
         } else if (Constants.REVIEW_TYPE.equals(type)) {
             initHeader("审核");
+            tv_addressWare.setOnClickListener(null);
         }
         String resultStr = intent.getStringExtra(Constants.SCAN_RESULT);
         if (resultStr != null) {
+            String encoding = CommonUtils.getEncoding(resultStr);
             String UTF_Str = "";
             String GB_Str = "";
             boolean is_cN = false;
             try {
-                UTF_Str = new String(resultStr.getBytes("ISO-8859-1"), "UTF-8");
+                if (encoding.equals("GB2312")) {
+                    UTF_Str = new String(resultStr.getBytes("GB2312"), "GB2312");
+                } else if (encoding.equals("ISO-8859-1")) {
+                    UTF_Str = new String(resultStr.getBytes("ISO-8859-1"), "UTF-8");
+                }
                 is_cN = CommonUtils.isChineseCharacter(UTF_Str);
                 //防止有人特意使用乱码来生成二维码来判断的情况
                 boolean b = CommonUtils.isSpecialCharacter(resultStr);
@@ -179,6 +192,9 @@ public class ScanResultActivity extends BaseActivity {
                 inOrderNum = subStringInfo(orderNumStr);
                 String orderNameStr = result.substring(result.indexOf("品名"));
                 orderName = subStringInfo(orderNameStr);
+                String steelGradeStr = result.substring(result.indexOf("牌号"));
+                steelGrade = steelGradeStr.substring(steelGradeStr.indexOf(";") + 1, steelGradeStr.indexOf("|")).trim();
+                steelGrade = steelGrade.replace("+", "%2B");
                 tv_markNum.setText(markNum);
                 tv_type.setText(spec);
 //                tv_gross_weight.setText(grossW);
@@ -216,12 +232,12 @@ public class ScanResultActivity extends BaseActivity {
                 address = ware + "仓" + row + "排" + column + "垛" + floor + "号";
                 CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
             }
-            String state = wareInfo.getState();
+            state = wareInfo.getState();
             if (Constants.IN_TYPE.equals(type) && "1".equals(state)) {
                 btn_commit.setVisibility(View.INVISIBLE);
                 tv_addressWare.setOnClickListener(null);
             }
-            if (Constants.OUT_TYPE.equals(type) && !"0".equals(state)) {
+            if (Constants.OUT_TYPE.equals(type) && !("0".equals(state) || "1".equals(state))) {
                 btn_commit.setVisibility(View.INVISIBLE);
             }
             if (Constants.REVIEW_TYPE.equals(type) && !"2".equals(state)) {
@@ -229,7 +245,6 @@ public class ScanResultActivity extends BaseActivity {
             }
 //            if (TextUtils.isEmpty(wareInfoAddress)) {
 //                tv_addressWare.setText("无");
-//            }
 //            }
         }
         List<WareInfo> data = (List<WareInfo>) intent.getSerializableExtra(Constants.LIST_DATA);
@@ -279,7 +294,7 @@ public class ScanResultActivity extends BaseActivity {
                 rows[i] = i + 1 + "";
             }
         }
-        for (int i = 0; i < 99; i++) {
+        for (int i = 0; i < 17; i++) {
             if (i < 9) {
                 columns[i] = "0" + (i + 1);
             } else {
@@ -344,6 +359,7 @@ public class ScanResultActivity extends BaseActivity {
         contentView.findViewById(R.id.ll_change_ware).setOnClickListener(this);
     }
 
+
     @Override
     public void onSuccessResult(BaseRequest request, BaseResponse response) {
         if (customProgressDialog != null) {
@@ -375,31 +391,33 @@ public class ScanResultActivity extends BaseActivity {
                         tv_markNum.setText(markNum);
                         tv_type.setText(wareInfo.getSpec());
                         tv_net_weight.setText(wareInfo.getNetWeight() + "T");
+                        proName = wareInfo.getProName();
+                        if (type.equals(Constants.IN_WARE)) {
+                            tv_addressWare.setOnClickListener(null);
+                            btn_commit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    CommonUtils.showToast(ScanResultActivity.this, "该货品已入库，无法再次入库");
+                                }
+                            });
+                        }
                         if (!TextUtils.isEmpty(wareInfoResponse.getData().getPositionCode().trim())) {
                             address = wareInfo.getAddress();
-                            String str = CommonUtils.formatAddress(address);
-                            tv_addressWare.setText(str);
-                            if (type.equals(Constants.IN_WARE)) {
-                                tv_addressWare.setOnClickListener(null);
-                                btn_commit.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        CommonUtils.showToast(ScanResultActivity.this, "该货品已入库，无法再次入库");
-                                    }
-                                });
-                            } else if (type.equals(Constants.OUT_WARE)) {
+                            String addressStr = CommonUtils.formatAddress(address);
+                            CommonUtils.stringInterceptionChangeLarge(tv_addressWare, addressStr, "仓", "排", "垛", "号");
+                            if (type.equals(Constants.OUT_WARE)) {
                                 tv_addressWare.setOnClickListener(null);
                             }
                         } else {
-                            if (type.equals(Constants.OUT_WARE)) {
+                            if (type.equals(Constants.OUT_WARE) || type.equals(Constants.IN_WARE)) {
                                 tv_addressWare.setText("无");
                                 tv_addressWare.setOnClickListener(null);
-                                btn_commit.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        CommonUtils.showToast(ScanResultActivity.this, "该货品已出库，无法再次出库");
-                                    }
-                                });
+//                                btn_commit.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        CommonUtils.showToast(ScanResultActivity.this, "该货品已出库，无法再次出库");
+//                                    }
+//                                });
                             } else if (type.equals(Constants.CHANGE_WARE)) {
                                 tv_addressWare.setText("无");
                                 tv_addressWare.setOnClickListener(null);
@@ -432,13 +450,25 @@ public class ScanResultActivity extends BaseActivity {
             if (outWareResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(ScanResultActivity.this, outWareResponse.getErrorMsg());
                 if ("请求成功".equals(outWareResponse.getErrorMsg())) {
-                    if (isLast) {
-                        ForUpRequest forUpRequest = new ForUpRequest(orderId, "2");
-                        sendRequest(forUpRequest, ForUpResponse.class);
-                        isLast = false;
-                    } else {
-                        handler.sendEmptyMessage(FINISH);
-                    }
+//                    if (isLast) {
+////                        ForUpRequest forUpRequest = new ForUpRequest(orderId, "1");
+////                        sendRequest(forUpRequest, ForUpResponse.class);
+//                        new AlertView("提示", "所有货品已扫描完毕，请货品上车后进行复核", null, new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(Object o, int position) {
+//                                switch (position) {
+//                                    case 0:
+//                                        handler.sendEmptyMessage(FINISH);
+//                                        Intent intent = new Intent(Constants.ORDER_REFRESH);
+//                                        sendBroadcast(intent);
+//                                        break;
+//                                }
+//                            }
+//                        }).setCancelable(false).show();
+//                        isLast = false;
+//                    } else {
+                    handler.sendEmptyMessage(FINISH);
+//                    }
                 }
             }
         } else if (request instanceof ForUpRequest) {
@@ -446,20 +476,14 @@ public class ScanResultActivity extends BaseActivity {
             if (forUpResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(ScanResultActivity.this, forUpResponse.getErrorMsg());
                 if ("请求成功".equals(forUpResponse.getErrorMsg())) {
-                    new AlertView("提示", "所有货品已扫描完毕，订单将进入复核状态，请货品上车后进行复核", null, new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            switch (position) {
-                                case 0:
-                                    handler.sendEmptyMessage(FINISH);
-                                    Intent intent = new Intent(Constants.ORDER_REFRESH);
-                                    sendBroadcast(intent);
-                                    break;
-                            }
-                        }
-                    }).setCancelable(false).show();
+
                 }
             }
+        } else if (request instanceof CheckRequest) {
+            CheckResponse checkResponse = (CheckResponse) response;
+            CommonUtils.showToast(ScanResultActivity.this, "提交完成");
+            setResult(Constants.RESULT_OK);
+            finish();
         }
     }
 
@@ -540,35 +564,43 @@ public class ScanResultActivity extends BaseActivity {
     private void reviewCommit() {
         address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
-        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, "1");
+        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, CommonUtils.getCurrentTime().substring(0, 10));
         sendRequest(outWareRequest, OutWareResponse.class);
     }
 
     private void outCommit() {
         address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
-        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, "0");
+//        if ("0".equals(state)) {
+        OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, CommonUtils.getCurrentTime().substring(0, 10));
         sendRequest(outWareRequest, OutWareResponse.class);
+//        } else if ("1".equals(state)) {
+//            OutWareRequest outWareRequest = new OutWareRequest(markNum, username, outOrderNum, address, model, "1");
+//            sendRequest(outWareRequest, OutWareResponse.class);
+//        }
     }
 
     private void checkCommit() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (customProgressDialog != null) {
+        showDialog(getString(R.string.commit_data));
+        if (!curAddress.equals(address)) {
+            CheckRequest checkRequest = new CheckRequest(markNum, proName, address, curAddress);
+            sendRequest(checkRequest, CheckResponse.class);
+        } else {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     customProgressDialog.dismiss();
+                    setResult(Constants.RESULT_OK);
+                    finish();
                 }
-                CommonUtils.showToast(ScanResultActivity.this, "信息正确");
-                finish();
-            }
-        }, 2000);
-        showDialog(getString(R.string.info_check));
+            }, 1000);
+        }
     }
 
     private void inCommit() {
         address = CommonUtils.formatAddressForUse(address);
         showDialog(getString(R.string.commit_data));
-        InWareRequest inWareRequest = new InWareRequest(markNum, username, inOrderNum, address, "1", netW, spec, orderName, "0", model);
+        InWareRequest inWareRequest = new InWareRequest(markNum, username, inOrderNum, address, "1", netW, spec, orderName, "0", steelGrade, model);
         sendRequest(inWareRequest, InWareResponse.class);
     }
 
@@ -597,8 +629,6 @@ public class ScanResultActivity extends BaseActivity {
             }
         }, 5000);
     }
-
-    // TODO: 2017/8/25 更换二维码扫描框架，当前框架扫描速度慢，信息不准确
 
     private void showMore() {
         morePopupWindow.showAsDropDown(ll_more);
@@ -643,7 +673,7 @@ public class ScanResultActivity extends BaseActivity {
             startActivity(intent);
         } else {
             bottonPopupWindowView = new BottonPopupWindowView(ware, floor, getString(R.string.choose_address), type);
-            bottonPopupWindow = bottonPopupWindowView.creat(this, wareNums, rows, columns, floors, this);
+            bottonPopupWindow = bottonPopupWindowView.creat(this, wareNums, floors, this);
             bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {

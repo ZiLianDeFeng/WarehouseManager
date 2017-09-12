@@ -2,52 +2,110 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_light"
     android:orientation="vertical">
 
     <include layout="@layout/header" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
         android:padding="@dimen/common_padding">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/common_dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_bg_green"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_in_hand"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="手动盘点"
-                android:textColor="@color/white"
-                android:textSize="@dimen/common_head_text_size" />
-
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="当前位置"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/item_size" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/common_dp"
+            android:id="@+id/ll_wheel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/common_padding"
             android:layout_weight="1"
-            android:background="@drawable/shape_bg_yellow"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/common_padding">
 
-            <TextView
-                android:id="@+id/tv_in_mark"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="二维码扫描"
-                android:textColor="@color/white"
-                android:textSize="@dimen/common_head_text_size" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/common_padding">
+
+                <com.hgad.warehousemanager.view.AddAndSubText
+                    android:id="@+id/at_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:text="排"
+                    android:textColor="@color/light_black"
+                    android:textSize="22sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/common_padding">
+
+                <com.hgad.warehousemanager.view.AddAndSubText
+                    android:id="@+id/at_column"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:text="垛"
+                    android:textColor="@color/light_black"
+                    android:textSize="22sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/common_padding">
+
+
+                <com.hgad.warehousemanager.view.AddAndSubText
+                    android:id="@+id/at_floor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:text="号"
+                    android:textColor="@color/light_black"
+                    android:textSize="22sp" />
+            </RelativeLayout>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_button_height"
+            android:background="@color/btn_color"
+            android:text="盘点扫描"
+            android:textColor="@color/white"
+            android:textSize="@dimen/item_size" />
     </LinearLayout>
 </LinearLayout>

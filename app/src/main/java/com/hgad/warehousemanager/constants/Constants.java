@@ -44,4 +44,13 @@ public class Constants {
     public static final String HISTORY_TYPE = "history";
     public static final String ORDER_REFRESH = "orderRefresh";
     public static final String HANDWRITE_CACHE = "/handwriteCache/";
+    public static final String WARE_NUMBER = "wareNumber";
+    public static final int HAND = 120;
+    public static final int EDIT_OK = 210;
+    public static final String PHOTOS = "photos";
+    public static final String MARK_NUM = "markNum";
+    public static final String ORDER_ITEM = "orderItem";
+    public static final String PRO_NAME = "proName";
+    public static final String NODE = "node";
+    public static final String CHECK_INFO = "checkInfo";
 }

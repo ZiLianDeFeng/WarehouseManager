@@ -81,7 +81,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/shape_circle"
-            android:hint="请输入订单号"
+            android:hint="请输入出库单号"
             android:padding="@dimen/common_dp"
             android:textSize="@dimen/common_text_size" />
 

@@ -119,25 +119,58 @@ public class OrderAdapter extends BaseSwipeAdapter implements Callback {
                 isSwipe = true;
             }
         });
+        TextView tv_swipe = (TextView) convertView.findViewById(R.id.tv_swipe);
         if (Constants.REVIEW_TYPE.equals(type)) {
-            swipeLayout.setSwipeEnabled(true);
+//            swipeLayout.setSwipeEnabled(true);
+            tv_swipe.setText("申请出库");
+            convertView.findViewById(R.id.ll_ask).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swipeLayout.close(true);
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(context, ApplyOutActivity.class);
+                            intent.putExtra(Constants.ORDER_INFO, orderInfo);
+                            context.startActivity(intent);
+                        }
+                    }, 200);
+                }
+            });
+
         } else {
-            swipeLayout.setSwipeEnabled(false);
+//            swipeLayout.setSwipeEnabled(false);
+            tv_swipe.setText("申请复核");
+            convertView.findViewById(R.id.ll_ask).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swipeLayout.close(true);
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(context, ApplyOutActivity.class);
+                            intent.putExtra(Constants.ORDER_INFO, orderInfo);
+                            context.startActivity(intent);
+                        }
+                    }, 200);
+                }
+            });
         }
-        convertView.findViewById(R.id.ll_ask).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                swipeLayout.close(true);
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(context, ApplyOutActivity.class);
-                        intent.putExtra(Constants.ORDER_INFO, orderInfo);
-                        context.startActivity(intent);
-                    }
-                }, 200);
-            }
-        });
+
+//        convertView.findViewById(R.id.ll_ask).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                swipeLayout.close(true);
+//                new Timer().schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        Intent intent = new Intent(context, ApplyOutActivity.class);
+//                        intent.putExtra(Constants.ORDER_INFO, orderInfo);
+//                        context.startActivity(intent);
+//                    }
+//                }, 200);
+//            }
+//        });
 //        if (orderInfo.getState().equals("3")) {
 //            tv_in_ware.setTextColor(context.getResources().getColor(R.color.black));
 //        } else {
@@ -179,61 +212,6 @@ public class OrderAdapter extends BaseSwipeAdapter implements Callback {
 //            }
 //        }
     }
-
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        CommonViewHolder holder = CommonViewHolder.createCVH(convertView, parent, R.layout.item_order);
-//        TextView tv_order_num = (TextView) holder.getView(R.id.tv_order_num);
-//        TextView tv_in_ware = (TextView) holder.getView(R.id.tv_in_ware);
-//        TextView tv_total = (TextView) holder.getView(R.id.tv_total);
-//        TextView tv_state = (TextView) holder.getView(R.id.tv_state);
-////        Button btn_accept = (Button) holder.getView(R.id.btn_accept);
-//        SwipeLayout swipeLayout = (SwipeLayout) holder.getView(R.id.swipe_layout);
-//        final OrderInfo orderInfo = data.get(position);
-//        if (orderInfo.getState().equals("3")) {
-//            tv_in_ware.setTextColor(context.getResources().getColor(R.color.black));
-//        } else {
-//            tv_in_ware.setTextColor(context.getResources().getColor(R.color.red));
-//        }
-//        tv_in_ware.setText(orderInfo.getInWareCount() + "");
-//        tv_total.setText(orderInfo.getProductCount() + "");
-//        tv_order_num.setText(orderInfo.getOrderNum());
-//        if (Constants.IN_TYPE.equals(orderInfo.getType())) {
-//            switch (orderInfo.getState()) {
-//                case "3":
-//                    tv_state.setText("已入库");
-//                    break;
-//                case "2":
-//                    tv_state.setText("入库中");
-//                    break;
-//                default:
-//                    tv_state.setText("待入库");
-//                    break;
-//            }
-//        } else if (Constants.OUT_TYPE.equals(orderInfo.getType())) {
-//            switch (orderInfo.getState()) {
-//                case "3":
-//                    tv_state.setText("已出库");
-//                    break;
-//                case "2":
-//                    tv_state.setText("出库中");
-//                    break;
-//                default:
-//                    tv_state.setText("待出库");
-//                    break;
-//            }
-//        } else if (Constants.REVIEW_TYPE.equals(orderInfo.getType())) {
-//            switch (orderInfo.getState()) {
-//                case "2":
-//                    tv_state.setText("审核中");
-//                    break;
-//                case "3":
-//                    tv_state.setText("已审核");
-//                    break;
-//            }
-//        }
-//        return holder.convertView;
-//    }
 
     @Override
     public void onSuccess(BaseRequest request, Object response) {

@@ -9,6 +9,7 @@ import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.bean.request.LoginRequest;
 import com.hgad.warehousemanager.bean.response.LoginResponse;
+import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
@@ -60,6 +61,11 @@ public class SplashActivity extends BaseActivity {
         splashRunnable = new Runnable() {
             @Override
             public void run() {
+                if (Constants.DEBUG) {
+                    Intent intent1 = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent1);
+                    finish();
+                }
                 boolean notFirst = SPUtils.getBoolean(SplashActivity.this, SPConstants.NOT_FRIST);
 //                notFirst = false;
                 if (notFirst) {

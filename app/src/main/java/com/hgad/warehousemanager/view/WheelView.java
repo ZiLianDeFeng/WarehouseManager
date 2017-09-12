@@ -76,7 +76,6 @@ public class WheelView extends ScrollView {
         }
 
         initData();
-
     }
 
 
@@ -143,8 +142,6 @@ public class WheelView extends ScrollView {
                                 }
                             });
                         }
-
-
                     }
 
 
@@ -171,11 +168,10 @@ public class WheelView extends ScrollView {
 
     private void initData() {
         displayItemCount = offset * 2 + 1;
-
+        views.removeAllViews();
         for (String item : items) {
             views.addView(createView(item));
         }
-
         refreshItemView(0);
     }
 
@@ -221,7 +217,6 @@ public class WheelView extends ScrollView {
 //            e.printStackTrace();
 //        }
 
-
         refreshItemView(t);
 
         if (t > oldt) {
@@ -236,7 +231,7 @@ public class WheelView extends ScrollView {
 
     }
 
-    private void refreshItemView(int y) {
+    public void refreshItemView(int y) {
         int position = y / itemHeight + offset;
         int remainder = y % itemHeight;
         int divided = y / itemHeight;
@@ -346,7 +341,6 @@ public class WheelView extends ScrollView {
                 return 0;
             }
         };
-
 
         super.setBackgroundDrawable(background);
 

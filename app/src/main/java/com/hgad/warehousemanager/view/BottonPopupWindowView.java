@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -67,8 +66,10 @@ public class BottonPopupWindowView implements Callback {
     private CustomProgressDialog customProgressDialog;
     private String[] numbers;
     private String chooseFloor;
-    private String[] wareNo = new String[]{"01", "02", "03", "04", "05", "06"};
+//    private String[] wareNo = new String[]{"01", "02", "03", "04", "05", "06"};
     private TextView tv_addressWare;
+    private List<String> rowList;
+    private ArrayList<String> colList;
 
 
     public String getWare() {
@@ -111,7 +112,7 @@ public class BottonPopupWindowView implements Callback {
         isMap = false;
     }
 
-    public PopupWindow creat(final Context context, final String[] wareNums, String[] rows, String[] columns, String[] floors, View.OnClickListener listener) {
+    public PopupWindow creat(final Context context, final String[] wareNums, String[] floors, View.OnClickListener listener) {
         this.numbers = floors;
         this.context = context;
         View popupWindowView = View.inflate(context, R.layout.popupwindow_address, null);
@@ -141,11 +142,11 @@ public class BottonPopupWindowView implements Callback {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle("选择仓库")
-                        .setItems(wareNo, new DialogInterface.OnClickListener() {
+                        .setItems(wareNums, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ware = wareNo[which];
-                                tv_addressWare.setText(wareNo[which]);
+                                ware = wareNums[which];
+                                tv_addressWare.setText(wareNums[which]);
                                 WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
                                 NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
                             }
@@ -153,24 +154,6 @@ public class BottonPopupWindowView implements Callback {
                 builder.show();
             }
         });
-//        wv_ware_num = (WheelView) popupWindowView.findViewById(R.id.wv_ware_num);
-//        wv_ware_num.setOffset(1);
-//        wv_ware_num.setItems(Arrays.asList(wareNums));
-//        wv_ware_num.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                ware = item;
-//            }
-//        });
-//        wv_floor = (WheelView) popupWindowView.findViewById(R.id.wv_floor);
-//        wv_floor.setOffset(1);
-//        wv_floor.setItems(Arrays.asList(floors));
-//        wv_floor.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                floor = item;
-//            }
-//        });
         wl_ware = (WheelView) popupWindowView.findViewById(R.id.wl_ware);
         wl_ware.setOffset(1);
         wl_ware.setItems(Arrays.asList(wareNums));
@@ -178,6 +161,8 @@ public class BottonPopupWindowView implements Callback {
             @Override
             public void onSelected(int selectedIndex, String item) {
                 ware = item;
+                WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
+                NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
             }
         });
         wl_floor = (WheelView) popupWindowView.findViewById(R.id.wl_floor);
@@ -191,7 +176,9 @@ public class BottonPopupWindowView implements Callback {
         });
         wl_row = (WheelView) popupWindowView.findViewById(R.id.wl_row);
         wl_row.setOffset(1);
-        wl_row.setItems(Arrays.asList(rows));
+//        wl_row.setItems(Arrays.asList(rows));
+        rowList = new ArrayList<>();
+        wl_row.setItems(rowList);
         wl_row.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
@@ -200,7 +187,9 @@ public class BottonPopupWindowView implements Callback {
         });
         wl_column = (WheelView) popupWindowView.findViewById(R.id.wl_column);
         wl_column.setOffset(1);
-        wl_column.setItems(Arrays.asList(columns));
+        colList = new ArrayList<>();
+//        wl_column.setItems(Arrays.asList(columns));
+        wl_column.setItems(colList);
         wl_column.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
@@ -211,6 +200,8 @@ public class BottonPopupWindowView implements Callback {
         column = wl_column.getSeletedItem();
         ware = wl_ware.getSeletedItem();
         floor = wl_floor.getSeletedItem();
+        WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
+        NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
         return bottonPopupWindow;
     }
 
@@ -303,10 +294,20 @@ public class BottonPopupWindowView implements Callback {
         chooseFloor = null;
         //拓展窗口
         ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alertext_floor, null);
-        GridView gl = (GridView) extView.findViewById(R.id.gl_floor);
-        final NumberAdapter numberAdapter = new NumberAdapter();
-        gl.setAdapter(numberAdapter);
-        gl.setNumColumns(9);
+//        GridView gl = (GridView) extView.findViewById(R.id.gl_floor);
+//        final NumberAdapter numberAdapter = new NumberAdapter();
+//        gl.setAdapter(numberAdapter);
+//        gl.setNumColumns(9);
+        WheelView wl_floor = (WheelView) extView.findViewById(R.id.wl_floor);
+        wl_floor.setOffset(1);
+        wl_floor.setItems(Arrays.asList(numbers));
+        wl_floor.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                chooseFloor = item;
+            }
+        });
+        chooseFloor = wl_floor.getSeletedItem();
         AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT).setTitle("选择层号")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
@@ -406,49 +407,6 @@ public class BottonPopupWindowView implements Callback {
 
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
-//    public void change() {
-//        if (index == 1) {
-//            boolean isNetWork = CommonUtils.checkNetWork(context);
-//            if (isNetWork) {
-//                connect = false;
-//                mainHandler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (!connect) {
-//                            seatView.setData(15, 99);
-//                            seatView.setScreenName(ware + "号仓库");
-//                            initSeatTable(seatRows, seatColums, unSeatRows, unSeatColums, unFullRows, unFullColums);
-//                            seatView.invalidate();
-//                        }
-//                    }
-//                }, 2000);
-//
-//                WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
-//                NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, this);
-//                pop_address.setVisibility(View.INVISIBLE);
-////                pop_switch.setVisibility(View.INVISIBLE);
-//                pop_switch.setText(floor + "号");
-//                pop_switch.setOnClickListener(null);
-//                pop_confirm.setText("确定");
-//                index++;
-//            } else {
-//                CommonUtils.showToast(context, context.getString(R.string.check_net));
-//            }
-//        } else if (index == 2) {
-//            if (row == null || column == null) {
-//                CommonUtils.showToast(context, "还未选择地址");
-//                return;
-//            }
-//            pop_map.setVisibility(View.INVISIBLE);
-////            pop_switch.setVisibility(View.INVISIBLE);
-////            pop_confirm.setVisibility(View.VISIBLE);
-//            pop_confirm.setText("确定");
-//            index++;
-//        } else if (index == 3) {
-//
-//        }
-
-//}
 
     @Override
     public void onSuccess(BaseRequest request, Object response) {
@@ -467,33 +425,62 @@ public class BottonPopupWindowView implements Callback {
                     int rows = dataEntity.getRows();
                     int cols = dataEntity.getCols();
                     String name = dataEntity.getName();
-                    List<WareHouseResponse.DataEntity.PositionListEntity> positionList = dataEntity.getPositionList();
-                    for (WareHouseResponse.DataEntity.PositionListEntity positionListEntity : positionList) {
-                        String raw = positionListEntity.getPositionCode().substring(2, 4);
-                        String column = positionListEntity.getPositionCode().substring(4, 6);
-                        List<String> storey = positionListEntity.getStorey();
-                        boolean hava = false;
-                        boolean unfull = false;
-                        if (storey.get(0) != null) {
-                            hava = true;
-                        }
-                        if (storey.get(storey.size() - 1) == null) {
-                            unfull = true;
-                        }
-                        if (hava) {
-                            if (unfull) {
-                                unFullRows.add(raw);
-                                unFullColums.add(column);
-                            } else {
-                                seatRows.add(raw);
-                                seatColums.add(column);
+                    if (isMap) {
+                        List<WareHouseResponse.DataEntity.PositionListEntity> positionList = dataEntity.getPositionList();
+                        for (WareHouseResponse.DataEntity.PositionListEntity positionListEntity : positionList) {
+                            String raw = positionListEntity.getPositionCode().substring(2, 4);
+                            String column = positionListEntity.getPositionCode().substring(4, 6);
+                            List<String> storey = positionListEntity.getStorey();
+                            boolean hava = false;
+                            boolean unfull = false;
+                            if (storey.get(0) != null) {
+                                hava = true;
+                            }
+                            if (storey.get(storey.size() - 1) == null) {
+                                unfull = true;
+                            }
+                            if (hava) {
+                                if (unfull) {
+                                    unFullRows.add(raw);
+                                    unFullColums.add(column);
+                                } else {
+                                    seatRows.add(raw);
+                                    seatColums.add(column);
+                                }
                             }
                         }
+                        seatView.setData(rows, cols);
+                        initSeatTable(seatRows, seatColums, unSeatRows, unSeatColums, unFullRows, unFullColums);
+                        seatView.setScreenName(name);
+                        seatView.invalidate();
+                    } else {
+                        rowList.clear();
+                        colList.clear();
+                        for (int i = 1; i < rows + 1; i++) {
+                            if (i < 10) {
+                                rowList.add("0" + i);
+                            } else {
+                                rowList.add(i + "");
+                            }
+                        }
+                        for (int i = 1; i < cols + 1; i++) {
+                            if (i < 10) {
+                                colList.add("0" + i);
+                            } else {
+                                colList.add(i + "");
+                            }
+                        }
+                        wl_row.setItems(rowList);
+                        wl_row.setSeletion(0);
+
+                        wl_column.setItems(colList);
+                        wl_column.setSeletion(0);
+                        wl_floor.setSeletion(0);
+                        row = wl_row.getSeletedItem();
+                        column = wl_column.getSeletedItem();
+                        ware = wl_ware.getSeletedItem();
+                        floor = wl_floor.getSeletedItem();
                     }
-                    seatView.setData(rows, cols);
-                    initSeatTable(seatRows, seatColums, unSeatRows, unSeatColums, unFullRows, unFullColums);
-                    seatView.setScreenName(name);
-                    seatView.invalidate();
                 }
             }
         }

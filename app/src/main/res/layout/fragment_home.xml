@@ -26,8 +26,8 @@
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/common_dp"
             android:padding="@dimen/common_dp"
-            android:visibility="invisible"
-            android:src="@mipmap/scan" />
+            android:src="@mipmap/scan"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <!--<com.bigkoo.convenientbanner.ConvenientBanner xmlns:app="http://schemas.android.com/apk/res-auto"-->
@@ -159,7 +159,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="盘点量"
+                        android:text="复核量"
                         android:textColor="@color/light_white"
                         android:textSize="@dimen/common_text_size" />
 
@@ -267,8 +267,8 @@
                         style="@style/table_text"
                         android:drawableTop="@mipmap/sign_in"
                         android:text="审核记录"
-                        android:visibility="gone"
-                        android:textSize="?commonTextSize" />
+                        android:textSize="?commonTextSize"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -289,19 +289,19 @@
                 </LinearLayout>
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="@dimen/common_dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:gravity="center"-->
-                    <!--android:orientation="vertical">-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="@dimen/common_dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical">-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tv_task_notification"-->
-                        <!--style="@style/table_text"-->
-                        <!--android:drawableTop="@mipmap/news"-->
-                        <!--android:text="任务通知"-->
-                        <!--android:textSize="?commonTextSize" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/tv_task_notification"-->
+                <!--style="@style/table_text"-->
+                <!--android:drawableTop="@mipmap/news"-->
+                <!--android:text="任务通知"-->
+                <!--android:textSize="?commonTextSize" />-->
                 <!--</LinearLayout>-->
 
                 <LinearLayout
@@ -342,8 +342,7 @@
                     android:layout_margin="@dimen/common_dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
-                </LinearLayout>
+                    android:orientation="vertical"></LinearLayout>
 
             </TableRow>
         </TableLayout>

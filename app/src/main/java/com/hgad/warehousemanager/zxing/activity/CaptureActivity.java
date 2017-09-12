@@ -82,7 +82,6 @@ public class CaptureActivity extends Activity implements Callback {
     private static final int TAKE_PHOTO_REQUEST_CODE = 2;
     private String type;
     private List<WareInfo> data;
-    private int orderId;
     private OrderInfo orderInfo;
 
     @Override
@@ -175,6 +174,7 @@ public class CaptureActivity extends Activity implements Callback {
         inactivityTimer.onActivity();
 //        playBeepSoundAndVibrate();
         String resultString = result.getText();
+        Toast.makeText(this, resultString, Toast.LENGTH_SHORT).show();
         if (resultString.equals("")) {
             Toast.makeText(CaptureActivity.this, "扫描失败!", Toast.LENGTH_SHORT)
                     .show();

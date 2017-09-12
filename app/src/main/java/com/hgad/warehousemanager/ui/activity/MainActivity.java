@@ -1,8 +1,12 @@
 package com.hgad.warehousemanager.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -25,18 +30,22 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.bigkoo.alertview.AlertView;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
+import com.hgad.warehousemanager.constants.HttpConstants;
 import com.hgad.warehousemanager.constants.SPConstants;
-import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.adapter.DrawerAdapter;
 import com.hgad.warehousemanager.ui.fragment.HomeFragment;
 import com.hgad.warehousemanager.ui.fragment.UserFragment;
 import com.hgad.warehousemanager.util.CommonUtils;
+import com.hgad.warehousemanager.util.DownloadUtil;
 import com.hgad.warehousemanager.util.FastBlurUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 
@@ -48,8 +57,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends BaseActivity {
 
+public class MainActivity extends BaseActivity {
+    protected static final int NEED_UPDATE = 0;
+    private static final int DOWN_OK = 1; // 下载完成
+    private static final int DOWN_ERROR = 2;
     private RadioGroup rg;
     private List<Fragment> fragments = new ArrayList<>();
     private Fragment mCurrentFragment = new Fragment();
@@ -60,9 +72,45 @@ public class MainActivity extends BaseActivity {
     private HomeFragment homeFragment;
     private UserFragment userFragment;
     private Bitmap roundBitmap;
-    private Handler handler = new Handler();
     private ImageView iv_user_icon;
     private Uri uri;
+    private NotificationManager notificationManager;
+    private Notification notification;
+    private RemoteViews contentView;
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case NEED_UPDATE:
+                    // 提醒用户是否更新
+                    String url = (String) msg.obj;
+                    String fileUrl = getFileName(url);
+                    verifyStoragePermissions(MainActivity.this);
+                    showUpdateDialog(fileUrl);
+                    break;
+                case DOWN_OK:
+                    // 下载完成，点击安装
+                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
+//                    notification.setLatestEventInfo(FragmentTabActivity.this, getString(R.string.app_name), "下载完成", pendingIntent);
+                    contentView.setTextViewText(R.id.notificationTitle, "下载完成");
+                    notificationManager.notify(notification_id, notification);
+                    notificationManager.cancel(notification_id);
+                    installApk(destFile);
+//                    stopService(updateIntent);
+                    break;
+                case DOWN_ERROR:
+//                    notification.setLatestEventInfo(FragmentTabActivity.this, getString(R.string.app_name), "下载失败", pendingIntent);
+                    contentView.setTextViewText(R.id.notificationTitle, "下载失败");
+                    break;
+                default:
+//                    stopService(updateIntent);
+                    break;
+            }
+        }
+
+        ;
+    };
+    private File destFile;
+    private String ip;
 
     @Override
     protected void setContentView() {
@@ -100,6 +148,8 @@ public class MainActivity extends BaseActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.touxiang);
         roundBitmap = FastBlurUtils.toRoundBitmap(bitmap);
         iv_user_icon.setImageBitmap(roundBitmap);
+        ip = SPUtils.getString(this, SPConstants.IP);
+        checkVersion();
     }
 
     @Override
@@ -145,11 +195,9 @@ public class MainActivity extends BaseActivity {
             public void onDrawerStateChanged(int newState) {
             }
         });
-        iv_user_icon = (ImageView)findViewById(R.id.iv_user_icon);
+        iv_user_icon = (ImageView) findViewById(R.id.iv_user_icon);
         iv_user_icon.setOnClickListener(this);
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
         DrawerAdapter drawerAdapter = new DrawerAdapter(this);
         drawerAdapter.setOnItemClickListener(new OnItemClickListener());
         drawerAdapter.setHeadClickListener(new DrawerAdapter.OnHeadClickListener() {
@@ -312,37 +360,190 @@ public class MainActivity extends BaseActivity {
         drawer.openDrawer(GravityCompat.START);
     }
 
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.nav_camera:
-//            case R.id.nav_gallery:
-//            case R.id.nav_tools:
-//            case R.id.nav_favorites:
-//            case R.id.nav_setting:
-//            case R.id.nav_air:
-////                go();
-//                break;
-//        }
-//        return true;
-//    }
 
     private void go() {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
 
+    private int notification_id = 1;
+
+    public void createNotification() {
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notification = new Notification();
+        notification.icon = R.mipmap.ic_launcher;
+//        // 这个参数是通知提示闪出来的值.
+        notification.tickerText = "开始下载";
+        // pendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
+
+        // 这里面的参数是通知栏view显示的内容
+//        notification.setLatestEventInfo(this, R.string.app_name, "下载：0%", pendingIntent);
+        // notificationManager.notify(notification_id, notification);
+
+        /***
+         * 在这里我们用自定的view来显示Notification
+         */
+        contentView = new RemoteViews(getPackageName(), R.layout.notification_item);
+        contentView.setTextViewText(R.id.notificationTitle, "正在下载");
+        contentView.setTextViewText(R.id.notificationPercent, "0%");
+        contentView.setProgressBar(R.id.notificationProgress, 100, 0, false);
+        notification.contentView = contentView;
+
+//        updateIntent = new Intent(this,LoginActivity.class);
+//        updateIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        pendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
+
+//        notification.contentIntent = pendingIntent;
+        notificationManager.notify(notification_id, notification);
+    }
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     /**
-     * 菜单、返回键响应
+     * Checks if the app has permission to write to device storage
+     * <p/>
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
      */
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            exitBy2Click();      //调用双击退出函数
-//        }
-//        return false;
-//    }
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+            CommonUtils.showToast(activity, "请允许权限进行更新下载");
+        }
+
+    }
+
+    private void checkVersion() {
+        String versionName = getVersionName();
+        String url = "";
+        String version = "v1.1.0";
+        if (!version.equalsIgnoreCase(versionName)) {
+            Message message = handler.obtainMessage();
+            message.obj = url;
+            message.what = NEED_UPDATE;
+            handler.sendMessage(message);
+        }
+    }
+
+    /**
+     * 获取版本号
+     *
+     * @return
+     */
+    private String getVersionName() {
+        // PackageManager
+        PackageManager pm = getPackageManager();
+        // PackageInfo
+        try {
+            // flags 代表可以获取的包信息的内容 传0即可 因为任何Flag都可以获取版本号
+            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    private void showUpdateDialog(final String url) {
+        new AlertView("更新信息", "已发布最新版本，建议立即更新使用", "暂不更新", new String[]{"开始更新"}, null, this, AlertView.Style.Alert, new com.bigkoo.alertview.OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                switch (position) {
+                    case 0:
+                        // SD卡  内部存储
+                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                            //SD卡存在
+                            destFile = new File(Environment.getExternalStorageDirectory(), url);
+                            while (destFile.exists()) {
+                                destFile = new File(Environment.getExternalStorageDirectory(), "（1）" + url);
+                            }
+                        } else {
+                            //SD卡不存在
+                            destFile = new File(getFilesDir(), url);
+                            int i = 1;
+                            while (destFile.exists()) {
+                                destFile = new File(getFilesDir(), "（" + i + "）" + url);
+                                i++;
+                            }
+                        }
+                        downLoadAPk(url, destFile);
+                        break;
+                }
+            }
+        }).setCancelable(false).show();
+    }
+
+    private void downLoadAPk(final String url, final File destFile) {
+        createNotification();
+        DownloadUtil.get().download(HttpConstants.APKFormatUrl(ip) + url, destFile.getPath(), new DownloadUtil.OnDownloadListener() {
+            @Override
+            public void onDownloadSuccess() {
+                Message message = handler.obtainMessage();
+                message.what = DOWN_OK;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onDownloading(int progress) {
+//                double x_double = progress * 1.0;
+//                double tempresult = x_double / total;
+//                DecimalFormat df1 = new DecimalFormat("0.00"); // ##.00%
+//                // 百分比格式，后面不足2位的用0补齐
+//                String result = df1.format(tempresult);
+                contentView.setTextViewText(R.id.notificationPercent, progress + "%");
+                contentView.setProgressBar(R.id.notificationProgress, 100, progress, false);
+                notificationManager.notify(notification_id, notification);
+            }
+
+            @Override
+            public void onDownloadFailed() {
+                Message message = handler.obtainMessage();
+                message.what = DOWN_ERROR;
+                handler.sendMessage(message);
+            }
+        });
+
+    }
+
+    /**
+     * 安装apk的方法
+     *
+     * @param apkFile
+     */
+    public void installApk(File apkFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        //Uri.parse("file://"+apkFile.getAbsolutePath()) 以前的写法
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+        //启动系统中的安装界面Activity  获取结果
+        startActivityForResult(intent, 250);
+    }
+
+    /**
+     * 根据URL切割文件名
+     *
+     * @param url
+     * @return
+     */
+    protected String getFileName(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
 
     /**
      * 双击退出函数

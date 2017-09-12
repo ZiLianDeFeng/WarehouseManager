@@ -47,7 +47,6 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/common_dp"
-                        android:text="HIC10092785"
                         android:textSize="@dimen/common_text_size" />
 
                 </LinearLayout>
@@ -78,7 +77,6 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/common_dp"
-                        android:text="0.600*1340*C"
                         android:textSize="@dimen/common_text_size" />
 
                 </LinearLayout>
@@ -109,7 +107,6 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/common_dp"
-                        android:text="8550kg"
                         android:textSize="@dimen/common_text_size" />
 
                 </LinearLayout>

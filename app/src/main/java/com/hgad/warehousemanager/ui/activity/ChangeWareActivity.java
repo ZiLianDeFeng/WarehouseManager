@@ -7,9 +7,9 @@ import android.view.View;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.constants.Constants;
-import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
-import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
+import com.hgad.warehousemanager.net.BaseResponse;
+import com.hgad.warehousemanager.zxing.activity.ScannerActivity;
 
 /**
  * Created by Administrator on 2017/6/29.
@@ -65,8 +65,7 @@ public class ChangeWareActivity extends BaseActivity{
     }
 
     private void go2Scan() {
-        Intent intent = new Intent(this, CaptureActivity.class);
-        intent.putExtra(Constants.TYPE,Constants.CHANGE_WARE);
+        Intent intent = new Intent(this, ScannerActivity.class);
         intent.putExtra(Constants.TYPE,Constants.CHANGE_WARE);
         startActivityForResult(intent, SCAN);
     }

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.hgad.warehousemanager.bean.response.InWareListResponse;
 import com.hgad.warehousemanager.bean.response.ProductListResponse;
+import com.hgad.warehousemanager.bean.response.SearchResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
 
 import java.io.Serializable;
@@ -23,6 +24,8 @@ public class WareInfo implements Serializable {
     private String proName;
     private String orderItem;
     private String steelGrade;
+    private String outPlateNumber;
+    private String curOutNunber;
 
     public WareInfo() {
     }
@@ -47,6 +50,7 @@ public class WareInfo implements Serializable {
         this.netWeight = entity.getNetWgt();
         this.proName = entity.getProName();
         this.spec = entity.getSpecification();
+        this.outPlateNumber = entity.getOutPlateNumber();
     }
 
     public void setData(WareInfoResponse.DataEntity entity) {
@@ -75,6 +79,35 @@ public class WareInfo implements Serializable {
         this.spec = listEntity.getSpecification();
         this.orderItem =listEntity.getOrderItem();
         this.steelGrade = listEntity.getSteelGrade();
+    }
+
+    public void setData(SearchResponse.DataEntity.ListEntity listEntity) {
+        this.id = listEntity.getId();
+        this.markNum = listEntity.getIdentification();
+        this.address = listEntity.getPositionCode();
+        this.proName = listEntity.getProName();
+        this.netWeight = listEntity.getNetWgt();
+        this.orderNum = listEntity.getOrderNo();
+        this.state = listEntity.getStatus();
+        this.spec = listEntity.getSpecification();
+        this.orderItem =listEntity.getOrderItem();
+        this.steelGrade = listEntity.getSteelGrade();
+    }
+
+    public String getCurOutNunber() {
+        return curOutNunber;
+    }
+
+    public void setCurOutNunber(String curOutNunber) {
+        this.curOutNunber = curOutNunber;
+    }
+
+    public String getOutPlateNumber() {
+        return outPlateNumber;
+    }
+
+    public void setOutPlateNumber(String outPlateNumber) {
+        this.outPlateNumber = outPlateNumber;
     }
 
     public String getSteelGrade() {
@@ -165,6 +198,7 @@ public class WareInfo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
 
 
 }

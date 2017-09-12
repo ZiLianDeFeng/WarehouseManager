@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -27,7 +26,7 @@ import com.hgad.warehousemanager.ui.adapter.OrderAdapter;
 import com.hgad.warehousemanager.ui.fragment.OutWareFragment;
 import com.hgad.warehousemanager.ui.fragment.ReviewFragment;
 import com.hgad.warehousemanager.util.CommonUtils;
-import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
+import com.hgad.warehousemanager.zxing.activity.ScannerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,10 +80,10 @@ public class OutWareActivity extends BaseActivity {
 //        reviewFragment = new ReviewFragment();
         et_order_num = (EditText) findViewById(R.id.et_order_num);
         findViewById(R.id.btn_find).setOnClickListener(this);
-        TextView tv_review = (TextView) findViewById(R.id.btn_confirm);
-        tv_review.setText("复核");
-        tv_review.setOnClickListener(this);
-        tv_review.setVisibility(View.VISIBLE);
+//        TextView tv_review = (TextView) findViewById(R.id.btn_confirm);
+//        tv_review.setText("复核");
+//        tv_review.setOnClickListener(this);
+//        tv_review.setVisibility(View.VISIBLE);
     }
 
     //    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener() {
@@ -179,9 +178,9 @@ public class OutWareActivity extends BaseActivity {
             case R.id.ll_in_scan:
                 go2Scan();
                 break;
-            case R.id.btn_confirm:
-                go2Review();
-                break;
+//            case R.id.btn_confirm:
+//                go2Review();
+//                break;
         }
     }
 
@@ -197,7 +196,7 @@ public class OutWareActivity extends BaseActivity {
 
     private void go2Scan() {
         morePopupWindow.dismiss();
-        Intent intent = new Intent(this, CaptureActivity.class);
+        Intent intent = new Intent(this, ScannerActivity.class);
         startActivityForResult(intent, SCAN);
     }
 
@@ -210,10 +209,10 @@ public class OutWareActivity extends BaseActivity {
 
     private void search() {
         String orderNum = et_order_num.getText().toString().trim();
-        if (TextUtils.isEmpty(orderNum)) {
-            CommonUtils.showToast(this, "未输入订单号哦！");
-            return;
-        }
+//        if (TextUtils.isEmpty(orderNum)) {
+//            CommonUtils.showToast(this, "未输入订单号哦！");
+//            return;
+//        }
 //        if (rb_out_ware.isChecked()) {
         outWareFragment.search(orderNum);
 //        } else {

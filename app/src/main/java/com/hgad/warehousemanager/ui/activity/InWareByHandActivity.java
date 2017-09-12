@@ -70,7 +70,7 @@ public class InWareByHandActivity extends BaseActivity {
     private TextView tv_ware_name;
     String[] wareNums = new String[6];
     String[] rows = new String[15];
-    String[] columns = new String[99];
+    String[] columns = new String[17];
     String[] floors = new String[27];
     private boolean isConnect;
     private String markNum;
@@ -79,6 +79,8 @@ public class InWareByHandActivity extends BaseActivity {
     private String model;
     private int orderId;
     private OrderInfo orderInfo;
+    private String curAddress;
+    private String proName;
 
     @Override
     protected void setContentView() {
@@ -94,6 +96,7 @@ public class InWareByHandActivity extends BaseActivity {
         type = intent.getStringExtra(Constants.TYPE);
         data = (List<WareInfo>) intent.getSerializableExtra(Constants.LIST_DATA);
         orderInfo = (OrderInfo) intent.getSerializableExtra(Constants.ORDER_INFO);
+        curAddress = intent.getStringExtra(Constants.ADDRESS);
         if (orderInfo != null) {
             orderNum = orderInfo.getOrderNum();
             orderId = orderInfo.getTaskId();
@@ -124,7 +127,7 @@ public class InWareByHandActivity extends BaseActivity {
                 rows[i] = i + 1 + "";
             }
         }
-        for (int i = 0; i < 99; i++) {
+        for (int i = 0; i < 17; i++) {
             if (i < 9) {
                 columns[i] = "0" + (i + 1);
             } else {
@@ -200,32 +203,46 @@ public class InWareByHandActivity extends BaseActivity {
                         markNum = wareInfo.getMarkNum();
                         id = wareInfo.getId();
                         tv_markNum.setText(markNum);
-                        tv_ware_name.setText(wareInfo.getProName());
+                        proName = wareInfo.getProName();
+                        tv_ware_name.setText(proName);
+                        if (type.equals(Constants.IN_WARE)) {
+                            tv_addressWare.setOnClickListener(null);
+                            btn_commit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    CommonUtils.showToast(InWareByHandActivity.this, "该货品已入库，无法再次入库");
+                                }
+                            });
+                        }
+                        if (type.equals(Constants.CHECK)) {
+                            tv_addressWare.setOnClickListener(null);
+                        }
                         if (!TextUtils.isEmpty(entity.getPositionCode().trim())) {
                             address = wareInfo.getAddress();
-                            address = CommonUtils.formatAddress(this.address);
-                            CommonUtils.stringInterceptionChangeLarge(tv_addressWare, address, "仓", "排", "垛", "号");
-                            if (type.equals(Constants.IN_WARE)) {
-                                tv_addressWare.setOnClickListener(null);
-                                btn_commit.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        CommonUtils.showToast(InWareByHandActivity.this, "该货品已入库，无法再次入库");
-                                    }
-                                });
-                            } else if (type.equals(Constants.OUT_WARE)) {
+                            String addressStr = CommonUtils.formatAddress(address);
+                            CommonUtils.stringInterceptionChangeLarge(tv_addressWare, addressStr, "仓", "排", "垛", "号");
+//                            if (type.equals(Constants.IN_WARE)) {
+//                                tv_addressWare.setOnClickListener(null);
+//                                btn_commit.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        CommonUtils.showToast(InWareByHandActivity.this, "该货品已入库，无法再次入库");
+//                                    }
+//                                });
+//                            } else
+                            if (type.equals(Constants.OUT_WARE)) {
                                 tv_addressWare.setOnClickListener(null);
                             }
                         } else {
-                            if (type.equals(Constants.OUT_WARE)) {
+                            if (type.equals(Constants.OUT_WARE) || type.equals(Constants.IN_WARE) || type.equals(Constants.CHECK)) {
                                 tv_addressWare.setText("无");
                                 tv_addressWare.setOnClickListener(null);
-                                btn_commit.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        CommonUtils.showToast(InWareByHandActivity.this, "该货品已出库，无法再次出库");
-                                    }
-                                });
+//                                btn_commit.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        CommonUtils.showToast(InWareByHandActivity.this, "该货品已出库，无法再次出库");
+//                                    }
+//                                });
                             } else if (type.equals(Constants.CHANGE_WARE)) {
                                 tv_addressWare.setText("无");
                                 tv_addressWare.setOnClickListener(null);
@@ -250,15 +267,15 @@ public class InWareByHandActivity extends BaseActivity {
             if (outWareResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(InWareByHandActivity.this, outWareResponse.getErrorMsg());
                 if ("请求成功".equals(outWareResponse.getErrorMsg())) {
-                    if (isLast) {
-                        ForUpRequest forUpRequest = new ForUpRequest(orderId, "2");
-                        sendRequest(forUpRequest, ForUpResponse.class);
-                        isLast = false;
-                    } else {
-                        Intent intent = new Intent(Constants.REFRESH);
-                        sendBroadcast(intent);
-                        finish();
-                    }
+//                    if (isLast) {
+//                        ForUpRequest forUpRequest = new ForUpRequest(orderId, "2",null);
+//                        sendRequest(forUpRequest, ForUpResponse.class);
+//                        isLast = false;
+//                    } else {
+                    Intent intent = new Intent(Constants.REFRESH);
+                    sendBroadcast(intent);
+                    finish();
+//                    }
                 }
             }
         } else if (request instanceof ForUpRequest) {
@@ -283,6 +300,15 @@ public class InWareByHandActivity extends BaseActivity {
                             }
                         }).setCancelable(false).show();
                     }
+                }
+            }
+        } else if (request instanceof CheckRequest) {
+            CheckResponse checkResponse = (CheckResponse) response;
+            if (checkResponse.getResponseCode().getCode() == 200) {
+                CommonUtils.showToast(this, checkResponse.getErrorMsg());
+                if ("请求成功".equals(checkResponse.getErrorMsg())) {
+                    setResult(Constants.RESULT_OK);
+                    finish();
                 }
             }
         }
@@ -319,8 +345,8 @@ public class InWareByHandActivity extends BaseActivity {
 
     private void search() {
         String markNum = et_markNum.getText().toString().trim();
-        if (TextUtils.isEmpty(markNum)){
-            CommonUtils.showToast(this,"还未填写标签号");
+        if (TextUtils.isEmpty(markNum)) {
+            CommonUtils.showToast(this, "还未填写标签号");
             return;
         }
         boolean checkNetWork = CommonUtils.checkNetWork(this);
@@ -332,10 +358,6 @@ public class InWareByHandActivity extends BaseActivity {
             CommonUtils.showToast(this, getString(R.string.check_net));
         }
     }
-
-//    private void changeChoose() {
-//        bottonPopupWindowView.change();
-//    }
 
     private void commit() {
         if (Constants.OUT_WARE.equals(type)) {
@@ -382,7 +404,7 @@ public class InWareByHandActivity extends BaseActivity {
                     isLast = true;
                 }
                 showDialog(getString(R.string.commit_data));
-                OutWareRequest outWareRequest = new OutWareRequest(markNum, username, orderNum + "", address, model, "1");
+                OutWareRequest outWareRequest = new OutWareRequest(markNum, username, orderNum + "", address, model, CommonUtils.getCurrentTime().substring(0, 10));
                 sendRequest(outWareRequest, OutWareResponse.class);
             } else {
                 CommonUtils.showToast(this, "该货品不在该次任务中，请重新扫描！");
@@ -415,7 +437,7 @@ public class InWareByHandActivity extends BaseActivity {
                     isLast = true;
                 }
                 showDialog(getString(R.string.commit_data));
-                OutWareRequest outWareRequest = new OutWareRequest(markNum, username, orderNum, address, model, "0");
+                OutWareRequest outWareRequest = new OutWareRequest(markNum, username, orderNum, address, model, CommonUtils.getCurrentTime().substring(0, 10));
                 sendRequest(outWareRequest, OutWareResponse.class);
             } else {
                 CommonUtils.showToast(this, "该货品不在该次任务中，请重新扫描！");
@@ -426,19 +448,20 @@ public class InWareByHandActivity extends BaseActivity {
     }
 
     private void checkCommit() {
-        CheckRequest checkRequest = new CheckRequest();
-        sendRequest(checkRequest, CheckResponse.class);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (customProgressDialog != null) {
+        showDialog(getString(R.string.commit_data));
+        if (!curAddress.equals(address)) {
+            CheckRequest checkRequest = new CheckRequest(markNum, proName, address, curAddress);
+            sendRequest(checkRequest, CheckResponse.class);
+        } else {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     customProgressDialog.dismiss();
+                    setResult(Constants.RESULT_OK);
+                    finish();
                 }
-                CommonUtils.showToast(InWareByHandActivity.this, "信息正确");
-                finish();
-            }
-        }, 2000);
-        showDialog(getString(R.string.info_check));
+            }, 1000);
+        }
     }
 
     private void inCommit() {
@@ -511,7 +534,7 @@ public class InWareByHandActivity extends BaseActivity {
 
     private void chooseAddress() {
         bottonPopupWindowView = new BottonPopupWindowView(ware, floor, getString(R.string.choose_address), type);
-        bottonPopupWindow = bottonPopupWindowView.creat(this, wareNums, rows, columns, floors, this);
+        bottonPopupWindow = bottonPopupWindowView.creat(this, wareNums, floors, this);
         bottonPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

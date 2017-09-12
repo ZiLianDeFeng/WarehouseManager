@@ -163,7 +163,7 @@ public class SeatTable extends View {
     /**
      * 概览图的比例
      */
-    float overviewScale = 10f;
+    float overviewScale = 4.8f;
 
     /**
      * 荧幕高度
@@ -423,10 +423,12 @@ public class SeatTable extends View {
 
         if (lineNumbers == null) {
             lineNumbers = new ArrayList<>();
-        } else if (lineNumbers.size() <= 0) {
+        } else {
+            lineNumbers.clear();
             for (int i = 0; i < row; i++) {
                 lineNumbers.add((i + 1) + "");
             }
+            columnNumbers.clear();
             for (int i = 0; i < column; i++) {
                 columnNumbers.add(i + 1 + "");
             }
@@ -1180,7 +1182,9 @@ public class SeatTable extends View {
     public void setData(int row, int column) {
         this.row = row;
         this.column = column;
+        isDrawOverviewBitmap = true;
         init();
+        autoScroll();
         invalidate();
     }
 

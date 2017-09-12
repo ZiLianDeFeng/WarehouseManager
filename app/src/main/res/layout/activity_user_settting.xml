@@ -17,6 +17,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_user_detail"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:background="@color/dark"
@@ -173,7 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="货品移位量"
+                        android:text="货品复核量"
                         android:textSize="@dimen/common_text_size" />
 
                 </LinearLayout>

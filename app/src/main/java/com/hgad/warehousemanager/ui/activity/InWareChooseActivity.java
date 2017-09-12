@@ -36,7 +36,7 @@ import com.hgad.warehousemanager.ui.adapter.ProductAdapter;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.view.CustomProgressDialog;
-import com.hgad.warehousemanager.zxing.activity.CaptureActivity;
+import com.hgad.warehousemanager.zxing.activity.ScannerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,7 @@ public class InWareChooseActivity extends BaseActivity {
     private List<WareInfo> data = new ArrayList<>();
     private ProductAdapter productAdapter;
     private EditText et_markNum;
-    private int currentPage = 0;
+    private int currentPage = 1;
     private String type = Constants.IN_TYPE;
     private int userId;
     private boolean isConnect = false;
@@ -248,7 +248,7 @@ public class InWareChooseActivity extends BaseActivity {
         if (isNetWork) {
             isRefresh = true;
             isConnect = false;
-            currentPage = 0;
+            currentPage = 1;
             InWareListRequest inWareListRequest = new InWareListRequest(currentPage);
             sendRequest(inWareListRequest, InWareListResponse.class);
             currentPage--;
@@ -276,7 +276,7 @@ public class InWareChooseActivity extends BaseActivity {
             InWareListResponse inWareListResponse = (InWareListResponse) response;
             if (inWareListResponse.getData() != null) {
                 currentPage++;
-                if (currentPage == 0) {
+                if (currentPage == 1) {
                     if (data != null) {
                         data.clear();
                     }
@@ -377,7 +377,7 @@ public class InWareChooseActivity extends BaseActivity {
 
     private void go2Scan() {
 //        morePopupWindow.dismiss();
-        Intent intent = new Intent(this, CaptureActivity.class);
+        Intent intent = new Intent(this, ScannerActivity.class);
         intent.putExtra(Constants.TYPE, Constants.IN_WARE);
         startActivityForResult(intent, SCAN);
     }
@@ -405,7 +405,6 @@ public class InWareChooseActivity extends BaseActivity {
         customProgressDialog.setCancelable(false);
         customProgressDialog.setCanceledOnTouchOutside(false);
         customProgressDialog.show();
-//        customProgressDialog.setContent(content);
         isConnect = false;
         handler.postDelayed(new Runnable() {
             @Override
