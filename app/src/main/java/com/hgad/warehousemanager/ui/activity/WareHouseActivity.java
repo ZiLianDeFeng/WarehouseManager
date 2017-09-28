@@ -27,7 +27,7 @@ public class WareHouseActivity extends BaseActivity {
 
     private SeatTable seatView;
     private WareInfo wareInfo;
-//    private TextView tv_confirm;
+    //    private TextView tv_confirm;
     private CustomProgressDialog customProgressDialog;
     private Handler handler = new Handler();
     private String type;
@@ -110,7 +110,7 @@ public class WareHouseActivity extends BaseActivity {
             final int[] checkColumns = new int[]{1, 2, 1, 2, 1, 2};
             initHeader("盘点统计");
 //            tv_confirm.setVisibility(View.INVISIBLE);
-            seatView.setData(15,15);
+            seatView.setData(15, 15);
             seatView.setScreenName("");
             seatView.setMaxSelected(0);
             seatView.setType(Constants.CHECK_RECORD);
@@ -177,7 +177,7 @@ public class WareHouseActivity extends BaseActivity {
         if (request instanceof WareHouseRequest) {
             WareHouseResponse wareHouseResponse = (WareHouseResponse) response;
             if (wareHouseResponse.getResponseCode().getCode() == 200) {
-                if (wareHouseResponse.getErrorMsg().equals("请求成功")) {
+                if (Constants.REQUEST_SUCCESS.equals(wareHouseResponse.getErrorMsg())) {
                     WareHouseResponse.DataEntity dataEntity = wareHouseResponse.getData().get(0);
                     int rows = dataEntity.getRows();
                     int cols = dataEntity.getCols();

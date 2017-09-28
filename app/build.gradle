@@ -42,7 +42,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile files('libs/ormlite-core-5.0.jar')
-//    compile files('libs/zxing.jar')
+    //    compile files('libs/zxing.jar')
     compile 'com.github.lazylibrary:lazylibrary:1.0.2'
     compile 'com.android.support:design:23.1.1'
     compile 'com.bigkoo:convenientbanner:2.0.5'
@@ -54,9 +54,10 @@ dependencies {
     compile 'com.bigkoo:alertview:1.0.3'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:support-v4:23.+'
-    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.google.zxing:core:3.2.1'
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
+    compile files('libs/TTS_library_stub_3.0_market.jar')
 }

@@ -15,4 +15,6 @@ public class SPConstants {
     public static final String TEXT_SIZE = "textSize";
     public static final String NOT_FRIST = "notFirst";
     public static final String VERSION_CODE = "versionCode";
+    public static final String PLAY_MUSIC = "playMusic";
+    public static final String VIBRATOR = "vibrator";
 }

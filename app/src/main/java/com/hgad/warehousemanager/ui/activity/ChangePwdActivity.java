@@ -8,6 +8,9 @@ import android.widget.EditText;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
+import com.hgad.warehousemanager.bean.request.ChangePwdRequest;
+import com.hgad.warehousemanager.bean.response.ChangePwdResponse;
+import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.SPConstants;
 import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
@@ -22,6 +25,7 @@ public class ChangePwdActivity extends BaseActivity {
     private EditText et_old_pwd;
     private EditText et_new_pwd;
     private EditText et_confirm_pwd;
+    private String userName;
 
     @Override
     protected void setContentView() {
@@ -31,6 +35,7 @@ public class ChangePwdActivity extends BaseActivity {
     @Override
     protected void initData() {
         initHeader("修改密码");
+        userName = SPUtils.getString(this, SPConstants.USER_NAME);
     }
 
     @Override
@@ -43,7 +48,21 @@ public class ChangePwdActivity extends BaseActivity {
 
     @Override
     public void onSuccessResult(BaseRequest request, BaseResponse response) {
+        if (request instanceof ChangePwdRequest) {
+            ChangePwdResponse changePwdResponse = (ChangePwdResponse) response;
+            if (changePwdResponse.getResponseCode().getCode() == 200) {
+                if (Constants.REQUEST_SUCCESS.equals(changePwdResponse.getErrorMsg())) {
+                    CommonUtils.showToast(this, "修改成功，请重新登录");
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    SPUtils.put(this, SPConstants.LOGIN_SUCCESS, false);
+                    BaseApplication.getApplication().exit();
+                } else {
+                    CommonUtils.showToast(this, changePwdResponse.getErrorMsg());
+                }
+            }
 
+        }
     }
 
     @Override
@@ -56,7 +75,8 @@ public class ChangePwdActivity extends BaseActivity {
     }
 
     private void commitChangePwd() {
-        if (TextUtils.isEmpty(et_old_pwd.getText().toString().trim())) {
+        String oldPwd = et_old_pwd.getText().toString().trim();
+        if (TextUtils.isEmpty(oldPwd)) {
             CommonUtils.showToast(this, "原密码不能为空");
             return;
         }
@@ -70,14 +90,15 @@ public class ChangePwdActivity extends BaseActivity {
             CommonUtils.showToast(this, "确认密码不能为空");
             return;
         }
-        if (!newPwd.equals(confirmPwd)){
-            CommonUtils.showToast(this,"确认密码与新密码不一致");
+        if (!oldPwd.equals(newPwd)) {
+            CommonUtils.showToast(this, "新密码与原密码不能相同，请重新填写新密码");
             return;
         }
-        CommonUtils.showToast(this, "修改成功，请重新登录");
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        SPUtils.put(this, SPConstants.LOGIN_SUCCESS, false);
-        BaseApplication.getApplication().exit();
+        if (!newPwd.equals(confirmPwd)) {
+            CommonUtils.showToast(this, "确认密码与新密码不一致");
+            return;
+        }
+        ChangePwdRequest changePwdRequest = new ChangePwdRequest(userName, oldPwd, newPwd);
+        sendRequest(changePwdRequest, ChangePwdResponse.class);
     }
 }

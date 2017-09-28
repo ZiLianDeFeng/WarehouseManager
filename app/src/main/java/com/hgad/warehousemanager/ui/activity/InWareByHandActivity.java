@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -47,6 +48,7 @@ import java.util.List;
  */
 public class InWareByHandActivity extends BaseActivity {
 
+    private static final int FINISH = 100;
     private EditText et_markNum;
     private BottonPopupWindowView bottonPopupWindowView;
     private PopupWindow bottonPopupWindow;
@@ -60,7 +62,6 @@ public class InWareByHandActivity extends BaseActivity {
     private String type;
     private LinearLayout ll_address;
     private CustomProgressDialog customProgressDialog;
-    private Handler handler = new Handler();
     private String username;
     private List<WareInfo> data;
     private boolean isLast;
@@ -81,6 +82,19 @@ public class InWareByHandActivity extends BaseActivity {
     private OrderInfo orderInfo;
     private String curAddress;
     private String proName;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case FINISH:
+                    Intent intent = new Intent(type);
+                    intent.putExtra(Constants.TYPE, type);
+                    sendBroadcast(intent);
+                    finish();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void setContentView() {
@@ -104,7 +118,7 @@ public class InWareByHandActivity extends BaseActivity {
         if (Constants.CHANGE_WARE.equals(type)) {
             initHeader("移位-手动移位");
         } else if (Constants.IN_WARE.equals(type)) {
-            initHeader("入库-手动添加");
+            initHeader("入库-手动入库");
         } else if (Constants.CHECK.equals(type)) {
             initHeader("盘点-手动盘点");
 //            ll_address.setVisibility(View.GONE);
@@ -177,23 +191,22 @@ public class InWareByHandActivity extends BaseActivity {
             InWareResponse inWareResponse = (InWareResponse) response;
             if (inWareResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(InWareByHandActivity.this, inWareResponse.getErrorMsg());
-                if ("请求成功".equals(inWareResponse.getErrorMsg())) {
-                    setResult(Constants.RESULT_OK);
-                    finish();
+                if (Constants.REQUEST_SUCCESS.equals(inWareResponse.getErrorMsg())) {
+                    handler.sendEmptyMessage(FINISH);
                 }
             }
         } else if (request instanceof ChangeWareRequest) {
             ChangeWareResponse changeWareResponse = (ChangeWareResponse) response;
             if (changeWareResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(InWareByHandActivity.this, changeWareResponse.getErrorMsg());
-                if ("请求成功".equals(changeWareResponse.getErrorMsg())) {
-                    finish();
+                if (Constants.REQUEST_SUCCESS.equals(changeWareResponse.getErrorMsg())) {
+                    handler.sendEmptyMessage(FINISH);
                 }
             }
         } else if (request instanceof WareInfoRequest) {
             WareInfoResponse wareInfoResponse = (WareInfoResponse) response;
             if (wareInfoResponse.getResponseCode().getCode() == 200) {
-                if ("请求成功".equals(wareInfoResponse.getErrorMsg())) {
+                if (Constants.REQUEST_SUCCESS.equals(wareInfoResponse.getErrorMsg())) {
                     WareInfoResponse.DataEntity entity = wareInfoResponse.getData();
                     if (entity != null) {
                         WareInfo wareInfo = new WareInfo();
@@ -210,7 +223,7 @@ public class InWareByHandActivity extends BaseActivity {
                             btn_commit.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    CommonUtils.showToast(InWareByHandActivity.this, "该货品已入库，无法再次入库");
+                                    CommonUtils.showToast(InWareByHandActivity.this, "该货品已入过库，无法再次入库");
                                 }
                             });
                         }
@@ -258,7 +271,7 @@ public class InWareByHandActivity extends BaseActivity {
                             }
                         }
                     } else {
-                        CommonUtils.showToast(this, "服务器中查询不到该货品");
+                        CommonUtils.showToast(this, wareInfoResponse.getErrorMsg());
                     }
                 }
             }
@@ -266,7 +279,7 @@ public class InWareByHandActivity extends BaseActivity {
             OutWareResponse outWareResponse = (OutWareResponse) response;
             if (outWareResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(InWareByHandActivity.this, outWareResponse.getErrorMsg());
-                if ("请求成功".equals(outWareResponse.getErrorMsg())) {
+                if (Constants.REQUEST_SUCCESS.equals(outWareResponse.getErrorMsg())) {
 //                    if (isLast) {
 //                        ForUpRequest forUpRequest = new ForUpRequest(orderId, "2",null);
 //                        sendRequest(forUpRequest, ForUpResponse.class);
@@ -274,7 +287,7 @@ public class InWareByHandActivity extends BaseActivity {
 //                    } else {
                     Intent intent = new Intent(Constants.REFRESH);
                     sendBroadcast(intent);
-                    finish();
+                    handler.sendEmptyMessage(FINISH);
 //                    }
                 }
             }
@@ -282,33 +295,30 @@ public class InWareByHandActivity extends BaseActivity {
             ForUpResponse forUpResponse = (ForUpResponse) response;
             if (forUpResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(InWareByHandActivity.this, forUpResponse.getErrorMsg());
-                if ("请求成功".equals(forUpResponse.getErrorMsg())) {
-                    CommonUtils.showToast(InWareByHandActivity.this, forUpResponse.getErrorMsg());
-                    if ("请求成功".equals(forUpResponse.getErrorMsg())) {
-                        new AlertView("提示", "所有货品已扫描完毕，订单将进入复核状态，请货品上车后进行复核", null, new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Object o, int position) {
-                                switch (position) {
-                                    case 0:
-                                        Intent intent = new Intent(Constants.REFRESH);
-                                        sendBroadcast(intent);
-                                        Intent orderIntent = new Intent(Constants.ORDER_REFRESH);
-                                        sendBroadcast(orderIntent);
-                                        finish();
-                                        break;
-                                }
+                if (Constants.REQUEST_SUCCESS.equals(forUpResponse.getErrorMsg())) {
+                    new AlertView("提示", "所有货品已扫描完毕，订单将进入复核状态，请货品上车后进行复核", null, new String[]{"确认"}, null, this, AlertView.Style.Alert, new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            switch (position) {
+                                case 0:
+                                    Intent intent = new Intent(Constants.REFRESH);
+                                    sendBroadcast(intent);
+                                    Intent orderIntent = new Intent(Constants.ORDER_REFRESH);
+                                    sendBroadcast(orderIntent);
+                                    finish();
+                                    break;
                             }
-                        }).setCancelable(false).show();
-                    }
+                        }
+                    }).setCancelable(false).show();
                 }
             }
         } else if (request instanceof CheckRequest) {
             CheckResponse checkResponse = (CheckResponse) response;
             if (checkResponse.getResponseCode().getCode() == 200) {
                 CommonUtils.showToast(this, checkResponse.getErrorMsg());
-                if ("请求成功".equals(checkResponse.getErrorMsg())) {
+                if (Constants.REQUEST_SUCCESS.equals(checkResponse.getErrorMsg())) {
                     setResult(Constants.RESULT_OK);
-                    finish();
+                    handler.sendEmptyMessage(FINISH);
                 }
             }
         }
@@ -372,8 +382,8 @@ public class InWareByHandActivity extends BaseActivity {
         }
         if (Constants.CHANGE_WARE.equals(type)) {
             changeCommit();
-        } else if (Constants.IN_WARE.equals(type)) {
-            inCommit();
+//        } else if (Constants.IN_WARE.equals(type)) {
+//            inCommit();
         } else if (Constants.CHECK.equals(type)) {
             checkCommit();
         } else if (Constants.REVIEW_TYPE.equals(type)) {
@@ -518,7 +528,7 @@ public class InWareByHandActivity extends BaseActivity {
         column = bottonPopupWindowView.getColumn();
         floor = bottonPopupWindowView.getFloor();
         address = ware + "仓" + row + "排" + column + "垛" + floor + "号";
-        new AlertDialog.Builder(this).setTitle("提示")
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT).setTitle("提示")
                 .setMessage("选择的货位为" + address)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override

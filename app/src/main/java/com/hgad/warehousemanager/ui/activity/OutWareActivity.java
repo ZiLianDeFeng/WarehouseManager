@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -55,6 +57,8 @@ public class OutWareActivity extends BaseActivity {
 //    private RadioButton rb_review;
     private OutWareFragment outWareFragment;
     private ReviewFragment reviewFragment;
+    private RadioGroup rg_out;
+    private RadioButton rb_all;
 
     @Override
     protected void setContentView() {
@@ -68,6 +72,7 @@ public class OutWareActivity extends BaseActivity {
 //        String orderNum = intent.getStringExtra(Constants.ORDER_NUMBER);
 //        ((RadioButton) rg_title.getChildAt(0)).setChecked(true);
         replaceFragment(outWareFragment);
+        rb_all.setChecked(true);
     }
 
     @Override
@@ -77,14 +82,46 @@ public class OutWareActivity extends BaseActivity {
 //        rb_review = (RadioButton) findViewById(R.id.rb_review);
 //        rg_title.setOnCheckedChangeListener(listener);
         outWareFragment = new OutWareFragment();
+        rg_out = (RadioGroup) findViewById(R.id.rg_out);
+        rg_out.setOnCheckedChangeListener(checkChangeListener);
+        rb_all = (RadioButton) findViewById(R.id.rb_all);
+//        RadioButton rb_should_out = (RadioButton) findViewById(R.id.rb_should_out);
+//        RadioButton rb_done_out = (RadioButton) findViewById(R.id.rb_done_out);
 //        reviewFragment = new ReviewFragment();
-        et_order_num = (EditText) findViewById(R.id.et_order_num);
-        findViewById(R.id.btn_find).setOnClickListener(this);
+//        et_order_num = (EditText) findViewById(R.id.et_order_num);
+//        findViewById(R.id.btn_find).setOnClickListener(this);
 //        TextView tv_review = (TextView) findViewById(R.id.btn_confirm);
 //        tv_review.setText("复核");
 //        tv_review.setOnClickListener(this);
 //        tv_review.setVisibility(View.VISIBLE);
     }
+
+    private String type;
+    private RadioGroup.OnCheckedChangeListener checkChangeListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case R.id.rb_all:
+                    type = "'1','2'";
+                    if (outWareFragment.isAdded()) {
+                        outWareFragment.setType(type);
+                    }
+                    break;
+                case R.id.rb_should_out:
+                    type = "'1'";
+                    if (outWareFragment.isAdded()) {
+                        outWareFragment.setType(type);
+                    }
+                    break;
+                case R.id.rb_done_out:
+                    type = "'2'";
+                    if (outWareFragment.isAdded()) {
+                        outWareFragment.setType(type);
+                    }
+                    break;
+            }
+        }
+    };
 
     //    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener() {
 //        @Override

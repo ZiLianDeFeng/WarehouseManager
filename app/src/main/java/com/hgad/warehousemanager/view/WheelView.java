@@ -358,7 +358,7 @@ public class WheelView extends ScrollView {
      * 选中回调
      */
     private void onSeletedCallBack() {
-        if (null != onWheelViewListener) {
+        if (null != onWheelViewListener && null != items) {
             onWheelViewListener.onSelected(selectedIndex, items.get(selectedIndex));
         }
     }
@@ -372,7 +372,7 @@ public class WheelView extends ScrollView {
                 WheelView.this.smoothScrollTo(0, p * itemHeight);
             }
         });
-
+        onSeletedCallBack();
     }
 
     public String getSeletedItem() {

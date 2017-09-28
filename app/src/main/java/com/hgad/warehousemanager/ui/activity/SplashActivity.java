@@ -88,6 +88,8 @@ public class SplashActivity extends BaseActivity {
                             }, 5000);
                         } else {
                             CommonUtils.showToast(SplashActivity.this, "请检查网络");
+                            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                            startActivity(intent);
                             finish();
                         }
                     } else {
@@ -96,6 +98,8 @@ public class SplashActivity extends BaseActivity {
                         finish();
                     }
                 } else {
+                    SPUtils.put(SplashActivity.this, SPConstants.PLAY_MUSIC, true);
+                    SPUtils.put(SplashActivity.this, SPConstants.VIBRATOR, true);
                     Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
                     startActivity(intent);
                     finish();
@@ -139,6 +143,9 @@ public class SplashActivity extends BaseActivity {
                 } else {
                     CommonUtils.showToast(this, "账号或密码错误！");
                     notConnect = false;
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         }

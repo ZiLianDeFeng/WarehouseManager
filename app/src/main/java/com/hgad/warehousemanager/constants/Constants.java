@@ -53,4 +53,7 @@ public class Constants {
     public static final String PRO_NAME = "proName";
     public static final String NODE = "node";
     public static final String CHECK_INFO = "checkInfo";
+    public static final String RESULT = "result";
+    public static final String NEXT = "next";
+    public static final String REQUEST_SUCCESS = "请求成功";
 }

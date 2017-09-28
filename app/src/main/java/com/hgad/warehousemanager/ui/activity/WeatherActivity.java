@@ -2,8 +2,6 @@ package com.hgad.warehousemanager.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.google.gson.Gson;
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.bean.WeatherEntity;
@@ -151,8 +151,8 @@ public class WeatherActivity extends Activity {
 
     public void changeCity() {
         //创建对话框
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("请选择一个城市");
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("请选择一个城市");
         //指定下拉列表的显示数据
         final String[] cities = {"北京", "上海", "武汉", "天津", "广州", "杭州", "贵阳", "台北", "香港", "合肥",
                 "福州", "南昌", "长沙", "成都", "昆明", "南宁", "海口", "哈尔滨", "重庆", "长春", "沈阳",
@@ -161,14 +161,23 @@ public class WeatherActivity extends Activity {
                 "101260101", "101340101", "101320101", "101220101", "101230101", "101240101", "101250101",
                 "101270101", "101290101", "101300101", "101310101", "101050101", "101040100", "101060101",
                 "101070101", "101080101", "101090101"};
-        builder.setItems(cities, new DialogInterface.OnClickListener() {
+//        builder.setItems(cities, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String weatherCode = codes[which];
+//                SPUtils.put(WeatherActivity.this, SPConstants.WEATHER_CITY, weatherCode);
+//                selectWeather(weatherCode);
+//            }
+//        });
+//        builder.show();
+
+        new AlertView("请选择一个城市", null, null, null, cities, this, AlertView.Style.Alert, new OnItemClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String weatherCode = codes[which];
+            public void onItemClick(Object o, int position) {
+                String weatherCode = codes[position];
                 SPUtils.put(WeatherActivity.this, SPConstants.WEATHER_CITY, weatherCode);
                 selectWeather(weatherCode);
             }
-        });
-        builder.show();
+        }).setCancelable(true).show();
     }
 }

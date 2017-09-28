@@ -137,7 +137,7 @@ public class InWareChooseActivity extends BaseActivity {
                         @Override
                         public void run() {
                             for (int i = 0; i < 10; i++) {
-                                data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", "0.5", "1", i + "",""));
+                                data.add(new WareInfo(i, "HIC000" + i, "01010101", "3*1600*1250", "0.5", "1", i + "", ""));
                             }
                             productAdapter.notifyDataSetChanged();
                             rl_info.setVisibility(View.INVISIBLE);
@@ -297,7 +297,7 @@ public class InWareChooseActivity extends BaseActivity {
             data.clear();
             WareInfoResponse wareInfoResponse = (WareInfoResponse) response;
             if (wareInfoResponse.getResponseCode().getCode() == 200) {
-                if ("请求成功".equals(wareInfoResponse.getErrorMsg())) {
+                if (Constants.REQUEST_SUCCESS.equals(wareInfoResponse.getErrorMsg())) {
                     WareInfoResponse.DataEntity entity = wareInfoResponse.getData();
                     if (entity != null) {
                         WareInfo wareInfo = new WareInfo();

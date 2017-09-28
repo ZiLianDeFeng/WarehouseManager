@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/rl_change_pwd"
             android:layout_width="match_parent"
@@ -47,7 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:padding="@dimen/common_padding">
+            android:padding="@dimen/common_padding"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_clear"
@@ -76,10 +78,6 @@
         android:layout_marginTop="@dimen/common_margin_top"
         android:background="@color/white"
         android:orientation="vertical">
-
-
-
-
 
         <RelativeLayout
             android:id="@+id/rl_system_setting"
@@ -145,7 +143,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:padding="@dimen/common_padding">
+            android:padding="@dimen/common_padding"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_zxing"

@@ -1,6 +1,9 @@
 package com.hgad.warehousemanager.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -112,9 +115,37 @@ public class CheckActivity extends BaseActivity {
     private CustomProgressDialog customProgressDialog;
     private boolean isConnect;
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Constants.CHECK)) {
+                String type = intent.getStringExtra(Constants.TYPE);
+                toResult(type);
+            } else if (action.equals(Constants.NEXT)) {
+                startScan();
+            }
+        }
+    };
+
+    private void registBroadcastReceiver(BroadcastReceiver receiver) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.CHECK);
+        intentFilter.addAction(Constants.NEXT);
+        registerReceiver(receiver, intentFilter);
+    }
+
+    private void toResult(String type) {
+        Intent intent = new Intent(this, OperateResultActivity.class);
+        intent.putExtra(Constants.TYPE, type);
+        intent.putExtra(Constants.ADDRESS, address);
+        startActivity(intent);
+    }
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_check);
+        registBroadcastReceiver(receiver);
     }
 
     @Override
@@ -160,7 +191,7 @@ public class CheckActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        findViewById(R.id.btn_start).setOnClickListener(this);
+        findViewById(R.id.ll_scan).setOnClickListener(this);
         at_row = (AddAndSubText) findViewById(R.id.at_row);
         at_row.setType("row");
 
@@ -228,11 +259,12 @@ public class CheckActivity extends BaseActivity {
                                         case 0:
 //                                            CheckStartRequest checkStartRequest = new CheckStartRequest(address, "2", userName, Constants.MODEL, taskId + "");
 //                                            sendRequest(checkStartRequest, CheckStartResponse.class);
-                                            at_row.addNumber();
                                             break;
                                     }
+
                                 }
                             }).setCancelable(false).show();
+                            at_row.addNumber();
                         }
                     }, 500);
                 }
@@ -262,15 +294,16 @@ public class CheckActivity extends BaseActivity {
                                 public void onItemClick(Object o, int position) {
                                     switch (position) {
                                         case 0:
-                                            CheckStartRequest checkStartRequest = new CheckStartRequest(address, "2", userName, Constants.MODEL, taskId + "");
-                                            sendRequest(checkStartRequest, CheckStartResponse.class);
-                                            at_column.addNumber();
+
                                             break;
                                     }
                                 }
                             }).setCancelable(false).show();
                         }
                     }, 500);
+                    CheckStartRequest checkStartRequest = new CheckStartRequest(address, "2", userName, Constants.MODEL, taskId + "");
+                    sendRequest(checkStartRequest, CheckStartResponse.class);
+                    at_column.addNumber();
                 } else {
                     CheckStartRequest checkStartRequest = new CheckStartRequest(address, "1", userName, Constants.MODEL, taskId + "");
                     sendRequest(checkStartRequest, CheckStartResponse.class);
@@ -278,6 +311,15 @@ public class CheckActivity extends BaseActivity {
                 curFloor = value;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
     }
 
     @Override
@@ -290,7 +332,7 @@ public class CheckActivity extends BaseActivity {
                 Intent intent = new Intent(this, ScanResultActivity.class);
                 intent.putExtra(Constants.SCAN_RESULT, result);
                 intent.putExtra(Constants.TYPE, type);
-                String address = ware + row + column + floor;
+                address = ware + row + column + floor;
                 intent.putExtra(Constants.ADDRESS, address);
                 startActivityForResult(intent, NEXTCHECK);
             }
@@ -312,34 +354,36 @@ public class CheckActivity extends BaseActivity {
                     public void onItemClick(Object o, int position) {
                         switch (position) {
                             case 0:
-                                if (at_column.getValue() != at_column.getMaxValue()) {
-                                    at_column.addNumber();
-                                } else {
-//                                    CommonUtils.showToast(CheckActivity.this, "当前排位已全部扫完，");
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new AlertView("提示", "当前排位已全部扫完，\n即将切换到下一排继续进行盘点", null, new String[]{"确定"}, null, CheckActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(Object o, int position) {
-                                                    switch (position) {
-                                                        case 0:
-                                                            if (at_row.getValue() != at_row.getMaxValue()) {
-                                                                at_row.addNumber();
-                                                            } else {
-                                                                CommonUtils.showToast(CheckActivity.this, "当前仓库已全部扫完，");
-                                                            }
-                                                            break;
-                                                    }
-                                                }
-                                            }).setCancelable(false).show();
-                                        }
-                                    }, 500);
-                                }
+
                                 break;
                         }
                     }
                 }).setCancelable(false).show();
+                if (at_column.getValue() != at_column.getMaxValue()) {
+                    at_column.addNumber();
+                } else {
+//                                    CommonUtils.showToast(CheckActivity.this, "当前排位已全部扫完，");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertView("提示", "当前排位已全部扫完，\n即将切换到下一排继续进行盘点", null, new String[]{"确定"}, null, CheckActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Object o, int position) {
+                                    switch (position) {
+                                        case 0:
+
+                                            break;
+                                    }
+                                }
+                            }).setCancelable(false).show();
+                        }
+                    }, 500);
+                    if (at_row.getValue() != at_row.getMaxValue()) {
+                        at_row.addNumber();
+                    } else {
+                        CommonUtils.showToast(CheckActivity.this, "当前仓库已全部扫完，");
+                    }
+                }
             } else {
                 at_floor.setValue(value + 1);
             }
@@ -361,7 +405,7 @@ public class CheckActivity extends BaseActivity {
         if (request instanceof CheckStartRequest) {
             CheckStartResponse checkStartResponse = (CheckStartResponse) response;
             if (checkStartResponse.getResponseCode().getCode() == 200) {
-                if (checkStartResponse.getErrorMsg().equals("请求成功")) {
+                if (Constants.REQUEST_SUCCESS.equals(checkStartResponse.getErrorMsg())) {
 
                 }
             } else {
@@ -370,7 +414,7 @@ public class CheckActivity extends BaseActivity {
         } else if (request instanceof WareHouseRequest) {
             WareHouseResponse wareHouseResponse = (WareHouseResponse) response;
             if (wareHouseResponse.getResponseCode().getCode() == 200) {
-                if (wareHouseResponse.getErrorMsg().equals("请求成功")) {
+                if (Constants.REQUEST_SUCCESS.equals(wareHouseResponse.getErrorMsg())) {
                     WareHouseResponse.DataEntity dataEntity = wareHouseResponse.getData().get(0);
                     int rows = dataEntity.getRows();
                     int cols = dataEntity.getCols();
@@ -381,7 +425,6 @@ public class CheckActivity extends BaseActivity {
                     bundle.putInt("col", cols);
                     message.setData(bundle);
                     handler.sendMessage(message);
-
                 }
             }
         }
@@ -390,7 +433,7 @@ public class CheckActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_start:
+            case R.id.ll_scan:
                 startScan();
                 break;
         }

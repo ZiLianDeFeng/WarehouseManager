@@ -51,13 +51,34 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="今日总录入100笔"
+                    android:text="今日总录入"
+                    android:textColor="@color/light_white"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_in_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/common_dp"
+                    android:layout_marginRight="@dimen/common_dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/light_white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="笔"
                     android:textColor="@color/light_white"
                     android:textSize="22sp" />
             </LinearLayout>
@@ -76,7 +97,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_check_count"
+                        android:id="@+id/tv_in_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -110,7 +131,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_maintain_count"
+                        android:id="@+id/tv_out_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -144,7 +165,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_shelve"
+                        android:id="@+id/tv_check_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -159,7 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="复核量"
+                        android:text="盘点量"
                         android:textColor="@color/light_white"
                         android:textSize="@dimen/common_text_size" />
 
@@ -260,7 +281,8 @@
                         style="@style/table_text"
                         android:drawableTop="@mipmap/sign_in"
                         android:text="出库审核"
-                        android:textSize="?commonTextSize" />
+                        android:textSize="?commonTextSize"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_review_result"
@@ -269,6 +291,13 @@
                         android:text="审核记录"
                         android:textSize="?commonTextSize"
                         android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_data_syn"
+                        style="@style/table_text"
+                        android:drawableTop="@mipmap/sign_in"
+                        android:text="数据同步"
+                        android:textSize="?commonTextSize" />
                 </LinearLayout>
 
                 <LinearLayout

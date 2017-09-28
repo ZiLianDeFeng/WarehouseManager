@@ -69,6 +69,8 @@
         <activity android:name=".zxing.activity.ScannerActivity" />
         <activity android:name=".ui.activity.UserDetailActivity" />
         <activity android:name=".ui.activity.PhotoActivity" />
+        <activity android:name=".ui.activity.OperateResultActivity" />
+        <activity android:name=".ui.activity.DataSynActivity" />
 
         <service android:name=".ui.service.PushService" />
 

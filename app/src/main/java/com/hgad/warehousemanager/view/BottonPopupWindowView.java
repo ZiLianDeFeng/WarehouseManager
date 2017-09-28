@@ -66,10 +66,11 @@ public class BottonPopupWindowView implements Callback {
     private CustomProgressDialog customProgressDialog;
     private String[] numbers;
     private String chooseFloor;
-//    private String[] wareNo = new String[]{"01", "02", "03", "04", "05", "06"};
+    //    private String[] wareNo = new String[]{"01", "02", "03", "04", "05", "06"};
     private TextView tv_addressWare;
     private List<String> rowList;
     private ArrayList<String> colList;
+    private TextView poptitle;
 
 
     public String getWare() {
@@ -131,7 +132,7 @@ public class BottonPopupWindowView implements Callback {
         ll_map = (LinearLayout) popupWindowView.findViewById(R.id.ll_map);
         ll_wheel = (LinearLayout) popupWindowView.findViewById(R.id.ll_wheel);
         seatView = (SeatTable) popupWindowView.findViewById(R.id.seatView);
-        TextView poptitle = (TextView) popupWindowView.findViewById(R.id.pop_title);
+        poptitle = (TextView) popupWindowView.findViewById(R.id.pop_title);
         poptitle.setText(title);
 //        ll_ware = (LinearLayout) popupWindowView.findViewById(R.id.ll_ware);
 //        ll_map_ware = (LinearLayout) popupWindowView.findViewById(R.id.ll_map_ware);
@@ -141,7 +142,7 @@ public class BottonPopupWindowView implements Callback {
         tv_addressWare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle("选择仓库")
+                AlertDialog.Builder builder = new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_LIGHT).setTitle("选择仓库")
                         .setItems(wareNums, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -152,6 +153,16 @@ public class BottonPopupWindowView implements Callback {
                             }
                         });
                 builder.show();
+//                new AlertView("选择仓库", null, "取消", null, wareNums, context, AlertView.Style.ActionSheet, new OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(Object o, int position) {
+//                        ware = wareNums[position];
+//                        tv_addressWare.setText(wareNums[position]);
+//                        WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
+//                        NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
+//
+//                    }
+//                }).setCancelable(true).show();
             }
         });
         wl_ware = (WheelView) popupWindowView.findViewById(R.id.wl_ware);
@@ -308,7 +319,7 @@ public class BottonPopupWindowView implements Callback {
             }
         });
         chooseFloor = wl_floor.getSeletedItem();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT).setTitle("选择层号")
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT).setTitle("选择号位")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -316,7 +327,7 @@ public class BottonPopupWindowView implements Callback {
                             floor = chooseFloor;
 //                            pop_switch.setText(floor + "号");
                         } else {
-                            CommonUtils.showToast(context, "未选择层号");
+                            CommonUtils.showToast(context, "未选择号位");
                         }
                     }
                 }).setNegativeButton("取消", null);
@@ -366,6 +377,8 @@ public class BottonPopupWindowView implements Callback {
         public void onClick(View v) {
             isMap = !isMap;
             if (isMap) {
+                tv_addressWare.setVisibility(View.VISIBLE);
+                poptitle.setVisibility(View.GONE);
                 ll_wheel.setVisibility(View.INVISIBLE);
                 ll_map.setVisibility(View.VISIBLE);
                 ware = tv_addressWare.getText().toString().trim();
@@ -374,6 +387,8 @@ public class BottonPopupWindowView implements Callback {
                 floor = "01";
                 seatView.clear();
             } else {
+                tv_addressWare.setVisibility(View.GONE);
+                poptitle.setVisibility(View.VISIBLE);
                 ll_wheel.setVisibility(View.VISIBLE);
                 ll_map.setVisibility(View.INVISIBLE);
                 row = wl_row.getSeletedItem();
@@ -433,11 +448,12 @@ public class BottonPopupWindowView implements Callback {
                             List<String> storey = positionListEntity.getStorey();
                             boolean hava = false;
                             boolean unfull = false;
-                            if (storey.get(0) != null) {
-                                hava = true;
-                            }
-                            if (storey.get(storey.size() - 1) == null) {
-                                unfull = true;
+                            for (String pro : storey) {
+                                if (pro != null) {
+                                    hava = true;
+                                } else {
+                                    unfull = true;
+                                }
                             }
                             if (hava) {
                                 if (unfull) {

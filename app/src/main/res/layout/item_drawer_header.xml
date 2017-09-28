@@ -39,6 +39,7 @@
         android:layout_marginTop="@dimen/common_dp"
         android:text="admin@android.com"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
 </LinearLayout>

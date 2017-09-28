@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.hgad.warehousemanager.bean.IpInfo;
+import com.hgad.warehousemanager.bean.WareInfo;
+import com.hgad.warehousemanager.util.DatabaseUtil;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -22,15 +24,15 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private Map<String, Dao> daos = new HashMap<String, Dao>();
 
     private DBHelper(Context context) {
-        super(context, TABLE_NAME, null, 1);
+        super(context, TABLE_NAME, null, 6);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database,
                          ConnectionSource connectionSource) {
         try {
-//            TableUtils.createTable(connectionSource, UserInfo.class);
-            TableUtils.createTable(connectionSource, IpInfo.class);
+            TableUtils.createTableIfNotExists(connectionSource, WareInfo.class);
+            TableUtils.createTableIfNotExists(connectionSource, IpInfo.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,6 +43,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
                           ConnectionSource connectionSource, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
 //            DatabaseUtil.upgradeTable(database, connectionSource, UserInfo.class, DatabaseUtil.OPERATION_TYPE.ADD);
+            DatabaseUtil.upgradeTable(database, connectionSource, WareInfo.class, DatabaseUtil.OPERATION_TYPE.ADD);
             onCreate(database, connectionSource);
         }
     }

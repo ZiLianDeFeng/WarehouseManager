@@ -36,9 +36,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     private List<DrawerItem> dataList = Arrays.asList(
             new DrawerItemHeader(),
             new DrawerItemNormal(R.drawable.ic_menu_camera, R.string.drawer_menu_camera),
-            new DrawerItemNormal(R.drawable.ic_menu_gallery, R.string.drawer_menu_gallery),
-            new DrawerItemNormal(R.drawable.ic_menu_tools, R.string.drawer_menu_tools),
-            new DrawerItemNormal(R.drawable.ic_grade_black, R.string.drawer_menu_favorites),
+//            new DrawerItemNormal(R.drawable.ic_menu_gallery, R.string.drawer_menu_gallery),
+//            new DrawerItemNormal(R.drawable.ic_menu_tools, R.string.drawer_menu_tools),
+//            new DrawerItemNormal(R.drawable.ic_grade_black, R.string.drawer_menu_favorites),
             new DrawerItemDivider(),
             new DrawerItemNormal(R.drawable.ic_settings_black, R.string.drawer_menu_setting),
             new DrawerItemNormal(R.drawable.ic_cloud_black, R.string.drawer_menu_air)

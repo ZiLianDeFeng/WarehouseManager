@@ -6,31 +6,91 @@ import com.hgad.warehousemanager.bean.response.InWareListResponse;
 import com.hgad.warehousemanager.bean.response.ProductListResponse;
 import com.hgad.warehousemanager.bean.response.SearchResponse;
 import com.hgad.warehousemanager.bean.response.WareInfoResponse;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 
 /**
  * Created by Administrator on 2017/6/27.
  */
+@DatabaseTable(tableName = WareInfo.TABLE_NAME)
 public class WareInfo implements Serializable {
+
+    public static final String TABLE_NAME = "t_ware_info";
+    @DatabaseField(generatedId = true)
     private int id;
+    @DatabaseField(columnName = "markNum")
     private String markNum;
+    @DatabaseField(columnName = "address")
     private String address;
+    @DatabaseField(columnName = "spec")
     private String spec;
+    @DatabaseField(columnName = "netWeight")
     private String netWeight;
-    private int grossWeight;
+    @DatabaseField(columnName = "state")
     private String state;
+    @DatabaseField(columnName = "orderNum")
     private String orderNum;
+    @DatabaseField(columnName = "proName")
     private String proName;
+    @DatabaseField(columnName = "orderItem")
     private String orderItem;
+    @DatabaseField(columnName = "steelGrade")
     private String steelGrade;
     private String outPlateNumber;
     private String curOutNunber;
+    private boolean isCheck;
+    @DatabaseField(columnName = "haveCommit")
+    private boolean haveCommit;
+
+    public boolean isHaveCommit() {
+        return haveCommit;
+    }
+
+    public void setHaveCommit(boolean haveCommit) {
+        this.haveCommit = haveCommit;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
 
     public WareInfo() {
     }
 
-    public WareInfo(int id, String markNum, String address, String spec, String netWeight, String state, String orderNum,String proName) {
+    public WareInfo(String markNum, String address, String spec, String netWeight, String orderItem, String proName, String steelGrade, boolean haveCommit) {
+        this.markNum = markNum;
+        this.address = address;
+        this.spec = spec;
+        this.netWeight = netWeight;
+        this.orderItem = orderItem;
+        this.proName = proName;
+        this.steelGrade = steelGrade;
+        this.haveCommit = haveCommit;
+    }
+
+    @Override
+    public String toString() {
+        return "WareInfo{" +
+                "steelGrade='" + steelGrade + '\'' +
+                ", orderItem='" + orderItem + '\'' +
+                ", proName='" + proName + '\'' +
+                ", orderNum='" + orderNum + '\'' +
+                ", state='" + state + '\'' +
+                ", netWeight='" + netWeight + '\'' +
+                ", spec='" + spec + '\'' +
+                ", address='" + address + '\'' +
+                ", markNum='" + markNum + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
+    public WareInfo(int id, String markNum, String address, String spec, String netWeight, String state, String orderNum, String proName) {
         this.id = id;
         this.markNum = markNum;
         this.address = address;
@@ -77,7 +137,7 @@ public class WareInfo implements Serializable {
         this.orderNum = listEntity.getOrderNo();
         this.state = listEntity.getStatus();
         this.spec = listEntity.getSpecification();
-        this.orderItem =listEntity.getOrderItem();
+        this.orderItem = listEntity.getOrderItem();
         this.steelGrade = listEntity.getSteelGrade();
     }
 
@@ -90,7 +150,7 @@ public class WareInfo implements Serializable {
         this.orderNum = listEntity.getOrderNo();
         this.state = listEntity.getStatus();
         this.spec = listEntity.getSpecification();
-        this.orderItem =listEntity.getOrderItem();
+        this.orderItem = listEntity.getOrderItem();
         this.steelGrade = listEntity.getSteelGrade();
     }
 
@@ -183,14 +243,6 @@ public class WareInfo implements Serializable {
         this.netWeight = netWeight;
     }
 
-    public int getGrossWeight() {
-        return grossWeight;
-    }
-
-    public void setGrossWeight(int grossWeight) {
-        this.grossWeight = grossWeight;
-    }
-
     public String getState() {
         return state;
     }
@@ -198,7 +250,6 @@ public class WareInfo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
-
 
 
 }

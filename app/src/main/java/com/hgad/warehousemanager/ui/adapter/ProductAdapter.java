@@ -88,22 +88,25 @@ public class ProductAdapter extends BaseAdapter implements PinnedSectionRefreshL
             } else if ("1".equals(state)) {
                 tv_state.setText("已审核");
             }
-        } else if (Constants.OUT_TYPE.equals(type)) {
+        } else if (Constants.OUT_TYPE.equals(type) || Constants.REVIEW_TYPE.equals(type)) {
             if ("0".equals(state)) {
                 tv_state.setText("装车待扫描");
+                tv_state.setTextColor(context.getResources().getColor(R.color.red));
             } else if ("1".equals(state)) {
                 tv_state.setText("复核待扫描");
+                tv_state.setTextColor(context.getResources().getColor(R.color.blue));
             } else if ("2".equals(state)) {
                 tv_state.setText("复核已扫描");
+                tv_state.setTextColor(context.getResources().getColor(R.color.black));
             }
-        } else if (Constants.REVIEW_TYPE.equals(type)) {
-            if ("2".equals(state)) {
-                tv_state.setText("复核待扫描");
-            } else if ("3".equals(state)) {
-                tv_state.setText("复核已扫描");
-            } else {
-                tv_state.setText("无需复核");
-            }
+//        } else if (Constants.REVIEW_TYPE.equals(type)) {
+//            if ("2".equals(state)) {
+//                tv_state.setText("复核待扫描");
+//            } else if ("3".equals(state)) {
+//                tv_state.setText("复核已扫描");
+//            } else {
+//                tv_state.setText("无需复核");
+//            }
         }
         return holder.convertView;
 //        } else {

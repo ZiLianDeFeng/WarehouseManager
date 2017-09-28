@@ -414,7 +414,7 @@ public abstract class BaseDao<T, Integer> {
      * @return 查询结果集合
      * @throws SQLException SQLException异常
      */
-    public List<T> query(String columnName, String columnValue) throws SQLException {
+    public List<T> query(String columnName, Object columnValue) throws SQLException {
         QueryBuilder<T, Integer> queryBuilder = getDao().queryBuilder();
         queryBuilder.where().eq(columnName, columnValue);
         PreparedQuery<T> preparedQuery = queryBuilder.prepare();

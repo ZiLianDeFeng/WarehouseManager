@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity {
                     SPUtils.put(LoginActivity.this, SPConstants.USER_ID, userId);
                     SPUtils.put(LoginActivity.this, SPConstants.LOGIN_SUCCESS, true);
                     SPUtils.put(LoginActivity.this, SPConstants.USER_NAME, username);
-                    SPUtils.put(LoginActivity.this, SPConstants.PWD, password);
+                    SPUtils.put(LoginActivity.this, SPConstants.PWD, pwd);
                     boolean success = SPUtils.getBoolean(LoginActivity.this, SPConstants.SET_ALIAS_SUCCESS);
                     if (!success) {
                         setAlias(userId + "");

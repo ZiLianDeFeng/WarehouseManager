@@ -265,7 +265,7 @@ public final class CameraManager {
 //			int width = (int)(dm.widthPixels * 0.6);
 //			int height = (int)(width * 0.9);
 
-            int width = screenResolution.x * 8 / 10;
+            int width = screenResolution.x * 4 / 10;
             int height = width;
 
             int leftOffset = (screenResolution.x - width) / 2;
