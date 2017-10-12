@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -63,10 +62,10 @@ public class ScanResultActivity extends BaseActivity {
     //    private TextView tv_gross_weight;
     private TextView tv_test;
     private Button btn_commit;
-    private String row = "1";
-    private String column = "1";
-    private String floor = "1";
-    private String ware = "1";
+    private String row = "01";
+    private String column = "01";
+    private String floor = "01";
+    private String ware = "01";
     private TextView tv_addressWare;
     private String type;
     private String address;
@@ -111,7 +110,7 @@ public class ScanResultActivity extends BaseActivity {
     private String proName;
     private String state;
     private BaseDaoImpl<WareInfo, Integer> wareDao;
-    private MediaPlayer mediaPlayer;
+
 
     @Override
     protected void setContentView() {
@@ -237,9 +236,12 @@ public class ScanResultActivity extends BaseActivity {
             }
             if (!result.contains("标签号")) {
                 sv_main.setVisibility(View.GONE);
+                tv_test.setVisibility(View.VISIBLE);
                 tv_test.setText(result);
                 btn_commit.setVisibility(View.INVISIBLE);
+                CommonUtils.showToast(this, "内容不匹配，请重新扫描");
             } else {
+
                 String markNumStr = result.substring(result.indexOf("标签号"));
                 markNum = subStringInfo(markNumStr);
                 String specStr = result.substring(result.indexOf("规格"));
@@ -262,45 +264,13 @@ public class ScanResultActivity extends BaseActivity {
                     tv_addressWare.setText("无");
                     tv_addressWare.setOnClickListener(null);
                 }
-//                boolean checkNetWork = CommonUtils.checkNetWork(this);
-//                if (checkNetWork) {
                 showDialog(getString(R.string.info_check));
                 WareInfoRequest wareInfoRequest = new WareInfoRequest(markNum);
                 sendRequest(wareInfoRequest, WareInfoResponse.class);
-//                    return;
-//                } else {
-//                    CommonUtils.showToast(this, getString(R.string.check_net));
-//                }
             }
         }
     }
 
-//    /**
-//     * 初始化 报警音频
-//     */
-//    private void initBeepSound() {
-//        if (mediaPlayer == null) {
-//            // 在stream_system音量不可调的，用户发现它太大声，所以我们现在播放的音乐流。
-//            setVolumeControlStream(AudioManager.STREAM_MUSIC);
-//            // 初始化 媒体播放器
-//            mediaPlayer = new MediaPlayer();
-//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//            mediaPlayer.setOnCompletionListener(null);
-//            AssetFileDescriptor file = getResources().openRawResourceFd(
-//                    R.raw.jentlemo_kanon);
-//            try {
-//                mediaPlayer.setDataSource(file.getFileDescriptor(),
-//                        file.getStartOffset(), file.getLength());
-//
-//                // 关闭 资源文件管理器
-//                file.close();
-//                mediaPlayer.setVolume(30f, 30f);
-//                mediaPlayer.prepare();
-//            } catch (IOException e) {
-//                mediaPlayer = null; // 异常 释放播放器对象
-//            }
-//        }
-//    }
 
     private void initTypeHeader(Intent intent) {
         if (Constants.IN_WARE.equals(type)) {
@@ -377,7 +347,6 @@ public class ScanResultActivity extends BaseActivity {
         iv_more.setImageResource(R.mipmap.and);
         ll_more = (LinearLayout) findViewById(R.id.ll_search);
         sv_main = (ScrollView) findViewById(R.id.sv_main);
-//        initBeepSound();
     }
 
     private void initMorePopupWindow() {
@@ -441,6 +410,7 @@ public class ScanResultActivity extends BaseActivity {
                         }
                         if (!TextUtils.isEmpty(wareInfoResponse.getData().getPositionCode().trim())) {
                             address = wareInfo.getAddress();
+                            ware = address.substring(0, 2);
                             String addressStr = CommonUtils.formatAddress(address);
                             CommonUtils.stringInterceptionChangeLarge(tv_addressWare, addressStr, "仓", "排", "垛", "号");
                             if (type.equals(Constants.OUT_WARE)) {
@@ -586,10 +556,6 @@ public class ScanResultActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void changeChoose() {
-//        bottonPopupWindowView.change();
-    }
-
     private void commit() {
         String trim = tv_addressWare.getText().toString().trim();
         if (TextUtils.isEmpty(trim)) {
@@ -629,7 +595,6 @@ public class ScanResultActivity extends BaseActivity {
     }
 
     private void checkCommit() {
-
         showDialog(getString(R.string.commit_data));
         if (!curAddress.equals(address)) {
             CheckRequest checkRequest = new CheckRequest(markNum, proName, address, curAddress);

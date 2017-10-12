@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-xlv/lib-xlv.iml" filepath="$PROJECT_DIR$/lib-xlv/lib-xlv.iml" />
       <module fileurl="file://$PROJECT_DIR$/pinnedSectionRefreshListView/pinnedSectionRefreshListView.iml" filepath="$PROJECT_DIR$/pinnedSectionRefreshListView/pinnedSectionRefreshListView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qrcodecore/qrcodecore.iml" filepath="$PROJECT_DIR$/qrcodecore/qrcodecore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zbar/zbar.iml" filepath="$PROJECT_DIR$/zbar/zbar.iml" />
     </modules>
   </component>
 </project>

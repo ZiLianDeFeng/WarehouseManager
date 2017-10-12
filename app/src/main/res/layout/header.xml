@@ -36,17 +36,7 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:visibility="gone" />
-        <!--<TextView-->
-            <!--android:id="@+id/btn_edit"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="@dimen/marginleft"-->
-            <!--android:gravity="center"-->
-            <!--android:text="编辑"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="18sp"-->
-            <!--android:visibility="gone" />-->
+
         <LinearLayout
             android:id="@+id/ll_search"
             android:layout_alignParentRight="true"

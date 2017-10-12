@@ -54,8 +54,8 @@ public class InWareByHandActivity extends BaseActivity {
     private PopupWindow bottonPopupWindow;
     private String row;
     private String column;
-    private String floor = "1";
-    private String ware = "1";
+    private String floor = "01";
+    private String ware = "01";
     private Button btn_commit;
     private String address;
     private TextView tv_addressWare;
@@ -232,6 +232,7 @@ public class InWareByHandActivity extends BaseActivity {
                         }
                         if (!TextUtils.isEmpty(entity.getPositionCode().trim())) {
                             address = wareInfo.getAddress();
+                            ware = address.substring(0, 2);
                             String addressStr = CommonUtils.formatAddress(address);
                             CommonUtils.stringInterceptionChangeLarge(tv_addressWare, addressStr, "仓", "排", "垛", "号");
 //                            if (type.equals(Constants.IN_WARE)) {

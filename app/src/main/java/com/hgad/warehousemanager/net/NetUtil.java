@@ -70,7 +70,7 @@ public class NetUtil {
                     netBean.baseReponse = baseReponse;
                 } else {
                     Log.d("NetUtil", "null");
-//
+////
 //                    ErrorResponseInfo errorResponseInfo = new Gson().fromJson(stringResponse, ErrorResponseInfo.class);
 //                    netBean.errorResponseInfo = errorResponseInfo;
                 }

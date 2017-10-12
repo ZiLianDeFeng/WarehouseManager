@@ -142,7 +142,7 @@ public class BottonPopupWindowView implements Callback {
         tv_addressWare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_LIGHT).setTitle("选择仓库")
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT).setTitle("选择仓库")
                         .setItems(wareNums, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -209,7 +209,9 @@ public class BottonPopupWindowView implements Callback {
         });
         row = wl_row.getSeletedItem();
         column = wl_column.getSeletedItem();
-        ware = wl_ware.getSeletedItem();
+        if (!type.equals(Constants.CHANGE_WARE)) {
+            ware = wl_ware.getSeletedItem();
+        }
         floor = wl_floor.getSeletedItem();
         WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
         NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
@@ -386,6 +388,10 @@ public class BottonPopupWindowView implements Callback {
                 column = null;
                 floor = "01";
                 seatView.clear();
+                if (Constants.CHANGE_WARE.equals(type)) {
+                    WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
+                    NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
+                }
             } else {
                 tv_addressWare.setVisibility(View.GONE);
                 poptitle.setVisibility(View.VISIBLE);
@@ -415,8 +421,6 @@ public class BottonPopupWindowView implements Callback {
             tv_addressWare.setOnClickListener(null);
             tv_fixed_ware.setText(ware);
             tv_fixed_ware.setVisibility(View.VISIBLE);
-            WareHouseRequest wareHouseRequest = new WareHouseRequest(ware);
-            NetUtil.sendRequest(wareHouseRequest, WareHouseResponse.class, BottonPopupWindowView.this);
         }
     }
 

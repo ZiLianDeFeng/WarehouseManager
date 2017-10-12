@@ -56,8 +56,9 @@ dependencies {
     compile 'com.android.support:support-v4:23.+'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.google.zxing:core:3.2.1'
-    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
-    compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
-    compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
+    //    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
+    //    compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
+    //    compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
     compile files('libs/TTS_library_stub_3.0_market.jar')
+    compile project(':zbar')
 }

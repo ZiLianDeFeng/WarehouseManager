@@ -55,6 +55,7 @@ public class LoginActivity extends BaseActivity {
         et_username = (EditText) findViewById(R.id.et_username);
         et_password = (EditText) findViewById(R.id.et_password);
         findViewById(R.id.tv_ip_setting).setOnClickListener(this);
+        findViewById(R.id.tv_test).setOnClickListener(this);
     }
 
 
@@ -149,7 +150,16 @@ public class LoginActivity extends BaseActivity {
             case R.id.tv_ip_setting:
                 ipSetting();
                 break;
+            case R.id.tv_test:
+                outline();
+                break;
         }
+    }
+
+    private void outline() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void ipSetting() {

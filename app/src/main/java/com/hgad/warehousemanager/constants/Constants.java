@@ -56,4 +56,5 @@ public class Constants {
     public static final String RESULT = "result";
     public static final String NEXT = "next";
     public static final String REQUEST_SUCCESS = "请求成功";
+    public static final long VIBRATE_DURATION = 200L;
 }
