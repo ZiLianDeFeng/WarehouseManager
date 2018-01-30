@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/header" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/common_dp"
+        android:gravity="center_horizontal">
+
+        <RadioGroup
+            android:id="@+id/rg_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_overage"
+                style="@style/OrderRadioButton"
+                android:text="盘盈" />
+
+            <RadioButton
+                android:id="@+id/rb_losses"
+                style="@style/OrderRadioButton"
+                android:text="盘亏" />
+
+            <RadioButton
+                android:id="@+id/rb_ware_wrong"
+                style="@style/OrderRadioButton"
+                android:text="货位有误" />
+
+        </RadioGroup>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2000" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_light">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rl_check_exception"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/common_padding" />
+
+        <RelativeLayout
+            android:id="@+id/rl_infoOperating"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_light"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/infoOperating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                android:src="@mipmap/jiazai" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

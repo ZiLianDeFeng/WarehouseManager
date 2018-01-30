@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/common_dp"
+    android:paddingLeft="@dimen/common_padding">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_min_padding"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="品&#8195;&#8195;名：" />
+
+        <TextView
+            android:id="@+id/tv_pro_name"
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_min_padding">
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="实际货品：" />
+
+        <TextView
+            android:id="@+id/tv_act_mark"
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_min_padding">
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="库存货品：" />
+
+        <TextView
+            android:id="@+id/tv_house_mark"
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

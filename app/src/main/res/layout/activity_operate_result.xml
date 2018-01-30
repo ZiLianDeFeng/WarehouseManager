@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="50dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="50dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_dp"
+                    android:src="@mipmap/complete_smile" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/common_min_padding">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="操作结果："
+                            android:textSize="@dimen/common_text_size" />
+
+                        <TextView
+                            android:id="@+id/tv_result"
+                            android:layout_width="240dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="本次操作成功！！！"
+                            android:textSize="@dimen/common_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/common_min_padding">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="操作人员："
+                            android:textSize="@dimen/common_text_size" />
+
+                        <TextView
+                            android:id="@+id/tv_opera_people"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="admin"
+                            android:textSize="@dimen/common_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/common_min_padding">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="操作时间："
+                            android:textSize="@dimen/common_text_size" />
+
+                        <TextView
+                            android:id="@+id/tv_opera_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2017-09-15 12:00:00"
+                            android:textSize="@dimen/common_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_address"
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/common_min_padding"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="操作货位："
+                            android:textSize="@dimen/common_text_size" />
+
+                        <TextView
+                            android:id="@+id/tv_opera_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1仓1排1垛1号"
+                            android:textSize="@dimen/common_text_size"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_button_height"
+            android:layout_marginLeft="@dimen/common_padding"
+            android:layout_marginRight="@dimen/common_padding"
+            android:layout_marginTop="@dimen/common_padding"
+            android:background="@drawable/shape_circle"
+            android:text="完成返回"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/item_size" />
+
+        <Button
+            android:id="@+id/btn_continue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_button_height"
+            android:layout_marginLeft="@dimen/common_padding"
+            android:layout_marginRight="@dimen/common_padding"
+            android:layout_marginTop="@dimen/common_padding"
+            android:background="@color/btn_color"
+            android:text="继续下一个"
+            android:textColor="@color/white"
+            android:textSize="@dimen/item_size" />
+    </LinearLayout>
+</LinearLayout>

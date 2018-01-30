@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/MatchMatch">
+
+    <!--&lt;!&ndash;<cn.bingoogolapple.qrcode.zbar.ZBarView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/zbarview"&ndash;&gt;-->
+        <!--&lt;!&ndash;style="@style/MatchMatch"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_animTime="2000"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_borderColor="@android:color/white"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_borderSize="1dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_cornerColor="#f57257"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_cornerLength="20dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_cornerSize="3dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isBarcode="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isOnlyDecodeScanBoxArea="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isScanLineReverse="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isShowDefaultGridScanLineDrawable="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isShowDefaultScanLineDrawable="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isShowTipBackground="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isShowTipTextAsSingleLine="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_isTipTextBelowRect="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_maskColor="#33FFFFFF"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_qrCodeTipText="将二维码放入框内，即可自动扫描"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_rectWidth="200dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_scanLineColor="#f57257"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_scanLineMargin="0dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_scanLineSize="1dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_tipTextColor="@android:color/white"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_tipTextSize="12sp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_toolbarHeight="0dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:qrcv_topOffset="180dp" />&ndash;&gt;-->
+
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:fitsSystemWindows="true"-->
+        <!--android:background="@color/tran"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/rl_root_title_base"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="46dp"-->
+            <!--android:layout_alignParentTop="true">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/tv_left_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:paddingLeft="20dp"-->
+                <!--android:paddingRight="10dp"-->
+                <!--android:src="@mipmap/back" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:text="@string/str_scan_title"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="18dp" />-->
+
+        <!--</RelativeLayout>-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:layout_alignParentBottom="true">-->
+
+            <!--<Button-->
+                <!--android:id="@+id/btn_light"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:background="@color/tran"-->
+                <!--android:onClick="IfOpenLight"-->
+                <!--android:text="@string/str_open_light"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="16sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/btn_openimg"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:background="@color/tran"-->
+                <!--android:onClick="pickPictureFromAblum"-->
+                <!--android:text="@string/str_editphoto_wrapper_title"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="16sp" />-->
+        <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
+</RelativeLayout>

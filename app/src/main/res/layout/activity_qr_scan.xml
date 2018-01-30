@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<include layout="@layout/header" />-->
+
+    <RelativeLayout
+        android:id="@+id/qr_code_header_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/head_height"
+        android:background="@color/dark"
+        android:paddingTop="25dp">
+
+        <ImageView
+            android:id="@+id/tv_left_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/str_scan_title"
+            android:textColor="@color/qr_code_white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/qr_code_header_black_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="扫钢板"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+    <ViewStub
+        android:id="@+id/qr_code_view_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/qr_code_header_bar"
+        android:layout_gravity="center" />
+
+    <com.kaola.qrcodescanner.qrcode.view.QrCodeFinderView
+        android:id="@+id/qr_code_view_finder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/qr_code_header_bar"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/tv_cur_address"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/qr_code_header_bar"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="1仓1排1垛1号"
+        android:textColor="@color/white"
+        android:textSize="@dimen/item_size"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/rg_scan"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@color/qr_code_flashlight_bg"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_scan_tape"
+                style="@style/ScanRadioButton"
+                android:drawableTop="@mipmap/ic_scan3"
+                android:text="钢卷/钢轧" />
+
+            <RadioButton
+                android:id="@+id/rb_scan_plate"
+                style="@style/ScanRadioButton"
+                android:drawableTop="@mipmap/ic_scan4"
+                android:text="钢板/板材" />
+
+            <!--<RadioButton-->
+            <!--style="@style/ScanRadioButton"-->
+            <!--android:drawableTop="@mipmap/torch"-->
+            <!--android:text="@string/qr_code_open_flash_light" />-->
+
+
+            <!--<RadioButton-->
+            <!--style="@style/ScanRadioButton"-->
+            <!--android:drawableTop="@mipmap/hand"-->
+            <!--android:text="@string/by_hand" />-->
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/qr_code_ll_flash_light"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/qr_code_flashlight_bg"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/qr_code_iv_flash_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/torch" />
+
+                <TextView
+                    android:id="@+id/qr_code_tv_flash_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/qr_code_open_flash_light"
+                    android:textColor="@color/no_net"
+                    android:textSize="@dimen/text_size_13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/qr_code_ll_hand"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_weight="1"
+                android:background="@color/qr_code_flashlight_bg"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/qr_code_iv_hand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/hand" />
+
+                <TextView
+                    android:id="@+id/qr_code_tv_hand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/by_hand"
+                    android:textColor="@color/no_net"
+                    android:textSize="@dimen/text_size_13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/qr_code_view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/qr_code_header_bar"
+        android:background="@android:color/black"
+        android:visibility="gone" />
+
+</RelativeLayout>

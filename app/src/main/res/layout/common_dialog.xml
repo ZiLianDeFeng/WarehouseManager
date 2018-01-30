@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_no_circle"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/dark">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"
+            android:text="提示"
+            android:textColor="@color/white"
+            android:textSize="@dimen/item_size" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="18dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="@dimen/marginleft"
+            android:paddingTop="24dp"
+            android:text="需要更新"
+            android:textColor="@color/black"
+            android:textSize="@dimen/common_text_size" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/common_dp"
+                android:paddingTop="@dimen/common_dp"
+                android:text="取消"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/item_size" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#2000" />
+
+            <TextView
+                android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/common_dp"
+                android:paddingTop="@dimen/common_dp"
+                android:text="确定"
+                android:textColor="@color/red"
+                android:textSize="@dimen/item_size" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

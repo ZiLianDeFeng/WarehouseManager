@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/common_dp"
+    android:paddingLeft="@dimen/common_padding"
+    android:paddingRight="@dimen/common_padding">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标&#32;&#32;签&#32;&#32;号：" />
+
+            <TextView
+                android:id="@+id/tv_markNum"
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/tv_pro_name"
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding">
+
+        <TextView
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="实际货位：" />
+
+        <TextView
+            android:id="@+id/tv_act_position"
+            style="@style/CommonTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <TextView
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="库存货位：" />
+
+            <TextView
+                android:id="@+id/tv_house_position"
+                style="@style/CommonTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_fix"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_bg_red"
+            android:text="修复"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2000" />
+</LinearLayout>

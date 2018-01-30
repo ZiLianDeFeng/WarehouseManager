@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3498db"
+    android:orientation="vertical">
+
+    <include layout="@layout/header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/dark"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/LargeItem"
+                        android:layout_width="wrap_content"
+                        android:background="@color/colorPrimaryDark"
+                        android:paddingRight="16dp"
+                        android:text="库存统计" />
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/mPieChart_stock"
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:paddingTop="@dimen/common_padding" />
+
+                <TextView
+                    android:id="@+id/tv_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/common_dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_size"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="考勤统计"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/item_size" />
+
+                    <TextView
+                        style="@style/LargeItem"
+                        android:layout_width="wrap_content"
+                        android:background="@color/colorPrimaryDark"
+                        android:paddingRight="14dp"
+                        android:text="考勤统计"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp">
+
+                    <RadioGroup
+                        android:id="@+id/rg_performance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_padding"
+                        android:layout_marginRight="@dimen/common_padding"
+                        android:layout_marginTop="@dimen/common_margin_top"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_day"
+                            style="@style/performanceRadioButton"
+                            android:text="日"
+                            android:textSize="@dimen/common_text_size" />
+
+                        <RadioButton
+                            android:id="@+id/rb_month"
+                            style="@style/performanceRadioButton"
+                            android:text="月"
+                            android:textSize="@dimen/common_text_size" />
+
+                        <RadioButton
+                            android:id="@+id/rb_total"
+                            style="@style/performanceRadioButton"
+                            android:text="年"
+                            android:textSize="@dimen/common_text_size" />
+                    </RadioGroup>
+                </RelativeLayout>
+
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/mHorizontalBarChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_margin="@dimen/common_dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

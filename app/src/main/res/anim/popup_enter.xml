@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 使用动画集合 需要把shareInterpolator设置为false 否则插入器失效 -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <alpha
+        android:duration="500"
+        android:fromAlpha="0"
+        android:toAlpha="1" />
+
+    <!--<scale-->
+    <!--android:duration="500"-->
+    <!--android:fromXScale="0"-->
+    <!--android:fromYScale="0"-->
+    <!--android:toXScale="1"-->
+    <!--android:toYScale="1" />-->
+    <translate
+        android:duration="500"
+        android:fromXDelta="100%"
+        android:interpolator="@android:anim/overshoot_interpolator"
+        android:toXDelta="0%" />
+
+    <!--<rotate -->
+    <!--android:interpolator="@android:anim/overshoot_interpolator"-->
+    <!--android:fromDegrees="360"-->
+    <!--android:toDegrees="0"-->
+    <!--android:duration="500"/>-->
+
+</set>
