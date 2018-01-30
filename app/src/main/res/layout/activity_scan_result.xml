@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light"
@@ -57,6 +58,7 @@
                     android:background="#1000" />
 
                 <LinearLayout
+                    android:id="@+id/ll_spec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -87,6 +89,7 @@
                     android:background="#1000" />
 
                 <LinearLayout
+                    android:id="@+id/ll_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -116,36 +119,37 @@
                     android:layout_height="0.5dp"
                     android:background="#1000" />
 
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@color/white"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:padding="5dp">-->
+                <LinearLayout
+                    android:id="@+id/ll_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
 
-                <!--<TextView-->
-                <!--style="@style/CommonTextview"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="毛        重：" />-->
+                    <TextView
+                        style="@style/CommonTextview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="张&#8195;&#8195;数：" />
 
-                <!--<TextView-->
-                <!--android:id="@+id/tv_gross_weight"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:paddingLeft="@dimen/common_dp"-->
-                <!--android:text="8630kg"-->
-                <!--android:textSize="@dimen/common_text_size" />-->
+                    <TextView
+                        android:id="@+id/tv_number"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/common_dp"
+                        android:textSize="@dimen/common_text_size" />
 
-                <!--</LinearLayout>-->
+                </LinearLayout>
 
-                <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0.5dp"-->
-                <!--android:background="#1000" />-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#1000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

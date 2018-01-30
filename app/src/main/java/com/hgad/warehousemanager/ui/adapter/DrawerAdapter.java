@@ -28,15 +28,51 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     private static final int TYPE_HEADER = 2;
 
     private Context context;
+    private String todayInWeight;
+    private String todayOutWeight;
+    private String monthInWeight;
+    private String monthOutWeight;
 
     public DrawerAdapter(Context context) {
         this.context = context;
     }
 
+    public String getTodayInWeight() {
+        return todayInWeight;
+    }
+
+    public void setTodayInWeight(String todayInWeight) {
+        this.todayInWeight = todayInWeight;
+    }
+
+    public String getTodayOutWeight() {
+        return todayOutWeight;
+    }
+
+    public void setTodayOutWeight(String todayOutWeight) {
+        this.todayOutWeight = todayOutWeight;
+    }
+
+    public String getMonthInWeight() {
+        return monthInWeight;
+    }
+
+    public void setMonthInWeight(String monthInWeight) {
+        this.monthInWeight = monthInWeight;
+    }
+
+    public String getMonthOutWeight() {
+        return monthOutWeight;
+    }
+
+    public void setMonthOutWeight(String monthOutWeight) {
+        this.monthOutWeight = monthOutWeight;
+    }
+
     private List<DrawerItem> dataList = Arrays.asList(
             new DrawerItemHeader(),
+            new DrawerItemNormal(R.drawable.ic_people_black, R.string.drawer_menu_group),
             new DrawerItemNormal(R.drawable.ic_menu_camera, R.string.drawer_menu_camera),
-//            new DrawerItemNormal(R.drawable.ic_menu_gallery, R.string.drawer_menu_gallery),
 //            new DrawerItemNormal(R.drawable.ic_menu_tools, R.string.drawer_menu_tools),
 //            new DrawerItemNormal(R.drawable.ic_grade_black, R.string.drawer_menu_favorites),
             new DrawerItemDivider(),
@@ -110,8 +146,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.touxiang);
             Bitmap roundBitmap = FastBlurUtils.toRoundBitmap(bitmap);
             headerViewHolder.imageView.setImageBitmap(roundBitmap);
-            String userName = SPUtils.getString(context, SPConstants.USER_NAME);
-            headerViewHolder.tv_name.setText(userName);
+            String realName = SPUtils.getString(context, SPConstants.REAL_NAME);
+            headerViewHolder.tv_name.setText(realName);
+            headerViewHolder.tv_in_today.setText(todayInWeight == null ? "0.00" : todayInWeight);
+            headerViewHolder.tv_out_today.setText(todayOutWeight == null ? "0.00" : todayOutWeight);
+            headerViewHolder.tv_in_month.setText(monthInWeight == null ? "0.00" : monthInWeight);
+            headerViewHolder.tv_out_month.setText(monthOutWeight == null ? "0.00" : monthOutWeight);
         }
     }
 
@@ -185,7 +225,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
         public NormalViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-
             tv = (TextView) itemView.findViewById(R.id.tv);
             iv = (ImageView) itemView.findViewById(R.id.iv);
         }
@@ -205,6 +244,10 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
         private ImageView imageView;
         private TextView tv_name;
         private TextView tv_email;
+        private TextView tv_in_today;
+        private TextView tv_out_today;
+        private TextView tv_in_month;
+        private TextView tv_out_month;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -212,6 +255,10 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             imageView = (ImageView) itemView.findViewById(R.id.iv_user_icon);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_email = (TextView) itemView.findViewById(R.id.tv_email);
+            tv_in_today = (TextView) itemView.findViewById(R.id.tv_in_today);
+            tv_out_today = (TextView) itemView.findViewById(R.id.tv_out_today);
+            tv_in_month = (TextView) itemView.findViewById(R.id.tv_in_month);
+            tv_out_month = (TextView) itemView.findViewById(R.id.tv_out_month);
         }
     }
 

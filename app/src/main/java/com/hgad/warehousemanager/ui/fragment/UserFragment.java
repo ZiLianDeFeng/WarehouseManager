@@ -3,12 +3,11 @@ package com.hgad.warehousemanager.ui.fragment;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseFragment;
-import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.net.BaseRequest;
+import com.hgad.warehousemanager.net.BaseResponse;
 import com.hgad.warehousemanager.ui.activity.SettingActivity;
 
 /**
@@ -25,7 +24,7 @@ public class UserFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        ((ImageView) mView.findViewById(R.id.iv_setting)).setOnClickListener(this);
+        mView.findViewById(R.id.iv_setting).setOnClickListener(this);
     }
 
     @Override

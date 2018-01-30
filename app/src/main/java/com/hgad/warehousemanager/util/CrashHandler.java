@@ -111,6 +111,24 @@ public class CrashHandler implements UncaughtExceptionHandler {
             public void run() {
                 Looper.prepare();
                 Toast.makeText(mContext, "很抱歉,程序出现异常,即将退出.", Toast.LENGTH_LONG).show();
+//                CommonDialog commonDialog = new CommonDialog(mContext, "提示", "程序异常退出，是否需要重新启动应用？", "是", "否");
+//                commonDialog.setCanceledOnTouchOutside(false);
+//                commonDialog.setCancelable(true);
+//                commonDialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
+//                    @Override
+//                    public void doConfirm() {
+//                        Intent intent = new Intent(mContext.getApplicationContext(), SplashActivity.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        mContext.startActivity(intent);
+//                        System.exit(0);
+//                    }
+//
+//                    @Override
+//                    public void doCancel() {
+//                        System.exit(0);
+//                    }
+//                });
+//                commonDialog.show();
                 Looper.loop();
             }
         }.start();
@@ -194,7 +212,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 FileOutputStream fos = new FileOutputStream(path + fileName);
                 fos.write(sb.toString().getBytes());
                 fos.close();
-            }else {
+            } else {
 
             }
             return fileName;

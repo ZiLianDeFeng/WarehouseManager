@@ -54,7 +54,7 @@ public class LoginActivity extends BaseActivity {
         btn_login.setOnClickListener(this);
         et_username = (EditText) findViewById(R.id.et_username);
         et_password = (EditText) findViewById(R.id.et_password);
-        findViewById(R.id.tv_ip_setting).setOnClickListener(this);
+        findViewById(R.id.iv_setting).setOnClickListener(this);
         findViewById(R.id.tv_test).setOnClickListener(this);
     }
 
@@ -73,10 +73,14 @@ public class LoginActivity extends BaseActivity {
                     int userId = loginResponse.getData().getId();
                     String username = loginResponse.getData().getUsername();
                     String password = loginResponse.getData().getPassword();
+                    String realname = loginResponse.getData().getRealname();
+                    String post = loginResponse.getData().getPost();
                     SPUtils.put(LoginActivity.this, SPConstants.USER_ID, userId);
                     SPUtils.put(LoginActivity.this, SPConstants.LOGIN_SUCCESS, true);
                     SPUtils.put(LoginActivity.this, SPConstants.USER_NAME, username);
+                    SPUtils.put(LoginActivity.this, SPConstants.REAL_NAME, realname);
                     SPUtils.put(LoginActivity.this, SPConstants.PWD, pwd);
+                    SPUtils.put(LoginActivity.this, SPConstants.POST, post == null ? "" : post);
                     boolean success = SPUtils.getBoolean(LoginActivity.this, SPConstants.SET_ALIAS_SUCCESS);
                     if (!success) {
                         setAlias(userId + "");
@@ -147,7 +151,7 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_login:
                 login();
                 break;
-            case R.id.tv_ip_setting:
+            case R.id.iv_setting:
                 ipSetting();
                 break;
             case R.id.tv_test:

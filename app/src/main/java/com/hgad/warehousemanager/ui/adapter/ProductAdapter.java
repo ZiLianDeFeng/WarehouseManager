@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hgad.warehousemanager.R;
@@ -27,6 +28,7 @@ public class ProductAdapter extends BaseAdapter implements PinnedSectionRefreshL
     private List<ProSectionBean> proData;
     private Context context;
     private String type;
+    private String proType;
 
     public ProductAdapter(List<WareInfo> data, Context context, String type) {
         this.data = data;
@@ -37,6 +39,10 @@ public class ProductAdapter extends BaseAdapter implements PinnedSectionRefreshL
     public ProductAdapter(List<ProSectionBean> proData, String type) {
         this.proData = proData;
         this.type = type;
+    }
+
+    public void setProType(String proType) {
+        this.proType = proType;
     }
 
     public void setType(String type) {
@@ -71,6 +77,9 @@ public class ProductAdapter extends BaseAdapter implements PinnedSectionRefreshL
         TextView tv_weight = (TextView) holder.getView(R.id.tv_weight);
         TextView tv_state = (TextView) holder.getView(R.id.tv_state);
         ImageView iv_operate = (ImageView) holder.getView(R.id.iv_operate);
+        TextView tv_pieces = (TextView) holder.getView(R.id.tv_pieces);
+        LinearLayout ll_weight = (LinearLayout) holder.getView(R.id.ll_weight);
+        LinearLayout ll_pieces = (LinearLayout) holder.getView(R.id.ll_pieces);
         WareInfo wareInfo = data.get(position);
         String address = wareInfo.getAddress();
         if (TextUtils.isEmpty(address.trim())) {
@@ -80,7 +89,23 @@ public class ProductAdapter extends BaseAdapter implements PinnedSectionRefreshL
             tv_address.setText(address);
         }
         tv_order_num.setText(wareInfo.getMarkNum());
-        tv_weight.setText(wareInfo.getNetWeight() + "吨");
+        if ("0".equals(proType)) {
+            ll_pieces.setVisibility(View.GONE);
+            ll_weight.setVisibility(View.VISIBLE);
+            String netWeight = wareInfo.getNetWeight();
+            if (!TextUtils.isEmpty(netWeight)) {
+                Double aWeight = Double.valueOf(netWeight);
+                java.text.DecimalFormat df = new java.text.DecimalFormat("#0.000");
+                String format = df.format(aWeight);
+                tv_weight.setText(format + "吨");
+            } else {
+                tv_weight.setText("");
+            }
+        } else if ("1".equals(proType)) {
+            ll_pieces.setVisibility(View.VISIBLE);
+            ll_weight.setVisibility(View.GONE);
+            tv_pieces.setText(wareInfo.getCount());
+        }
         String state = wareInfo.getState();
         if (Constants.IN_TYPE.equals(type)) {
             if ("0".equals(state)) {

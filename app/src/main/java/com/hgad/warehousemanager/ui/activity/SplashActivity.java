@@ -65,6 +65,7 @@ public class SplashActivity extends BaseActivity {
                     Intent intent1 = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent1);
                     finish();
+                    return;
                 }
                 boolean notFirst = SPUtils.getBoolean(SplashActivity.this, SPConstants.NOT_FRIST);
 //                notFirst = false;
@@ -137,6 +138,10 @@ public class SplashActivity extends BaseActivity {
                 if (loginResponse.getResponseCode().getCode() == 200) {
 //                    CommonUtils.showToast(this, "登录成功！");
                     notConnect = false;
+                    int userId = loginResponse.getData().getId();
+                    String post = loginResponse.getData().getPost();
+                    SPUtils.put(SplashActivity.this, SPConstants.USER_ID, userId);
+                    SPUtils.put(SplashActivity.this, SPConstants.POST, post == null ? "" : post);
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                     finish();

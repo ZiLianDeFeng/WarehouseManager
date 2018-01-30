@@ -31,7 +31,7 @@
             <EditText
                 android:id="@+id/et_old_pwd"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_circle"
                 android:hint="请输入原密码"
@@ -62,7 +62,7 @@
             <EditText
                 android:id="@+id/et_new_pwd"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_circle"
                 android:gravity="center_vertical"
@@ -94,7 +94,7 @@
             <EditText
                 android:id="@+id/et_confirm_pwd"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_circle"
                 android:gravity="center_vertical"

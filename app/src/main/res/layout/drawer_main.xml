@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/right"
     android:layout_width="match_parent"
@@ -9,57 +10,70 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/fl"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
         <ImageView
             android:id="@+id/iv_user_icon"
             android:layout_width="32dp"
             android:layout_height="48dp"
-            android:layout_marginTop="23dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginTop="23dp"
             android:src="@mipmap/admin" />
     </RelativeLayout>
 
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab_group"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="@dimen/marginleft"-->
+        <!--android:src="@mipmap/ic_group"-->
+        <!--app:backgroundTint="@color/colorAccent"-->
+        <!--app:elevation="6dp"-->
+        <!--app:pressedTranslationZ="12dp"-->
+        <!--app:rippleColor="#56abe4" />-->
+
 
     <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="#2000" />-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:background="#2000" />-->
 
     <!--<RadioGroup-->
-        <!--android:id="@+id/rg"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="56dp"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:id="@+id/rg"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:orientation="horizontal">-->
 
-        <!--<RadioButton-->
-            <!--android:id="@+id/rb_home"-->
-            <!--style="@style/ButtonMenu"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:drawableTop="@drawable/rb_home_selector"-->
-            <!--android:text="@string/home" />-->
+    <!--<RadioButton-->
+    <!--android:id="@+id/rb_home"-->
+    <!--style="@style/ButtonMenu"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:drawableTop="@drawable/rb_home_selector"-->
+    <!--android:text="@string/home" />-->
 
-        <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:background="#DCDCDC" />-->
+    <!--<View-->
+    <!--android:layout_width="1dp"-->
+    <!--android:layout_height="30dp"-->
+    <!--android:layout_gravity="center_vertical"-->
+    <!--android:background="#DCDCDC" />-->
 
 
-        <!--<RadioButton-->
-            <!--android:id="@+id/rb_user"-->
-            <!--style="@style/ButtonMenu"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:drawableTop="@drawable/rb_user_selector"-->
-            <!--android:text="@string/personal_center" />-->
+    <!--<RadioButton-->
+    <!--android:id="@+id/rb_user"-->
+    <!--style="@style/ButtonMenu"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:drawableTop="@drawable/rb_user_selector"-->
+    <!--android:text="@string/personal_center" />-->
     <!--</RadioGroup>-->
-</LinearLayout>
+</RelativeLayout>

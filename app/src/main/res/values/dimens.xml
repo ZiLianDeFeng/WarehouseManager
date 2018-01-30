@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="common_text_size">16sp</dimen>
+    <dimen name="common_text_size_little">14sp</dimen>
     <dimen name="common_padding">10dp</dimen>
     <dimen name="common_dp">5dp</dimen>
     <dimen name="common_margin_top">10dp</dimen>
@@ -16,7 +17,7 @@
     <dimen name="button_text_size">18sp</dimen>
     <dimen name="itmes_height">200dp</dimen>
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
-    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="nav_header_height">180dp</dimen>
     <dimen name="drawer_width">300dp</dimen>
     <dimen name="drawer_item_icon_size">16dp</dimen>
     <dimen name="drawer_item_icon_leftmargin">20dp</dimen>

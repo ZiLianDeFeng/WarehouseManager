@@ -8,8 +8,8 @@ android {
         applicationId "com.hgad.warehousemanager"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 7
+        versionName "1.0.6"
 
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -43,9 +43,9 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile files('libs/ormlite-core-5.0.jar')
     //    compile files('libs/zxing.jar')
-    compile 'com.github.lazylibrary:lazylibrary:1.0.2'
+    //    compile 'com.github.lazylibrary:lazylibrary:1.0.2'
     compile 'com.android.support:design:23.1.1'
-    compile 'com.bigkoo:convenientbanner:2.0.5'
+    //    compile 'com.bigkoo:convenientbanner:2.0.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(path: ':pinnedSectionRefreshListView')
     compile project(':lib-xlv')
@@ -55,10 +55,12 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:support-v4:23.+'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
-    compile 'com.google.zxing:core:3.2.1'
+    //    compile 'com.google.zxing:core:3.2.1'
     //    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     //    compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     //    compile 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
-    compile files('libs/TTS_library_stub_3.0_market.jar')
-    compile project(':zbar')
+    //    compile project(':zbar')
+    compile project(':scanner')
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    compile project(':treeRecycleView')
 }

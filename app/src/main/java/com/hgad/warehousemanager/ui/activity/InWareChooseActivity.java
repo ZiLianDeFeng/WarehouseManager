@@ -36,7 +36,7 @@ import com.hgad.warehousemanager.ui.adapter.ProductAdapter;
 import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.view.CustomProgressDialog;
-import com.hgad.warehousemanager.zxing.activity.ScannerActivity;
+import com.hgad.warehousemanager.zxing.activity.QrScanActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -325,6 +325,8 @@ public class InWareChooseActivity extends BaseActivity {
             if (bundle != null) {
                 String resultStr = bundle.getString("result");
                 Intent intent = new Intent(this, ScanResultActivity.class);
+                String codeType = bundle.getString("codeType");
+                intent.putExtra(Constants.CODE_TYPE, codeType);
                 intent.putExtra(Constants.SCAN_RESULT, resultStr);
                 intent.putExtra(Constants.TYPE, Constants.IN_WARE);
                 startActivity(intent);
@@ -377,7 +379,7 @@ public class InWareChooseActivity extends BaseActivity {
 
     private void go2Scan() {
 //        morePopupWindow.dismiss();
-        Intent intent = new Intent(this, ScannerActivity.class);
+        Intent intent = new Intent(this, QrScanActivity.class);
         intent.putExtra(Constants.TYPE, Constants.IN_WARE);
         startActivityForResult(intent, SCAN);
     }

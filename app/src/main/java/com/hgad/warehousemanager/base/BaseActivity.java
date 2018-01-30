@@ -1,5 +1,6 @@
 package com.hgad.warehousemanager.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BaseApplication.getApplication().addActivity(this);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTextSize();
         setContentView();
         initView();
@@ -104,6 +106,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Callback
             CommonUtils.showToast(this, getString(R.string.check_net));
         }
     }
+
+    public void cancel(){
+        NetUtil.cancel();
+    };
 
     public abstract void onSuccessResult(BaseRequest request, BaseResponse response);
 

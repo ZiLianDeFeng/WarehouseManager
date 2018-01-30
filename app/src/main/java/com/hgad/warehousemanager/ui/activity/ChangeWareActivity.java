@@ -9,7 +9,7 @@ import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.net.BaseRequest;
 import com.hgad.warehousemanager.net.BaseResponse;
-import com.hgad.warehousemanager.zxing.activity.ScannerActivity;
+import com.hgad.warehousemanager.zxing.activity.QrScanActivity;
 
 /**
  * Created by Administrator on 2017/6/29.
@@ -45,6 +45,8 @@ public class ChangeWareActivity extends BaseActivity{
             if (bundle != null) {
                 String resultStr = bundle.getString("result");
                 Intent intent = new Intent(this, ScanResultActivity.class);
+                String codeType = bundle.getString("codeType");
+                intent.putExtra(Constants.CODE_TYPE, codeType);
                 intent.putExtra(Constants.SCAN_RESULT, resultStr);
                 intent.putExtra(Constants.TYPE, Constants.CHANGE_WARE);
                 startActivity(intent);
@@ -65,7 +67,7 @@ public class ChangeWareActivity extends BaseActivity{
     }
 
     private void go2Scan() {
-        Intent intent = new Intent(this, ScannerActivity.class);
+        Intent intent = new Intent(this, QrScanActivity.class);
         intent.putExtra(Constants.TYPE,Constants.CHANGE_WARE);
         startActivityForResult(intent, SCAN);
     }

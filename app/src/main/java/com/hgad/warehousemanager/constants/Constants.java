@@ -57,4 +57,22 @@ public class Constants {
     public static final String NEXT = "next";
     public static final String REQUEST_SUCCESS = "请求成功";
     public static final long VIBRATE_DURATION = 200L;
+    public static final String QR = "qr";
+    public static final String CODE = "code";
+    public static final String CODE_TYPE = "codeType";
+    public static final String TASK_ID = "taskId";
+    public static final String PLATES = "plates";
+    public static final String NO_PLATES = "noPlates";
+    public static final String SCAN_STATE = "scanState";
+    public static final String COUNT = "pieces";
+    public static final String OVER = "over";
+    public static final String PRO_TYPE = "proType";
+    public static final String POSITION_CODE = "positionCode";
+    public static final String OCCUPIED = "当前仓位已被占用，请重新选择仓位";
+    public static final String HAS_ADD = "hasAdd";
+    public static final String DATA = "data";
+    public static final String MEMBER = "member";
+    public static final String ADD_TYPE = "addType";
+    public static final String HEADER = "header";
+    public static final String GROUP_ID = "groupId";
 }

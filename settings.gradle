@@ -1,1 +1,1 @@
-include ':app', ':pinnedSectionRefreshListView', ':lib-xlv', ':qrcodecore', ':zbar'
+include ':app', ':pinnedSectionRefreshListView', ':lib-xlv', ':qrcodecore', ':zxing', ':scanner', ':treeRecycleView'

@@ -17,4 +17,8 @@ public class SPConstants {
     public static final String VERSION_CODE = "versionCode";
     public static final String PLAY_MUSIC = "playMusic";
     public static final String VIBRATOR = "vibrator";
+    public static final String REAL_NAME = "realName";
+    public static final String IS_SCAN_PLATE = "isScanPlate";
+    public static final String GROUP_ID = "groupId";
+    public static final String POST = "post";
 }

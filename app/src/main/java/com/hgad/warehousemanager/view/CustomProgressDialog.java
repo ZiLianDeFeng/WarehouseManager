@@ -97,4 +97,5 @@ public class CustomProgressDialog extends ProgressDialog {
 		mAnimation.start();
 		super.onWindowFocusChanged(hasFocus);
 	}*/
+
 }

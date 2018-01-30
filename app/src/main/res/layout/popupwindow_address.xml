@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="500dp"
     android:background="@color/white"
@@ -9,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:orientation="vertical"
-        android:padding="@dimen/common_dp">
+        android:paddingLeft="@dimen/common_dp"
+        android:paddingRight="@dimen/common_dp">
 
         <TextView
             android:id="@+id/pop_confirm"
@@ -17,6 +19,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/common_padding"
+            android:gravity="center"
             android:text="确定"
             android:textColor="@color/blue"
             android:textSize="@dimen/item_size" />
@@ -26,35 +29,35 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="5dp">
+            <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:padding="5dp">-->
 
-                <TextView
-                    android:id="@+id/tv_addressWare"
-                    android:layout_width="120dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/shape_circle"
-                    android:gravity="center"
-                    android:hint="点击选择仓库"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/item_size"
-                    android:visibility="gone" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_addressWare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/common_padding"
+                android:text="点击选择仓库"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/item_size"
+                android:visibility="gone" />
+            <!--</LinearLayout>-->
 
             <TextView
                 android:id="@+id/pop_title"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="@dimen/common_padding"
-                android:text="请选择位置"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/common_padding"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/item_size" />
         </RelativeLayout>
@@ -64,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/common_padding"
+            android:gravity="center"
             android:text="取消"
             android:textColor="@color/blue"
             android:textSize="@dimen/item_size" />
@@ -72,6 +76,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="400dp">
+
 
         <LinearLayout
             android:id="@+id/ll_map"
@@ -169,6 +174,15 @@
 
             <!--</LinearLayout>-->
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="未选择仓库"
+            android:textColor="@color/unclick_color"
+            android:textSize="22sp" />
 
         <LinearLayout
             android:id="@+id/ll_wheel"
@@ -280,10 +294,10 @@
     <TextView
         android:id="@+id/pop_switch"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:padding="@dimen/common_padding"
         android:text="切换"
         android:textColor="@color/blue"
-        android:textSize="@dimen/common_text_size" />
+        android:textSize="@dimen/common_head_text_size" />
 </LinearLayout>

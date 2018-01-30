@@ -28,7 +28,7 @@ import com.hgad.warehousemanager.util.CommonUtils;
 import com.hgad.warehousemanager.util.SPUtils;
 import com.hgad.warehousemanager.view.AddAndSubText;
 import com.hgad.warehousemanager.view.CustomProgressDialog;
-import com.hgad.warehousemanager.zxing.activity.ScannerActivity;
+import com.hgad.warehousemanager.zxing.activity.QrScanActivity;
 
 /**
  * Created by Administrator on 2017/6/29.
@@ -301,12 +301,12 @@ public class CheckActivity extends BaseActivity {
                             }).setCancelable(false).show();
                         }
                     }, 500);
-                    CheckStartRequest checkStartRequest = new CheckStartRequest(address, "2", userName, Constants.MODEL, taskId + "");
-                    sendRequest(checkStartRequest, CheckStartResponse.class);
+//                    CheckStartRequest checkStartRequest = new CheckStartRequest(address, userName, Constants.MODEL, taskId + "");
+//                    sendRequest(checkStartRequest, CheckStartResponse.class);
                     at_column.addNumber();
                 } else {
-                    CheckStartRequest checkStartRequest = new CheckStartRequest(address, "1", userName, Constants.MODEL, taskId + "");
-                    sendRequest(checkStartRequest, CheckStartResponse.class);
+//                    CheckStartRequest checkStartRequest = new CheckStartRequest(address, userName, Constants.MODEL, taskId + "");
+//                    sendRequest(checkStartRequest, CheckStartResponse.class);
                 }
                 curFloor = value;
             }
@@ -330,8 +330,11 @@ public class CheckActivity extends BaseActivity {
             if (bundle != null) {
                 String result = bundle.getString("result");
                 Intent intent = new Intent(this, ScanResultActivity.class);
+                String codeType = bundle.getString("codeType");
+                intent.putExtra(Constants.CODE_TYPE, codeType);
                 intent.putExtra(Constants.SCAN_RESULT, result);
                 intent.putExtra(Constants.TYPE, type);
+                intent.putExtra(Constants.TASK_ID, taskId + "");
                 address = ware + row + column + floor;
                 intent.putExtra(Constants.ADDRESS, address);
                 startActivityForResult(intent, NEXTCHECK);
@@ -340,11 +343,11 @@ public class CheckActivity extends BaseActivity {
             int value = at_floor.getValue();
             address = ware + row + column + floor;
             if (value == at_floor.getMaxValue()) {
-                CheckStartRequest checkStartRequest = new CheckStartRequest(address, "2", userName, Constants.MODEL, taskId + "");
-                sendRequest(checkStartRequest, CheckStartResponse.class);
+//                CheckStartRequest checkStartRequest = new CheckStartRequest(address, userName, Constants.MODEL, taskId + "");
+//                sendRequest(checkStartRequest, CheckStartResponse.class);
             } else {
-                CheckStartRequest checkStartRequest = new CheckStartRequest(address, "1", userName, Constants.MODEL, taskId + "");
-                sendRequest(checkStartRequest, CheckStartResponse.class);
+//                CheckStartRequest checkStartRequest = new CheckStartRequest(address, userName, Constants.MODEL, taskId + "");
+//                sendRequest(checkStartRequest, CheckStartResponse.class);
             }
             if (value == 9 || value == 19) {
                 at_floor.setValue(value + 2);
@@ -440,7 +443,7 @@ public class CheckActivity extends BaseActivity {
     }
 
     private void startScan() {
-        Intent intent = new Intent(this, ScannerActivity.class);
+        Intent intent = new Intent(this, QrScanActivity.class);
         intent.putExtra(Constants.TYPE, type);
         startActivityForResult(intent, SCAN);
     }

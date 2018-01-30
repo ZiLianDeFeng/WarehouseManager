@@ -1,14 +1,17 @@
 package com.hgad.warehousemanager.bean;
 
+import com.hgad.warehousemanager.bean.response.GetMemberListResponse;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.Serializable;
 
 /**
  * Created by Administrator on 2017/6/27.
  */
 
 @DatabaseTable(tableName = UserInfo.TABLE_NAME)
-public class UserInfo {
+public class UserInfo implements Serializable {
 
     public static final String TABLE_NAME = "t_user_info";
     @DatabaseField(id = true)
@@ -27,23 +30,40 @@ public class UserInfo {
     private int sex;
 
     @DatabaseField(columnName = "realName")
-    private int realName;
+    private String realName;
+
+    private boolean isChecked;
 
     public UserInfo() {
     }
 
-    public UserInfo(int id, String userName, String password) {
+    public UserInfo(int id, String realName, boolean isChecked) {
         this.id = id;
-        this.userName = userName;
-        this.password = password;
+        this.realName = realName;
+        this.isChecked = isChecked;
     }
 
-    public int getRealName() {
+    public void setData(GetMemberListResponse.DataEntity dataEntity) {
+        this.id = dataEntity.getId();
+        this.realName = dataEntity.getRealname();
+        this.userName = dataEntity.getUsername();
+        this.isChecked = false;
+    }
+
+    public String getRealName() {
         return realName;
     }
 
-    public void setRealName(int realName) {
+    public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public int getSex() {
@@ -86,15 +106,5 @@ public class UserInfo {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", age=" + age +
-                ", sex=" + sex +
-                ", realName=" + realName +
-                '}';
-    }
+
 }

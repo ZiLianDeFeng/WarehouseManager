@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -197,11 +198,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_light">
+        android:background="@color/white">
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/white"
             android:padding="@dimen/common_padding">
 
@@ -223,7 +224,6 @@
                         android:textSize="?commonTextSize" />
 
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -296,7 +296,7 @@
                         android:id="@+id/tv_data_syn"
                         style="@style/table_text"
                         android:drawableTop="@mipmap/sign_in"
-                        android:text="数据同步"
+                        android:text="数据统计"
                         android:textSize="?commonTextSize" />
                 </LinearLayout>
 
@@ -351,30 +351,20 @@
                 </LinearLayout>
             </TableRow>
 
-            <TableRow>
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/common_dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/common_dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"></LinearLayout>
-
-            </TableRow>
         </TableLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/marginleft"
+            android:src="@mipmap/ic_group"
+            app:backgroundTint="@color/colorAccent"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:rippleColor="#56abe4" />
 
     </RelativeLayout>
 

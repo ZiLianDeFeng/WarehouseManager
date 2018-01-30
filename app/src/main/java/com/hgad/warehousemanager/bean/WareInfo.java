@@ -40,6 +40,8 @@ public class WareInfo implements Serializable {
     private String steelGrade;
     private String outPlateNumber;
     private String curOutNunber;
+    private String count;
+    private String type;
     private boolean isCheck;
     @DatabaseField(columnName = "haveCommit")
     private boolean haveCommit;
@@ -111,6 +113,7 @@ public class WareInfo implements Serializable {
         this.proName = entity.getProName();
         this.spec = entity.getSpecification();
         this.outPlateNumber = entity.getOutPlateNumber();
+        this.count = entity.getPieces() + "";
     }
 
     public void setData(WareInfoResponse.DataEntity entity) {
@@ -126,6 +129,8 @@ public class WareInfo implements Serializable {
         this.state = entity.getStatus();
         this.steelGrade = entity.getSteelGrade();
         this.orderItem = entity.getOrderItem();
+        this.count = entity.getPieces();
+        this.type = entity.getType();
     }
 
     public void setData(InWareListResponse.DataEntity.ListEntity listEntity) {
@@ -152,6 +157,22 @@ public class WareInfo implements Serializable {
         this.spec = listEntity.getSpecification();
         this.orderItem = listEntity.getOrderItem();
         this.steelGrade = listEntity.getSteelGrade();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
     }
 
     public String getCurOutNunber() {

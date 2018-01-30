@@ -20,6 +20,10 @@ public class NetUtil {
             new NetTask().execute(new NetBean(request, responseClass, callback));
     }
 
+    public static void cancel(){
+        new NetTask().cancel(true);
+    }
+
     private static class NetBean {
 
         public NetBean(BaseRequest request, Class<? extends BaseResponse> responseClass, Callback callback) {
@@ -57,11 +61,6 @@ public class NetUtil {
                 if (stringResponse != null) {
 
                 Log.e("NetUtil", "获取的json数据:" + stringResponse);
-//                    if (stringResponse.contains("nulldata")) {
-//                        stringResponse = stringResponse.replaceAll("\"nulldata\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],", "");
-//                        stringResponse = stringResponse.replaceAll("\"nulldata\":[\"\",\"\",\"\",\"\",\"\",\"\"],", "");
-////                        stringResponse = stringResponse.replaceAll("\"nulldata\":[],", "");
-//                    }
 //                JSONObject jsonObject = new JSONObject(stringResponse);
 //                String response = jsonObject.toString();
 //                if (!"error".equals(response)) {
@@ -107,6 +106,7 @@ public class NetUtil {
 
             }
         }
+
     }
 
 

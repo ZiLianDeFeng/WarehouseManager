@@ -35,4 +35,7 @@
     <color name="viewfinder_mask">#60000000</color>
     <color name="result_view">#b0000000</color>
     <color name="possible_result_points">#00000000</color>
+    <color name="gray_seletor">#ffb7b5b5</color>
+    <color name="green_selector">#ff498b7a</color>
+    <color name="no_net_selector">#bb8f8f8f</color>
 </resources>

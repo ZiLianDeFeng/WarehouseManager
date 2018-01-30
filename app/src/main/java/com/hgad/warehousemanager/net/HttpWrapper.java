@@ -55,7 +55,6 @@ public class HttpWrapper {
 
     //返回json字符流
     public Reader getReaderResponse(BaseRequest request) throws IOException {
-
         ResponseBody responseBody = getResponseBody(request);
         return responseBody.charStream();
     }
@@ -79,7 +78,6 @@ public class HttpWrapper {
                 builder.addHeader(entry.getKey(), entry.getValue());
             }
         }
-        //http://192.168.209.1:8080/p2p/TestServlet?username=itcast&password=123
         if (request.getHttpMethod() == BaseRequest.HttpMethod.GET) {
 
             StringBuilder stringBuilder = new StringBuilder(request.getUrl());

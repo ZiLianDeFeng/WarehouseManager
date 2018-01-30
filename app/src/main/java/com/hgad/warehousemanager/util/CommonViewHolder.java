@@ -30,7 +30,6 @@ public class CommonViewHolder {
         }
         // SingleNews singleNews = mNewsInListView.get(position);
         CommonViewHolder cvh = (CommonViewHolder) convertView.getTag();
-
         return cvh;
     }
 

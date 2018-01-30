@@ -171,13 +171,14 @@ public class WeatherActivity extends Activity {
 //        });
 //        builder.show();
 
-        new AlertView("请选择一个城市", null, null, null, cities, this, AlertView.Style.Alert, new OnItemClickListener() {
+        AlertView alertView = new AlertView("请选择一个城市", null, null, null, cities, this, AlertView.Style.Alert, new OnItemClickListener() {
             @Override
             public void onItemClick(Object o, int position) {
                 String weatherCode = codes[position];
                 SPUtils.put(WeatherActivity.this, SPConstants.WEATHER_CITY, weatherCode);
                 selectWeather(weatherCode);
             }
-        }).setCancelable(true).show();
+        });
+        alertView.setCancelable(true).show();
     }
 }

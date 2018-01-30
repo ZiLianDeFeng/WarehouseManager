@@ -28,8 +28,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -38,7 +38,9 @@ import com.hgad.warehousemanager.R;
 import com.hgad.warehousemanager.base.BaseActivity;
 import com.hgad.warehousemanager.base.BaseApplication;
 import com.hgad.warehousemanager.bean.request.CheckVersionRequest;
+import com.hgad.warehousemanager.bean.request.DataStatisticsRequest;
 import com.hgad.warehousemanager.bean.response.CheckVersionResponse;
+import com.hgad.warehousemanager.bean.response.DataStatisticsResponse;
 import com.hgad.warehousemanager.constants.Constants;
 import com.hgad.warehousemanager.constants.HttpConstants;
 import com.hgad.warehousemanager.constants.SPConstants;
@@ -66,10 +68,12 @@ public class MainActivity extends BaseActivity {
     private static final int DOWN_OK = 1; // 下载完成
     private static final int DOWN_ERROR = 2;
     private static final int CODE = 100;
+    private static final int ADD_MEMBER = 110;
+    private static final int HEAD_MAN = 120;
     private RadioGroup rg;
     private List<Fragment> fragments = new ArrayList<>();
     private Fragment mCurrentFragment = new Fragment();
-    private LinearLayout right;
+    private RelativeLayout right;
     private RecyclerView left;
     private boolean isDrawer = false;
     private DrawerLayout drawer;
@@ -116,6 +120,10 @@ public class MainActivity extends BaseActivity {
     private File destFile;
     private String ip;
     private int curPro;
+    private String realName;
+    private int userId;
+    private DrawerAdapter drawerAdapter;
+    private String type = "day";
 
     @Override
     protected void setContentView() {
@@ -154,7 +162,31 @@ public class MainActivity extends BaseActivity {
         roundBitmap = FastBlurUtils.toRoundBitmap(bitmap);
         iv_user_icon.setImageBitmap(roundBitmap);
         ip = SPUtils.getString(this, SPConstants.IP);
+        userId = SPUtils.getInt(this, SPConstants.USER_ID);
         checkVersion();
+        getStatistics();
+    }
+
+    private void getStatistics() {
+        realName = SPUtils.getString(this, SPConstants.REAL_NAME);
+        String currentTime = CommonUtils.getCurrentTime();
+        currentTime = currentTime.substring(0, 10);
+        int year = Integer.parseInt(currentTime.substring(0, 4));
+        int month = Integer.parseInt(currentTime.substring(5, 7));
+        String startToday = currentTime;
+        String endToday = currentTime;
+        Date beginDayofMonth = CommonUtils.getSupportBeginDayofMonth(year, month);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String startMonth = dateFormat.format(beginDayofMonth);
+        Date endDayofMonth = CommonUtils.getSupportEndDayofMonth(year, month);
+        String endMonth = dateFormat.format(endDayofMonth);
+        if (type.equals("day")) {
+            DataStatisticsRequest todayStatisticsRequest = new DataStatisticsRequest(startToday, endToday);
+            sendRequest(todayStatisticsRequest, DataStatisticsResponse.class);
+        } else {
+            DataStatisticsRequest monthStatisticsRequest = new DataStatisticsRequest(startMonth, endMonth);
+            sendRequest(monthStatisticsRequest, DataStatisticsResponse.class);
+        }
     }
 
 
@@ -162,7 +194,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
 //        rg = (RadioGroup) findViewById(R.id.rg);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        right = (LinearLayout) findViewById(R.id.right);
+        right = (RelativeLayout) findViewById(R.id.right);
         left = (RecyclerView) findViewById(R.id.rv_drawer);
         right.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -203,8 +235,7 @@ public class MainActivity extends BaseActivity {
         });
         iv_user_icon = (ImageView) findViewById(R.id.iv_user_icon);
         iv_user_icon.setOnClickListener(this);
-
-        DrawerAdapter drawerAdapter = new DrawerAdapter(this);
+        drawerAdapter = new DrawerAdapter(this);
         drawerAdapter.setOnItemClickListener(new OnItemClickListener());
         drawerAdapter.setHeadClickListener(new DrawerAdapter.OnHeadClickListener() {
             @Override
@@ -221,7 +252,12 @@ public class MainActivity extends BaseActivity {
         });
         left.setLayoutManager(new LinearLayoutManager(this));
         left.setAdapter(drawerAdapter);
+//        fab_group = (FloatingActionButton) findViewById(R.id.fab_group);
+//        fab_group.setOnClickListener(this);
+//        initGroupPopupwindow();
     }
+
+    boolean inGroup = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -231,6 +267,7 @@ public class MainActivity extends BaseActivity {
                 if (resultCode == RESULT_OK) {
                     sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
                 }
+                break;
         }
     }
 
@@ -251,10 +288,13 @@ public class MainActivity extends BaseActivity {
                     favorite();
                     break;
                 case R.string.drawer_menu_setting://设置
-                    go();
+                    setting();
                     break;
                 case R.string.drawer_menu_air:
                     weather();
+                    break;
+                case R.string.drawer_menu_group:
+                    group();
                     break;
             }
             handler.postDelayed(new Runnable() {
@@ -264,6 +304,11 @@ public class MainActivity extends BaseActivity {
                 }
             }, 1000);
         }
+    }
+
+    private void group() {
+        Intent intent = new Intent(this, GroupActivity.class);
+        startActivity(intent);
     }
 
     private void favorite() {
@@ -313,7 +358,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -347,13 +391,40 @@ public class MainActivity extends BaseActivity {
                     if (url != null) {
                         String version = url.substring(url.lastIndexOf("v") + 1, url.lastIndexOf(".apk"));
                         String versionName = getVersionName();
-                        if (!version.equalsIgnoreCase(versionName)) {
+                        if (version.compareTo(versionName) == 1) {
                             Message message = handler.obtainMessage();
                             message.obj = url;
                             message.what = NEED_UPDATE;
                             handler.sendMessage(message);
                         }
                     }
+                }
+            }
+        } else if (request instanceof DataStatisticsRequest) {
+            DataStatisticsResponse dataStatisticsResponse = (DataStatisticsResponse) response;
+            if (dataStatisticsResponse.getResponseCode() != null) {
+                if (dataStatisticsResponse.getResponseCode().getCode() == 200) {
+                    List<DataStatisticsResponse.DataEntity> data = dataStatisticsResponse.getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        DataStatisticsResponse.DataEntity dataEntity = data.get(i);
+                        if (realName.equals(dataEntity.getOperator())) {
+                            String inType = dataEntity.getInType();
+                            String outType = dataEntity.getOutType();
+                            if (type.equals("day")) {
+                                drawerAdapter.setTodayInWeight(inType);
+                                drawerAdapter.setTodayOutWeight(outType);
+                            } else if (type.equals("month")) {
+                                drawerAdapter.setMonthInWeight(inType);
+                                drawerAdapter.setMonthOutWeight(outType);
+                            }
+                            break;
+                        }
+                    }
+                    drawerAdapter.notifyDataSetChanged();
+                }
+                if (type.equals("day")) {
+                    type = "month";
+                    getStatistics();
                 }
             }
         }
@@ -381,8 +452,7 @@ public class MainActivity extends BaseActivity {
         drawer.openDrawer(GravityCompat.START);
     }
 
-
-    private void go() {
+    private void setting() {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
@@ -390,7 +460,6 @@ public class MainActivity extends BaseActivity {
     private int notification_id = 1;
 
     public void createNotification() {
-
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notification = new Notification();
         notification.icon = R.mipmap.ic_launcher;
@@ -424,14 +493,6 @@ public class MainActivity extends BaseActivity {
         String versionName = getVersionName();
         CheckVersionRequest checkVersionRequest = new CheckVersionRequest("v" + versionName);
         sendRequest(checkVersionRequest, CheckVersionResponse.class);
-//        String url = "";
-//        String version = "1.0.0";
-//        if (!version.equalsIgnoreCase(versionName)) {
-//            Message message = handler.obtainMessage();
-//            message.obj = url;
-//            message.what = NEED_UPDATE;
-//            handler.sendMessage(message);
-//        }
     }
 
     /**
@@ -590,5 +651,21 @@ public class MainActivity extends BaseActivity {
         } else {
             BaseApplication.getApplication().exit();
         }
+    }
+
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        if (bgAlpha == 1) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
+        } else {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
+        }
+        getWindow().setAttributes(lp);
     }
 }

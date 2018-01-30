@@ -18,14 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.hgad.warehousemanager.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: wangjie
- * Email: tiantian.china.2@gmail.com
- * Date: 7/1/14.
- */
 public class WheelView extends ScrollView {
     public static final String TAG = WheelView.class.getSimpleName();
 
@@ -39,6 +36,16 @@ public class WheelView extends ScrollView {
 //    private ScrollView scrollView;
 
     private LinearLayout views;
+
+    private String occupied = "02";
+
+    private List<String> occList = new ArrayList<>();
+
+    private String type;
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public WheelView(Context context) {
         super(context);
@@ -166,6 +173,11 @@ public class WheelView extends ScrollView {
         this.postDelayed(scrollerTask, newCheck);
     }
 
+    public void setOccItem(List<String> hasList) {
+        occList.clear();
+        occList.addAll(hasList);
+    }
+
     private void initData() {
         displayItemCount = offset * 2 + 1;
         views.removeAllViews();
@@ -280,6 +292,12 @@ public class WheelView extends ScrollView {
             } else {
                 itemView.setTextColor(Color.parseColor("#bbbbbb"));
             }
+            for (String occ : occList) {
+                if ("floor".equals(type) && itemView.getText().equals(occ)) {
+                    itemView.setTextColor(context.getResources().getColor(R.color.yellow));
+                }
+            }
+
         }
     }
 

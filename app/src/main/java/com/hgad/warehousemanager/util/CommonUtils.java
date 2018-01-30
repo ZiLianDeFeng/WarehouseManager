@@ -342,7 +342,7 @@ public class CommonUtils {
         for (int i = 0; i < string2.length; i++) {
             int bstart = string.indexOf(string2[i]) - 3;
             int bend = bstart + 2;
-            style.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, 80, null, null), bstart, bend,
+            style.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, 60, null, null), bstart, bend,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         }
 //        style.setSpan(new ForegroundColorSpan(Color.RED), fstart, fend,
@@ -386,10 +386,19 @@ public class CommonUtils {
 
     public static String formatAddress(String address) {
         StringBuffer str = new StringBuffer(address);
-        str.insert(2, "仓");
-        str.insert(5, "排");
-        str.insert(8, "垛");
-        str.insert(11, "号");
+        int length = str.length();
+        if (length >= 2) {
+            str.insert(2, "仓");
+        }
+        if (length >= 4) {
+            str.insert(5, "排");
+        }
+        if (length >= 6) {
+            str.insert(8, "垛");
+        }
+        if (length >= 8) {
+            str.insert(11, "号");
+        }
         return str.toString();
     }
 

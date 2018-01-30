@@ -90,7 +90,7 @@ public class ChangePwdActivity extends BaseActivity {
             CommonUtils.showToast(this, "确认密码不能为空");
             return;
         }
-        if (!oldPwd.equals(newPwd)) {
+        if (oldPwd.equals(newPwd)) {
             CommonUtils.showToast(this, "新密码与原密码不能相同，请重新填写新密码");
             return;
         }
